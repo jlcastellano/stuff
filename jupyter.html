@@ -1,0 +1,68 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pasos para instalar JupyterLab en WSL y acceder desde Windows</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    ol {
+      margin-left: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pasos para instalar JupyterLab en WSL y acceder desde Windows</h1>
+  
+  <ol>
+    <li>Abre la terminal de WSL (por ejemplo, Ubuntu).</li>
+    
+    <li>Actualiza la lista de paquetes ejecutando el siguiente comando:
+      <br><code>sudo apt update</code></li>
+    
+    <li>Instala Python y pip si aún no los tienes instalados:
+      <br><code>sudo apt install python3 python3-pip</code></li>
+    
+    <li>Instala JupyterLab utilizando pip:
+      <br><code>pip3 install jupyterlab</code></li>
+    
+    <li>Configura JupyterLab para permitir conexiones desde cualquier dirección IP. Crea un archivo de configuración ejecutando:
+      <br><code>jupyter lab --generate-config</code></li>
+    
+    <li>Abre el archivo de configuración con un editor de texto:
+      <br><code>nano ~/.jupyter/jupyter_lab_config.py</code></li>
+    
+    <li>Descomenta y modifica las siguientes líneas para permitir conexiones desde cualquier dirección IP:
+      <pre><code>c.ServerApp.ip = '0.0.0.0'
+c.ServerApp.port = 8888
+c.ServerApp.open_browser = False
+c.LabApp.expose_app_in_browser = True</code></pre></li>
+    
+    <li>Guarda los cambios y cierra el editor (Ctrl+X, luego Y y Enter).</li>
+    
+    <li>Inicia JupyterLab ejecutando:
+      <br><code>jupyter lab --no-browser</code></li>
+    
+    <li>Copia la URL que aparece en la terminal, que debería ser similar a:
+      <br><code>http://localhost:8888/?token=...</code></li>
+    
+    <li>En Windows, abre un navegador web y pega la URL copiada.</li>
+    
+    <li>Para acceder a los archivos ubicados en Windows desde JupyterLab, navega hasta el directorio donde se encuentran montadas las unidades de Windows en WSL. Por ejemplo:
+      <br><code>/mnt/c/Users/&lt;username&gt;/Documents</code></li>
+  </ol>
+
+  <p>¡Listo! Ahora puedes utilizar JupyterLab en WSL y acceder a él desde un navegador web en Windows. Además, puedes trabajar con archivos ubicados en el sistema de archivos de Windows desde JupyterLab en WSL.</p>
+</body>
+</html>

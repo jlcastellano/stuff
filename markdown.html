@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Uso de Markdown en Jupyter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Manual de Uso de Markdown en Jupyter</h1>
+
+<h2>Introducción</h2>
+<p>Markdown es un lenguaje de marcado ligero que se utiliza para formatear texto. En Jupyter, puedes usarlo para crear celdas de texto con formato.</p>
+
+<h2>Encabezados</h2>
+<pre><code># Encabezado 1
+## Encabezado 2
+### Encabezado 3
+</code></pre>
+
+<h2>Estilos de Texto</h2>
+<ul>
+    <li><strong>Negrita:</strong> Usa <code>**texto**</code> o <code>__texto__</code>.</li>
+    <li><em>Cursiva:</em> Usa <code>*texto*</code> o <code>_texto_</code>.</li>
+    <li><del>Tachado:</del> Usa <code>~~texto~~</code>.</li>
+</ul>
+
+<h2>Listas</h2>
+
+<h3>Listas No Ordenadas</h3>
+<pre><code>- Elemento 1
+- Elemento 2
+  - Sub-elemento
+</code></pre>
+
+<h3>Listas Ordenadas</h3>
+<pre><code>1. Primer elemento
+2. Segundo elemento
+   1. Sub-elemento
+</code></pre>
+
+<h2>Enlaces</h2>
+<pre><code>[Texto del enlace](http://ejemplo.com)
+</code></pre>
+
+<h2>Imágenes</h2>
+<pre><code>![Texto alternativo](http://ejemplo.com/imagen.png)
+</code></pre>
+
+<h2>Códigos y Bloques de Código</h2>
+<ul>
+    <li><code>Código en línea</code> usa comillas invertidas.</li>
+    <li>Bloques de código:
+        <pre><code>```python
+def funcion():
+    return "Hola, mundo"
