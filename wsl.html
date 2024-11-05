@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h1>Pasos para instalar WSL2 en Windows 10</h1>
+  <h1>Pasos para instalar WSL2 en Windows 10/11</h1>
   
   <ol>
     <li>Abre PowerShell como administrador y ejecuta el siguiente comando para habilitar la característica de Subsistema de Windows para Linux:
@@ -43,6 +43,13 @@
       <br><code>wsl --set-default-version 2</code></li>
     
     <li>Instala tu distribución de Linux preferida desde la Microsoft Store, como Ubuntu, Debian, o Kali Linux.</li>
+    <li>O desde el terminal usando:
+    <br><code>wsl --list --online</code></li>
+    <li>Y luego:
+    <br><code>wsl --install -d NombreDistribucion</code></li>
+    <li>Para ver qué distribuciones tienes instalaladas:
+    <br><code>wsl --list --verbose</code></li>
+    
     
     <li>Abre la distribución de Linux instalada y completa la configuración inicial, creando un nombre de usuario y contraseña.</li>
   </ol>
