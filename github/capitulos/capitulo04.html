@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 4: Ramas y Fusiones - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html" class="active">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 4: Ramas y Fusiones</h1>
+        
+        <div class="content">
+            <h2>4.1 Conceptos de Ramificación</h2>
+            
+            <div class="concept-section">
+                <h3>¿Qué es una Rama?</h3>
+                <p>Una rama en Git es un puntero móvil a uno de los commits. Las ramas permiten:</p>
+                <ul>
+                    <li>Desarrollar funcionalidades aisladas</li>
+                    <li>Experimentar sin afectar al código principal</li>
+                    <li>Trabajar en paralelo en diferentes características</li>
+                    <li>Mantener versiones diferentes del software</li>
+                </ul>
+            </div>
+
+            <h2>4.2 Comandos Básicos de Ramas</h2>
+            
+            <div class="command-section">
+                <h3>Gestión de Ramas</h3>
+                <pre><code># Ver todas las ramas
+git branch
+
+# Ver todas las ramas (locales y remotas)
+git branch -a
+
+# Crear nueva rama
+git branch nombre-rama
+
+# Crear y cambiar a nueva rama
+git checkout -b nombre-rama
+
+# Cambiar a una rama existente
+git checkout nombre-rama
+
+# Eliminar rama (si está fusionada)
+git branch -d nombre-rama
+
+# Eliminar rama (forzado)
+git branch -D nombre-rama
+
+# Renombrar rama
+git branch -m nombre-antiguo nombre-nuevo</code></pre>
+            </div>
+
+            <h2>4.3 Fusiones (Merge)</h2>
+
+            <div class="merge-section">
+                <h3>Tipos de Fusiones</h3>
+                <ul>
+                    <li><strong>Fast-forward:</strong> Cuando no hay commits divergentes</li>
+                    <li><strong>Recursive:</strong> Cuando hay commits divergentes</li>
+                    <li><strong>Octopus:</strong> Merge de múltiples ramas</li>
+                </ul>
+
+                <h3>Comandos de Fusión</h3>
+                <pre><code># Fusionar rama en la rama actual
+git merge nombre-rama
+
+# Fusión sin fast-forward
+git merge --no-ff nombre-rama
+
+# Abortar una fusión con conflictos
+git merge --abort
+
+# Ver ramas fusionadas
+git branch --merged
+
+# Ver ramas no fusionadas
+git branch --no-merged</code></pre>
+            </div>
+
+            <h2>4.4 Rebase</h2>
+
+            <div class="rebase-section">
+                <h3>¿Qué es Rebase?</h3>
+                <p>Rebase es una alternativa a merge que permite mantener un historial más limpio y lineal.</p>
+
+                <pre><code># Rebase básico
+git rebase rama-destino
+
+# Rebase interactivo
+git rebase -i HEAD~3
+
+# Abortar rebase
+git rebase --abort
+
+# Continuar rebase después de resolver conflictos
+git rebase --continue</code></pre>
+
+                <div class="warning-box">
+                    <h4>⚠️ Advertencia sobre Rebase</h4>
+                    <p>No uses rebase en commits que ya has compartido con otros. Esto puede causar problemas 
+                    de sincronización para otros desarrolladores.</p>
+                </div>
+            </div>
+
+            <h2>4.5 Estrategias de Ramificación</h2>
+
+            <div class="strategy-section">
+                <h3>Ramas Principales</h3>
+                <ul>
+                    <li><strong>main/master:</strong> Código en producción</li>
+                    <li><strong>develop:</strong> Código en desarrollo</li>
+                    <li><strong>feature/*:</strong> Nuevas características</li>
+                    <li><strong>hotfix/*:</strong> Correcciones urgentes</li>
+                    <li><strong>release/*:</strong> Preparación para releases</li>
+                </ul>
+
+                <h3>Convenciones de Nombrado</h3>
+                <pre><code>feature/login-system
+feature/user-profile
+hotfix/security-vulnerability
+release/v1.2.0</code></pre>
+            </div>
+
+            <h2>4.6 Resolución de Conflictos</h2>
+
+            <div class="conflict-section">
+                <h3>Pasos para Resolver Conflictos</h3>
+                <ol>
+                    <li>Identificar los archivos en conflicto</li>
+                    <li>Abrir los archivos y localizar las marcas de conflicto</li>
+                    <li>Decidir qué cambios mantener</li>
+                    <li>Eliminar las marcas de conflicto</li>
+                    <li>Añadir los archivos resueltos</li>
+                    <li>Completar el merge o rebase</li>
+                </ol>
+
+                <h3>Ejemplo de Conflicto</h3>
+                <pre><code><<<<<<< HEAD
+código de tu rama actual
+=======
+código de la rama que intentas fusionar
+>>>>>>> nombre-rama</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Mejores Prácticas</h3>
+                <ul>
+                    <li>Mantén las ramas pequeñas y enfocadas</li>
+                    <li>Actualiza frecuentemente tu rama con los cambios de main/master</li>
+                    <li>Usa nombres descriptivos para las ramas</li>
+                    <li>Elimina las ramas después de fusionarlas</li>
+                    <li>Revisa los cambios antes de hacer merge</li>
+                </ul>
+            </div>
+
+            <div class="exercise-section">
+                <h3>🔄 Ejercicio Práctico</h3>
+                <ol>
+                    <li>Crea una nueva rama feature</li>
+                    <li>Realiza algunos cambios y commits</li>
+                    <li>Cambia a main y realiza otros cambios</li>
+                    <li>Intenta fusionar la rama feature</li>
+                    <li>Resuelve los conflictos si aparecen</li>
+                    <li>Prueba a hacer un rebase</li>
+                    <li>Compara las diferencias entre merge y rebase</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo03.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo05.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

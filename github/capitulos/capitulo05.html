@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 5: Trabajo Colaborativo y Flujos de Trabajo - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html" class="active">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 5: Trabajo Colaborativo y Flujos de Trabajo</h1>
+        
+        <div class="content">
+            <h2>5.1 Git Flow</h2>
+            
+            <div class="workflow-section">
+                <h3>Estructura de Git Flow</h3>
+                <div class="branch-structure">
+                    <h4>Ramas Principales</h4>
+                    <ul>
+                        <li><strong>main/master:</strong> Código en producción</li>
+                        <li><strong>develop:</strong> Rama de desarrollo principal</li>
+                    </ul>
+
+                    <h4>Ramas de Soporte</h4>
+                    <ul>
+                        <li><strong>feature/*:</strong> Nuevas funcionalidades</li>
+                        <li><strong>release/*:</strong> Preparación de releases</li>
+                        <li><strong>hotfix/*:</strong> Correcciones urgentes en producción</li>
+                        <li><strong>bugfix/*:</strong> Correcciones durante el desarrollo</li>
+                    </ul>
+                </div>
+
+                <h3>Comandos Git Flow</h3>
+                <pre><code># Iniciar Git Flow en un repositorio
+git flow init
+
+# Iniciar nueva característica
+git flow feature start nombre-feature
+
+# Finalizar característica
+git flow feature finish nombre-feature
+
+# Iniciar release
+git flow release start v1.0.0
+
+# Finalizar release
+git flow release finish v1.0.0
+
+# Iniciar hotfix
+git flow hotfix start error-critico</code></pre>
+            </div>
+
+            <h2>5.2 Trunk Based Development</h2>
+
+            <div class="trunk-section">
+                <h3>Principios del Trunk Based Development</h3>
+                <ul>
+                    <li>Commits frecuentes al trunk (main/master)</li>
+                    <li>Ramas de corta duración</li>
+                    <li>Feature flags para características en desarrollo</li>
+                    <li>CI/CD constante</li>
+                </ul>
+
+                <h3>Prácticas Recomendadas</h3>
+                <pre><code># Actualizar trunk frecuentemente
+git pull origin main
+
+# Crear rama corta para feature
+git checkout -b feature/quick-fix
+
+# Merge frecuente a trunk
+git checkout main
+git merge feature/quick-fix
+git push origin main</code></pre>
+            </div>
+
+            <h2>5.3 GitHub Flow</h2>
+
+            <div class="github-flow-section">
+                <h3>Proceso de GitHub Flow</h3>
+                <ol>
+                    <li>Crear rama desde main</li>
+                    <li>Realizar cambios y commits</li>
+                    <li>Abrir Pull Request</li>
+                    <li>Discusión y revisión</li>
+                    <li>Deployment (opcional)</li>
+                    <li>Merge a main</li>
+                </ol>
+
+                <pre><code># Crear rama para feature
+git checkout -b feature/nueva-funcionalidad
+
+# Pushear rama y crear PR
+git push -u origin feature/nueva-funcionalidad
+
+# Después de la revisión, merge a main
+git checkout main
+git merge feature/nueva-funcionalidad
+git push origin main</code></pre>
+            </div>
+
+            <h2>5.4 Estrategias de Colaboración</h2>
+
+            <div class="collaboration-section">
+                <h3>Pull Requests / Merge Requests</h3>
+                <ul>
+                    <li>Descripción clara del cambio</li>
+                    <li>Referencias a issues relacionados</li>
+                    <li>Screenshots o GIFs (si aplica)</li>
+                    <li>Checklist de cambios</li>
+                    <li>Asignación de revisores</li>
+                </ul>
+
+                <h3>Code Review</h3>
+                <ul>
+                    <li>Revisar el código línea por línea</li>
+                    <li>Comentarios constructivos</li>
+                    <li>Sugerencias de mejora</li>
+                    <li>Verificar estándares de código</li>
+                    <li>Probar los cambios localmente</li>
+                </ul>
+            </div>
+
+            <h2>5.5 Integración Continua</h2>
+
+            <div class="ci-section">
+                <h3>Prácticas de CI</h3>
+                <ul>
+                    <li>Commits pequeños y frecuentes</li>
+                    <li>Tests automatizados</li>
+                    <li>Build automatizado</li>
+                    <li>Análisis de código</li>
+                </ul>
+
+                <h3>Comandos Útiles para CI</h3>
+                <pre><code># Verificar estado antes de commit
+git status
+git diff
+
+# Ejecutar tests locales
+npm run test
+
+# Verificar build
+npm run build
+
+# Push con tags
+git push --follow-tags</code></pre>
+            </div>
+
+            <h2>5.6 Buenas Prácticas de Colaboración</h2>
+
+            <div class="best-practices">
+                <h3>Commits</h3>
+                <pre><code># Commit atómico y descriptivo
+git commit -m "feat: implementa autenticación con Google
+
+- Añade botón de login con Google
+- Configura OAuth2
+- Añade manejo de tokens
+- Actualiza tests"</code></pre>
+
+                <h3>Sincronización</h3>
+                <pre><code># Mantener repositorio actualizado
+git fetch --all
+git pull --rebase origin main
+
+# Limpiar ramas obsoletas
+git remote prune origin
+git branch --merged | grep -v "\*" | xargs -n 1 git branch -d</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Recomendaciones para Trabajo en Equipo</h3>
+                <ul>
+                    <li>Establecer convenciones de commit claras</li>
+                    <li>Documentar el flujo de trabajo elegido</li>
+                    <li>Mantener las ramas actualizadas</li>
+                    <li>Realizar code reviews exhaustivos</li>
+                    <li>Usar herramientas de calidad de código</li>
+                    <li>Mantener una comunicación clara en PRs e issues</li>
+                </ul>
+            </div>
+
+            <div class="exercise-section">
+                <h3>🔄 Ejercicio Práctico</h3>
+                <ol>
+                    <li>Configura un repositorio con Git Flow</li>
+                    <li>Crea una feature siguiendo el flujo completo</li>
+                    <li>Realiza un release</li>
+                    <li>Simula un hotfix</li>
+                    <li>Practica la revisión de código con un compañero</li>
+                    <li>Implementa un flujo de CI básico</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo04.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo06.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

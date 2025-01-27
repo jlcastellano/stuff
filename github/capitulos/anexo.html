@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anexo: Ejemplos y Ejercicios Prácticos - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html" class="active">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Anexo: Ejemplos y Ejercicios Prácticos</h1>
+        
+        <div class="content">
+            <h2>A.1 Ejercicio: Desarrollo de una Página Web</h2>
+            
+            <div class="exercise-section">
+                <h3>Escenario</h3>
+                <p>Simularemos el desarrollo de una página web simple en equipo. Este ejercicio cubre los conceptos básicos de Git y flujo de trabajo en equipo.</p>
+
+                <h3>Objetivos</h3>
+                <ul>
+                    <li>Practicar comandos básicos de Git</li>
+                    <li>Trabajar con ramas</li>
+                    <li>Resolver conflictos</li>
+                    <li>Usar GitHub para colaboración</li>
+                </ul>
+
+                <h3>Paso a Paso</h3>
+                <pre><code># 1. Configuración Inicial
+git init proyecto-web
+cd proyecto-web
+
+# 2. Crear estructura básica
+touch index.html styles.css script.js
+git add .
+git commit -m "feat: estructura inicial del proyecto"
+
+# 3. Crear rama para el header
+git checkout -b feature/header
+
+# En index.html añadir:
+&lt;header&gt;
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;
+
+git commit -am "feat: añade estructura del header"</code></pre>
+            </div>
+
+            <h2>A.2 Ejercicio: Simulación de Conflictos</h2>
+
+            <div class="conflict-exercise">
+                <h3>Escenario</h3>
+                <p>Simularemos un conflicto común en el desarrollo y aprenderemos a resolverlo.</p>
+
+                <pre><code># Developer 1
+git checkout -b feature/estilos-header
+# Modificar styles.css
+header {
+    background: blue;
+    color: white;
+}
+
+# Developer 2
+git checkout -b feature/header-responsive
+# Modificar styles.css
+header {
+    background: navy;
+    color: lightgray;
+}
+
+# Resolución
+git checkout main
+git merge feature/estilos-header
+git merge feature/header-responsive
+# Resolver en styles.css
+header {
+    background: navy;
+    color: white;
+    media (max-width: 768px) {
+        padding: 1rem;
+    }
+}</code></pre>
+            </div>
+
+            <h2>A.3 Proyecto Práctico: Blog Personal</h2>
+
+            <div class="project-section">
+                <h3>Descripción del Proyecto</h3>
+                <p>Crearemos un blog personal aplicando Git Flow y mejores prácticas.</p>
+
+                <h3>Estructura del Proyecto</h3>
+                <pre><code>blog/
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   └── main.js
+└── posts/
+    ├── post1.html
+    └── post2.html</code></pre>
+
+                <h3>Flujo de Trabajo</h3>
+                <pre><code># Iniciar Git Flow
+git flow init
+
+# Feature para sistema de posts
+git flow feature start sistema-posts
+
+# Añadir funcionalidad
+git add .
+git commit -m "feat: sistema de posts"
+
+# Finalizar feature
+git flow feature finish sistema-posts
+
+# Crear release
+git flow release start v1.0.0
+# Ajustes finales
+git flow release finish v1.0.0</code></pre>
+            </div>
+
+            <h2>A.4 Ejercicio: Automatización con GitHub Actions</h2>
+
+            <div class="actions-exercise">
+                <h3>Crear Pipeline de CI/CD</h3>
+                <pre><code># .github/workflows/deploy.yml
+name: Deploy Blog
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          
+      - name: Install dependencies
+        run: npm install
+          
+      - name: Build
+        run: npm run build
+          
+      - name: Deploy
+        run: |
+          # Comandos de despliegue</code></pre>
+            </div>
+
+            <h2>A.5 Ejercicios de Git Avanzado</h2>
+
+            <div class="advanced-exercise">
+                <h3>Ejercicio 1: Git Rebase Interactivo</h3>
+                <pre><code># Limpiar historial de commits
+git rebase -i HEAD~5
+
+# Comandos disponibles:
+# pick - mantener commit
+# squash - combinar con anterior
+# reword - cambiar mensaje
+# edit - modificar commit
+# drop - eliminar commit</code></pre>
+
+                <h3>Ejercicio 2: Git Bisect</h3>
+                <pre><code># Encontrar commit que introdujo un bug
+git bisect start
+git bisect bad HEAD
+git bisect good commit-antiguo
+
+# Git bisect automático
+git bisect run npm test</code></pre>
+            </div>
+
+            <h2>A.6 Ejercicios de Recuperación</h2>
+
+            <div class="recovery-exercise">
+                <h3>Escenarios de Recuperación</h3>
+                <pre><code># Recuperar commit eliminado
+git reflog
+git reset --hard HEAD@{1}
+
+# Recuperar archivos eliminados
+git checkout HEAD~1 archivo.txt
+
+# Deshacer merge problemático
+git reset --hard ORIG_HEAD</code></pre>
+            </div>
+
+            <div class="practice-section">
+                <h3>🎯 Mini-Proyectos Sugeridos</h3>
+                <ol>
+                    <li>
+                        <strong>Portfolio Personal</strong>
+                        <ul>
+                            <li>Implementar Git Flow</li>
+                            <li>Configurar GitHub Pages</li>
+                            <li>Automatizar despliegue</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Aplicación de Notas</strong>
+                        <ul>
+                            <li>Trabajo en equipo</li>
+                            <li>Resolución de conflictos</li>
+                            <li>Feature branches</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>API Documentation</strong>
+                        <ul>
+                            <li>Versionado semántico</li>
+                            <li>Release management</li>
+                            <li>Documentación automática</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Consejos para los Ejercicios</h3>
+                <ul>
+                    <li>Usa un repositorio de práctica para experimentar</li>
+                    <li>Documenta los comandos que uses</li>
+                    <li>Simula diferentes escenarios de error</li>
+                    <li>Practica la recuperación de errores</li>
+                    <li>Trabaja con otros desarrolladores cuando sea posible</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>🔧 Herramientas Recomendadas</h3>
+                <ul>
+                    <li>GitKraken - Visualización de ramas</li>
+                    <li>Visual Studio Code + GitLens</li>
+                    <li>GitHub Desktop para principiantes</li>
+                    <li>Git Graph extension</li>
+                    <li>Git Command Explorer</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="../capitulos/capitulo09.html" class="button">← Volver al Manual</a>
+            <a href="../index.html" class="button">Inicio</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 8: Resolución de Conflictos - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html" class="active">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 8: Resolución de Conflictos</h1>
+        
+        <div class="content">
+            <h2>8.1 Entendiendo los Conflictos</h2>
+            
+            <div class="conflict-basics">
+                <h3>¿Qué es un Conflicto?</h3>
+                <p>Un conflicto ocurre cuando Git no puede resolver automáticamente las diferencias entre dos commits.</p>
+
+                <h3>Causas Comunes de Conflictos</h3>
+                <ul>
+                    <li>Modificación de la misma línea en diferentes ramas</li>
+                    <li>Eliminación de archivo en una rama mientras se modifica en otra</li>
+                    <li>Renombrado de archivo en una rama mientras se modifica en otra</li>
+                    <li>Cambios en archivos binarios</li>
+                </ul>
+            </div>
+
+            <h2>8.2 Anatomía de un Conflicto</h2>
+
+            <div class="conflict-anatomy">
+                <h3>Marcadores de Conflicto</h3>
+                <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+const greeting = "Hola Mundo";
+=======
+const greeting = "Hello World";
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/english-version
+</code></pre>
+
+                <h3>Significado de los Marcadores</h3>
+                <ul>
+                    <li><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>: Inicio del conflicto - versión actual</li>
+                    <li><code>=======</code>: Separador entre versiones</li>
+                    <li><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; rama</code>: Final del conflicto - versión de la rama</li>
+                </ul>
+            </div>
+
+            <h2>8.3 Herramientas de Resolución</h2>
+
+            <div class="conflict-tools">
+                <h3>Herramientas en Línea de Comandos</h3>
+                <pre><code># Ver estado de archivos en conflicto
+git status
+
+# Ver diferencias en detalle
+git diff
+
+# Marcar como resuelto
+git add &lt;archivo&gt;
+
+# Continuar merge después de resolver
+git merge --continue</code></pre>
+
+                <h3>Herramientas Visuales</h3>
+                <ul>
+                    <li>VS Code Git</li>
+                    <li>GitKraken</li>
+                    <li>Meld</li>
+                    <li>Beyond Compare</li>
+                    <li>P4Merge</li>
+                </ul>
+            </div>
+
+            <h2>8.4 Estrategias de Resolución</h2>
+
+            <div class="resolution-strategies">
+                <h3>Método Manual</h3>
+                <pre><code># 1. Identificar archivos en conflicto
+git status
+
+# 2. Abrir y editar archivos
+# 3. Eliminar marcadores de conflicto
+# 4. Elegir o combinar cambios
+
+# 5. Marcar como resuelto
+git add archivo_resuelto.txt
+
+# 6. Completar el merge
+git merge --continue</code></pre>
+
+                <h3>Usando checkout</h3>
+                <pre><code># Aceptar cambios de la rama actual (HEAD)
+git checkout --ours archivo.txt
+
+# Aceptar cambios de la otra rama
+git checkout --theirs archivo.txt
+
+# Después de elegir
+git add archivo.txt</code></pre>
+            </div>
+
+            <h2>8.5 Prevención de Conflictos</h2>
+
+            <div class="conflict-prevention">
+                <h3>Buenas Prácticas</h3>
+                <ul>
+                    <li>Mantener commits pequeños y frecuentes</li>
+                    <li>Actualizar la rama regularmente con main/master</li>
+                    <li>Comunicar cambios al equipo</li>
+                    <li>Usar archivos .gitignore adecuadamente</li>
+                    <li>Establecer convenciones de código claras</li>
+                </ul>
+
+                <h3>Estrategias de Branching</h3>
+                <pre><code># Actualizar rama antes de empezar
+git checkout feature-branch
+git pull origin main
+
+# Rebase periódico
+git checkout feature-branch
+git rebase main
+
+# Merge de mantenimiento
+git checkout feature-branch
+git merge main</code></pre>
+            </div>
+
+            <h2>8.6 Escenarios Complejos</h2>
+
+            <div class="complex-scenarios">
+                <h3>Conflictos en Rebase</h3>
+                <pre><code># Durante un rebase
+git rebase main
+
+# Si hay conflictos
+# 1. Resolver conflictos
+# 2. git add &lt;archivos&gt;
+# 3. git rebase --continue
+
+# Para abortar
+git rebase --abort</code></pre>
+
+                <h3>Conflictos en Cherry-Pick</h3>
+                <pre><code># Al aplicar commit específico
+git cherry-pick &lt;commit-hash&gt;
+
+# Resolver conflictos
+git add &lt;archivos&gt;
+git cherry-pick --continue
+
+# Para abortar
+git cherry-pick --abort</code></pre>
+            </div>
+
+            <h2>8.7 Casos Especiales</h2>
+
+            <div class="special-cases">
+                <h3>Conflictos Binarios</h3>
+                <ul>
+                    <li>Usar herramientas específicas para el tipo de archivo</li>
+                    <li>Considerar Git LFS para archivos grandes</li>
+                    <li>Mantener respaldos antes de resolver</li>
+                </ul>
+
+                <h3>Conflictos en Renombrado</h3>
+                <pre><code># Ver detalles del renombrado
+git log --follow archivo
+
+# Resolver usando la herramienta de merge
+git mergetool</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Consejos para Resolución de Conflictos</h3>
+                <ul>
+                    <li>Entender ambos cambios antes de resolver</li>
+                    <li>Consultar con otros desarrolladores cuando sea necesario</li>
+                    <li>Mantener backups de archivos importantes</li>
+                    <li>Probar código después de resolver conflictos</li>
+                    <li>Documentar decisiones importantes en mensajes de commit</li>
+                </ul>
+            </div>
+
+            <div class="exercise-section">
+                <h3>🔄 Ejercicio Práctico</h3>
+                <ol>
+                    <li>Crear una rama y modificar un archivo</li>
+                    <li>Modificar el mismo archivo en main</li>
+                    <li>Intentar merge y resolver el conflicto</li>
+                    <li>Practicar con diferentes estrategias de resolución</li>
+                    <li>Probar herramientas visuales de merge</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo07.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo09.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

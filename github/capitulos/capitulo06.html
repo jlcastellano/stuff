@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 6: Visual Studio Code y Git - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html" class="active">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Capítulo 6: Visual Studio Code y Git</h1>
+        
+        <div class="content">
+            <h2>6.1 Configuración Inicial</h2>
+            
+            <div class="setup-section">
+                <h3>Extensiones Recomendadas</h3>
+                <ul>
+                    <li><strong>GitLens:</strong> Información detallada sobre el historial de Git</li>
+                    <li><strong>Git History:</strong> Visualización del historial de Git</li>
+                    <li><strong>Git Graph:</strong> Visualización gráfica de ramas</li>
+                </ul>
+
+                <h3>Configuración del Terminal Integrado</h3>
+                <pre><code>// settings.json
+{
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true
+}</code></pre>
+            </div>
+
+            <h2>6.2 Panel de Control de Versiones</h2>
+
+            <div class="source-control-section">
+                <h3>Elementos Principales</h3>
+                <ul>
+                    <li><strong>Changes:</strong> Archivos modificados</li>
+                    <li><strong>Staged Changes:</strong> Cambios preparados para commit</li>
+                    <li><strong>Commit Message:</strong> Campo para mensaje de commit</li>
+                    <li><strong>More Actions:</strong> Opciones adicionales</li>
+                </ul>
+
+                <h3>Acciones Comunes</h3>
+                <table class="shortcuts-table">
+                    <tr>
+                        <th>Acción</th>
+                        <th>Atajo (Windows)</th>
+                        <th>Atajo (Mac)</th>
+                    </tr>
+                    <tr>
+                        <td>Abrir panel de Git</td>
+                        <td>Ctrl+Shift+G</td>
+                        <td>Cmd+Shift+G</td>
+                    </tr>
+                    <tr>
+                        <td>Stage cambios</td>
+                        <td>Ctrl+Enter</td>
+                        <td>Cmd+Enter</td>
+                    </tr>
+                    <tr>
+                        <td>Commit staged</td>
+                        <td>Ctrl+Enter</td>
+                        <td>Cmd+Enter</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>6.3 Trabajo con Cambios</h2>
+
+            <div class="changes-section">
+                <h3>Visualización de Diferencias</h3>
+                <ul>
+                    <li>Vista lado a lado de cambios</li>
+                    <li>Resaltado de líneas modificadas</li>
+                    <li>Stage/unstage de cambios específicos</li>
+                    <li>Descartar cambios selectivamente</li>
+                </ul>
+
+                <h3>Comandos de la Paleta</h3>
+                <pre><code>// Comandos comunes (Ctrl/Cmd + Shift + P)
+Git: Add Remote
+Git: Checkout to...
+Git: Create Branch...
+Git: Pull
+Git: Push
+Git: Sync</code></pre>
+            </div>
+
+            <h2>6.4 Gestión de Ramas</h2>
+
+            <div class="branch-section">
+                <h3>Operaciones con Ramas</h3>
+                <ul>
+                    <li>Crear nueva rama</li>
+                    <li>Cambiar entre ramas</li>
+                    <li>Fusionar ramas</li>
+                    <li>Eliminar ramas</li>
+                </ul>
+
+                <h3>Accesos Directos</h3>
+                <pre><code># Desde la barra de estado
+Click en nombre de rama actual → Lista de ramas
+
+# Desde la paleta de comandos
+Git: Checkout to...
+Git: Create Branch...
+Git: Delete Branch...</code></pre>
+            </div>
+
+            <h2>6.5 Resolución de Conflictos</h2>
+
+            <div class="conflict-section">
+                <h3>Herramientas de Merge</h3>
+                <ul>
+                    <li>Editor de conflictos visual</li>
+                    <li>Opciones de Accept Current/Incoming/Both</li>
+                    <li>Vista de diferencias en tres vías</li>
+                    <li>Marcadores de conflicto interactivos</li>
+                </ul>
+
+                <h3>Proceso de Resolución</h3>
+                <ol>
+                    <li>Identificar archivos con conflictos</li>
+                    <li>Abrir editor de merge</li>
+                    <li>Elegir cambios a mantener</li>
+                    <li>Marcar como resuelto</li>
+                    <li>Completar el merge</li>
+                </ol>
+            </div>
+
+            <h2>6.6 GitLens</h2>
+
+            <div class="gitlens-section">
+                <h3>Características Principales</h3>
+                <ul>
+                    <li>Blame annotations en línea</li>
+                    <li>Explorador de historial de archivos</li>
+                    <li>Comparación de ramas</li>
+                    <li>Historial de líneas</li>
+                    <li>Visualización de stashes</li>
+                </ul>
+
+                <h3>Configuraciones Útiles</h3>
+                <pre><code>// settings.json
+{
+    "gitlens.currentLine.enabled": true,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.codeLens.enabled": true,
+    "gitlens.statusBar.enabled": true
+}</code></pre>
+            </div>
+
+            <h2>6.7 Terminal Integrado</h2>
+
+            <div class="terminal-section">
+                <h3>Comandos Git en Terminal</h3>
+                <pre><code># Abrir terminal integrado
+Ctrl + ` (Windows/Linux)
+Cmd + ` (Mac)
+
+# Ejecutar comandos Git
+git status
+git log --oneline
+git branch -a</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Consejos Avanzados</h3>
+                <ul>
+                    <li>Usa la vista de Timeline para ver el historial de un archivo</li>
+                    <li>Configura alias personalizados para comandos frecuentes</li>
+                    <li>Utiliza los marcadores de Git en el scroll bar</li>
+                    <li>Aprovecha la integración con GitHub para PRs</li>
+                    <li>Usa snippets para mensajes de commit estandarizados</li>
+                </ul>
+            </div>
+
+            <div class="exercise-section">
+                <h3>🔄 Ejercicio Práctico</h3>
+                <ol>
+                    <li>Instala y configura las extensiones recomendadas</li>
+                    <li>Practica el flujo de trabajo básico usando la interfaz de VS Code</li>
+                    <li>Crea y gestiona ramas desde la interfaz</li>
+                    <li>Resuelve un conflicto usando el editor de merge</li>
+                    <li>Explora las características de GitLens</li>
+                    <li>Personaliza la configuración según tus necesidades</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo05.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo07.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

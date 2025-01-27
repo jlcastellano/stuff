@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 2: Conceptos Básicos y Primeros Pasos - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html" class="active">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 2: Conceptos Básicos y Primeros Pasos</h1>
+
+        <div class="content">
+            <h2>2.1 Conceptos Fundamentales</h2>
+
+            <div class="concept-section">
+                <h3>¿Qué es el Control de Versiones?</h3>
+                <p>Un sistema de control de versiones (VCS) permite:</p>
+                <ul>
+                    <li>Registrar cambios en archivos a lo largo del tiempo</li>
+                    <li>Recuperar versiones específicas más adelante</li>
+                    <li>Colaborar con otros desarrolladores</li>
+                    <li>Comparar cambios a lo largo del tiempo</li>
+                    <li>Ver quién modificó por última vez algo que podría estar causando problemas</li>
+                </ul>
+
+                <h3>¿Qué es un Commit?</h3>
+                <p>Un commit es una instantánea (snapshot) del estado de tu proyecto en un momento específico. Es como
+                    una fotografía que captura:</p>
+                <ul>
+                    <li>Los cambios realizados en los archivos</li>
+                    <li>Quién realizó los cambios</li>
+                    <li>Cuándo se realizaron los cambios</li>
+                    <li>Por qué se realizaron (a través del mensaje de commit)</li>
+                </ul>
+                <p>Los commits forman la línea de tiempo de tu proyecto, permitiéndote volver a cualquier punto anterior
+                    si es necesario.</p>
+
+                <h3>Estructura de Git</h3>
+                <h4>Las Tres Áreas de Git</h4>
+                <ul>
+                    <li><strong>Working Directory (Directorio de Trabajo)</strong>: Donde modificas tus archivos</li>
+                    <li><strong>Staging Area (Área de Preparación)</strong>: Donde preparas los cambios que quieres
+                        commitear</li>
+                    <li><strong>Repository (Repositorio)</strong>: Donde se almacenan los commits</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>2.2 Primeros Pasos</h2>
+
+        <div class="command-section">
+            <h3>Crear un Nuevo Repositorio</h3>
+            <pre><code>mkdir mi_proyecto
+cd mi_proyecto
+git init</code></pre>
+            <p>Esto crea un nuevo directorio con un repositorio Git inicializado.</p>
+        </div>
+
+        <div class="concept-section">
+            <h3>Estados de los Archivos</h3>
+            <ul>
+                <li><strong>Untracked</strong>: Archivos que Git no está siguiendo</li>
+                <li><strong>Tracked</strong>: Archivos que Git está siguiendo
+                    <ul>
+                        <li><em>Modified</em>: Modificado pero no preparado</li>
+                        <li><em>Staged</em>: Preparado para el próximo commit</li>
+                        <li><em>Committed</em>: Guardado en el repositorio</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <h2>2.3 El archivo .gitignore</h2>
+
+        <div class="gitignore-section">
+            <p>El archivo .gitignore especifica qué archivos debe ignorar Git:</p>
+            <pre><code># Ejemplo de .gitignore
+# Ignorar archivos compilados
+*.class
+*.o
+*.pyc
+
+# Ignorar directorios
+node_modules/
+dist/
+build/
+
+# Ignorar archivos de configuración local
+.env
+config.local.json
+
+# Ignorar archivos del sistema
+.DS_Store
+Thumbs.db</code></pre>
+        </div>
+
+        <h2>2.4 Anatomía de un Commit</h2>
+
+        <div class="commit-anatomy">
+            <p>Cada commit contiene:</p>
+            <ul>
+                <li>Un identificador único (hash SHA-1)</li>
+                <li>Mensaje descriptivo</li>
+                <li>Autor y fecha</li>
+                <li>Referencia al commit padre</li>
+                <li>Instantánea del código en ese momento</li>
+            </ul>
+
+            <h3>Buenas Prácticas para Mensajes de Commit</h3>
+            <pre><code># Estructura recomendada
+tipo(alcance): descripción corta
+
+descripción detallada si es necesaria
+
+# Ejemplos
+feat: añade nueva funcionalidad de login
+fix: corrige error en la validación de formularios
+docs: actualiza documentación de API
+style: formato de código sin cambios funcionales</code></pre>
+        </div>
+
+        <div class="pro-tip">
+            <h3>💡 Consejos Importantes</h3>
+            <ul>
+                <li>Mantén los commits atómicos (una sola funcionalidad/fix por commit)</li>
+                <li>Usa mensajes descriptivos pero concisos</li>
+                <li>Sigue un estándar en los mensajes de commit</li>
+                <li>Revisa siempre qué archivos están staged antes de hacer commit</li>
+            </ul>
+        </div>
+
+        <h2>2.5 Verificación del Estado</h2>
+
+        <div class="command-section">
+            <h3>Comandos Básicos de Verificación</h3>
+            <pre><code># Ver el estado actual del repositorio
+git status
+
+# Ver el historial de commits
+git log
+
+# Ver el historial en formato compacto
+git log --oneline
+
+# Ver cambios en archivos
+git diff
+
+# Ver cambios en archivos staged
+git diff --staged</code></pre>
+        </div>
+    </div>
+
+    <div class="navigation-buttons">
+        <a href="capitulo01.html" class="button">← Capítulo Anterior</a>
+        <a href="capitulo03.html" class="button">Siguiente Capítulo →</a>
+    </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+
+</html>

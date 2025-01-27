@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 7: GitHub y Repositorios Remotos - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html" class="active">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 7: GitHub y Repositorios Remotos</h1>
+        
+        <div class="content">
+            <h2>7.1 Configuración Inicial de GitHub</h2>
+            
+            <div class="setup-section">
+                <h3>Creación de Cuenta y Configuración</h3>
+                <ol>
+                    <li>Registrarse en GitHub</li>
+                    <li>Configurar perfil</li>
+                    <li>Configurar SSH keys</li>
+                    <li>Configurar autenticación de dos factores</li>
+                </ol>
+
+                <h3>Configuración de SSH</h3>
+                <pre><code># Generar nueva clave SSH
+ssh-keygen -t ed25519 -C "tu_email@ejemplo.com"
+
+# Iniciar el agente SSH
+eval "$(ssh-agent -s)"
+
+# Añadir la clave al agente
+ssh-add ~/.ssh/id_ed25519
+
+# Copiar la clave pública (para añadir a GitHub)
+cat ~/.ssh/id_ed25519.pub</code></pre>
+            </div>
+
+            <h2>7.2 Repositorios Remotos</h2>
+
+            <div class="remote-section">
+                <h3>Operaciones Básicas</h3>
+                <pre><code># Clonar repositorio
+git clone https://github.com/usuario/repositorio.git
+
+# Añadir remoto
+git remote add origin https://github.com/usuario/repositorio.git
+
+# Ver remotos
+git remote -v
+
+# Eliminar remoto
+git remote remove origin
+
+# Cambiar URL del remoto
+git remote set-url origin nueva-url</code></pre>
+
+                <h3>Sincronización</h3>
+                <pre><code># Subir cambios
+git push origin main
+
+# Traer cambios
+git fetch origin
+
+# Traer y fusionar cambios
+git pull origin main
+
+# Subir todas las ramas y tags
+git push --all origin
+git push --tags</code></pre>
+            </div>
+
+            <h2>7.3 Pull Requests</h2>
+
+            <div class="pr-section">
+                <h3>Proceso de Pull Request</h3>
+                <ol>
+                    <li>Crear rama para feature</li>
+                    <li>Realizar cambios y commits</li>
+                    <li>Pushear rama a GitHub</li>
+                    <li>Crear Pull Request</li>
+                    <li>Revisión de código</li>
+                    <li>Aplicar cambios sugeridos</li>
+                    <li>Merge del PR</li>
+                </ol>
+
+                <h3>Buenas Prácticas para PRs</h3>
+                <div class="pr-template">
+                    <pre><code># Plantilla de Pull Request
+
+## Descripción
+[Descripción breve de los cambios]
+
+## Cambios Realizados
+- [Cambio 1]
+- [Cambio 2]
+- [Cambio 3]
+
+## Testing
+- [ ] Test unitarios
+- [ ] Test de integración
+- [ ] Test manuales
+
+## Screenshots
+[Si aplica]
+
+## Issues Relacionados
+Closes #123</code></pre>
+                </div>
+            </div>
+
+            <h2>7.4 Issues y Proyectos</h2>
+
+            <div class="issues-section">
+                <h3>Gestión de Issues</h3>
+                <ul>
+                    <li>Crear issues descriptivos</li>
+                    <li>Usar etiquetas apropiadas</li>
+                    <li>Asignar responsables</li>
+                    <li>Establecer hitos</li>
+                    <li>Usar plantillas de issues</li>
+                </ul>
+
+                <h3>Tableros de Proyecto</h3>
+                <ul>
+                    <li>Configurar columnas (To Do, In Progress, Done)</li>
+                    <li>Automatizar movimientos</li>
+                    <li>Integrar con issues y PRs</li>
+                    <li>Usar vistas diferentes (tabla, tablero)</li>
+                </ul>
+            </div>
+
+            <h2>7.5 GitHub Actions</h2>
+
+            <div class="actions-section">
+                <h3>Automatización Básica</h3>
+                <pre><code># Ejemplo de workflow básico
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Install dependencies
+      run: npm install
+    - name: Run tests
+      run: npm test</code></pre>
+            </div>
+
+            <h2>7.6 Características Avanzadas</h2>
+
+            <div class="advanced-section">
+                <h3>GitHub Pages</h3>
+                <pre><code># Configurar GitHub Pages
+# 1. Ir a Settings > Pages
+# 2. Seleccionar branch source
+# 3. Elegir carpeta (root o /docs)
+# 4. Save</code></pre>
+
+                <h3>GitHub Packages</h3>
+                <ul>
+                    <li>Publicación de paquetes</li>
+                    <li>Gestión de dependencias</li>
+                    <li>Versionado semántico</li>
+                </ul>
+
+                <h3>Gists</h3>
+                <ul>
+                    <li>Compartir snippets de código</li>
+                    <li>Versionar snippets</li>
+                    <li>Embedder en otras páginas</li>
+                </ul>
+            </div>
+
+            <h2>7.7 Seguridad y Permisos</h2>
+
+            <div class="security-section">
+                <h3>Configuraciones de Seguridad</h3>
+                <ul>
+                    <li>Gestión de accesos</li>
+                    <li>Revisión de dependencias</li>
+                    <li>Análisis de código</li>
+                    <li>Configuración de branch protection</li>
+                </ul>
+
+                <h3>Branch Protection Rules</h3>
+                <pre><code># Reglas comunes
+- Require pull request reviews
+- Require status checks to pass
+- Require signed commits
+- Include administrators
+- Allow force pushes
+- Allow deletions</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Consejos para GitHub</h3>
+                <ul>
+                    <li>Mantén un README.md completo y actualizado</li>
+                    <li>Usa GitHub Projects para gestión de tareas</li>
+                    <li>Configura webhooks para integraciones</li>
+                    <li>Utiliza GitHub Actions para CI/CD</li>
+                    <li>Implementa templates para Issues y PRs</li>
+                </ul>
+            </div>
+
+            <div class="exercise-section">
+                <h3>🔄 Ejercicio Práctico</h3>
+                <ol>
+                    <li>Configura un nuevo repositorio en GitHub</li>
+                    <li>Clona el repositorio localmente</li>
+                    <li>Crea una rama y realiza cambios</li>
+                    <li>Crea un Pull Request</li>
+                    <li>Configura GitHub Actions básico</li>
+                    <li>Implementa GitHub Pages</li>
+                    <li>Practica la gestión de issues</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo06.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo08.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

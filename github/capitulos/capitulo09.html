@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 9: Temas Avanzados y Mejores Prácticas - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html" class="active">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 9: Temas Avanzados y Mejores Prácticas</h1>
+        
+        <div class="content">
+            <h2>9.1 Git Internos</h2>
+            
+            <div class="internals-section">
+                <h3>Objetos de Git</h3>
+                <ul>
+                    <li><strong>Blobs:</strong> Contenido de archivos</li>
+                    <li><strong>Trees:</strong> Directorios y metadata</li>
+                    <li><strong>Commits:</strong> Snapshots del proyecto</li>
+                    <li><strong>Tags:</strong> Referencias nombradas</li>
+                </ul>
+
+                <h3>Comandos Internos</h3>
+                <pre><code># Ver objetos Git
+git cat-file -p &lt;hash&gt;
+
+# Examinar estructura interna
+git ls-tree HEAD
+
+# Ver objetos sueltos
+git fsck
+
+# Mantenimiento y optimización
+git gc
+git prune</code></pre>
+            </div>
+
+            <h2>9.2 Git Hooks Avanzados</h2>
+
+            <div class="hooks-section">
+                <h3>Hooks Personalizados</h3>
+                <pre><code>#!/bin/bash
+# .git/hooks/pre-commit
+# Validación de estilo de código
+eslint .
+
+# Ejecutar tests
+npm test
+
+# Verificar mensajes de commit
+#!/bin/bash
+# .git/hooks/commit-msg
+commit_regex='^(feat|fix|docs|style|refactor|test|chore):.+'
+error_msg="El mensaje de commit debe seguir Conventional Commits"
+
+if ! grep -iqE "$commit_regex" "$1"; then
+    echo "$error_msg" >&2
+    exit 1
+fi</code></pre>
+
+                <h3>Implementación de Hooks en Equipo</h3>
+                <pre><code># Configurar directorio de hooks compartido
+git config core.hooksPath .githooks
+
+# Script de instalación de hooks
+#!/bin/bash
+# install-hooks.sh
+cp .githooks/* .git/hooks/
+chmod +x .git/hooks/*</code></pre>
+            </div>
+
+            <h2>9.3 Estrategias Avanzadas de Branching</h2>
+
+            <div class="branching-section">
+                <h3>Patrones de Branch por Entorno</h3>
+                <pre><code># Estructura de ramas
+main          # Producción
+├── staging   # Pre-producción
+├── qa        # Testing
+└── develop   # Desarrollo
+    ├── feature/A
+    ├── feature/B
+    └── hotfix/X
+
+# Políticas de merge
+git merge --no-ff feature/A  # Preservar historia
+git merge --squash feature/B # Condensar commits</code></pre>
+
+                <h3>Branch Protection Avanzada</h3>
+                <ul>
+                    <li>Required status checks</li>
+                    <li>Required reviews</li>
+                    <li>Require signed commits</li>
+                    <li>Include administrators</li>
+                </ul>
+            </div>
+
+            <h2>9.4 Optimización de Rendimiento</h2>
+
+            <div class="performance-section">
+                <h3>Repositorios Grandes</h3>
+                <pre><code># Clon superficial
+git clone --depth 1 repositorio
+
+# Clon parcial
+git clone --filter=blob:none repositorio
+
+# Limpiar historial
+git filter-branch --tree-filter 'rm -rf carpeta-grande' HEAD
+
+# Comprimir repositorio
+git gc --aggressive --prune=now</code></pre>
+
+                <h3>Git LFS (Large File Storage)</h3>
+                <pre><code># Configurar LFS
+git lfs install
+
+# Trackear archivos grandes
+git lfs track "*.psd"
+git lfs track "*.zip"
+
+# Ver archivos trackeados
+git lfs ls-files</code></pre>
+            </div>
+
+            <h2>9.5 Seguridad Avanzada</h2>
+
+            <div class="security-section">
+                <h3>Firma de Commits y Tags</h3>
+                <pre><code># Configurar GPG
+git config --global user.signingkey &lt;key-id&gt;
+
+# Firmar commits
+git commit -S -m "commit firmado"
+
+# Firmar tags
+git tag -s v1.0.0 -m "Release v1.0.0"
+
+# Verificar firmas
+git verify-commit &lt;commit-hash&gt;
+git verify-tag v1.0.0</code></pre>
+
+                <h3>Auditoría de Seguridad</h3>
+                <pre><code># Buscar secretos en el historial
+git log -p | grep -i password
+
+# Verificar integridad
+git fsck --full
+
+# Revisar permisos
+git ls-files -s</code></pre>
+            </div>
+
+            <h2>9.6 Automatización Avanzada</h2>
+
+            <div class="automation-section">
+                <h3>Scripts Personalizados</h3>
+                <pre><code>#!/bin/bash
+# git-cleanup
+# Limpia ramas fusionadas
+git branch --merged | grep -v "main" | xargs git branch -d
+
+# git-sync
+# Sincroniza todas las ramas
+git fetch --all --prune
+git pull --rebase origin main
+git push origin --all</code></pre>
+
+                <h3>GitHub Actions Avanzadas</h3>
+                <pre><code>name: Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}</code></pre>
+            </div>
+
+            <h2>9.7 Mejores Prácticas Profesionales</h2>
+
+            <div class="best-practices">
+                <h3>Estructura de Commits</h3>
+                <ul>
+                    <li>Commits atómicos y coherentes</li>
+                    <li>Mensajes descriptivos y estandarizados</li>
+                    <li>Referencias a issues/tickets</li>
+                    <li>Separación de cambios refactor/feature</li>
+                </ul>
+
+                <h3>Flujo de Trabajo en Equipo</h3>
+                <ul>
+                    <li>Code review sistemático</li>
+                    <li>Documentación actualizada</li>
+                    <li>Tests automatizados</li>
+                    <li>Integración continua</li>
+                    <li>Despliegue controlado</li>
+                </ul>
+
+                <h3>Mantenimiento a Largo Plazo</h3>
+                <ul>
+                    <li>Limpieza periódica de ramas</li>
+                    <li>Actualización de dependencias</li>
+                    <li>Monitoreo de tamaño del repositorio</li>
+                    <li>Backups regulares</li>
+                    <li>Documentación de procesos</li>
+                </ul>
+            </div>
+
+            <div class="final-thoughts">
+                <h3>🎓 Conclusiones del Manual</h3>
+                <ul>
+                    <li>Git es una herramienta fundamental en el desarrollo moderno</li>
+                    <li>La práctica constante es clave para el dominio</li>
+                    <li>Las mejores prácticas evolucionan con el tiempo</li>
+                    <li>La automatización mejora la eficiencia del equipo</li>
+                    <li>La seguridad y el mantenimiento son cruciales</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>📚 Recursos Adicionales</h3>
+                <ul>
+                    <li>Documentación oficial de Git</li>
+                    <li>GitHub Guides y Learning Lab</li>
+                    <li>Comunidades y foros especializados</li>
+                    <li>Herramientas de visualización de Git</li>
+                    <li>Cursos avanzados y certificaciones</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo08.html" class="button">← Capítulo Anterior</a>
+            <a href="../index.html" class="button">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>

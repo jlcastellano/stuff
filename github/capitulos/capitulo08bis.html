@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 8: Casos Prácticos y Ejercicios - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="capitulo08.html" class="active">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Capítulo 8: Casos Prácticos y Ejercicios</h1>
+        
+        <div class="content">
+            <h2>8.1 Caso Práctico: Desarrollo de un Sitio Web</h2>
+            
+            <div class="project-section">
+                <h3>Escenario</h3>
+                <p>Desarrollarás un sitio web simple trabajando en equipo, aplicando las mejores prácticas de Git.</p>
+
+                <h3>Pasos del Proyecto</h3>
+                <pre><code># 1. Inicialización del Proyecto
+git init
+git add README.md
+git commit -m "docs: inicializa proyecto"
+
+# 2. Estructura Inicial
+git checkout -b feature/estructura-inicial
+# Crear archivos base
+touch index.html styles.css script.js
+git add .
+git commit -m "feat: añade archivos base"
+
+# 3. Desarrollo de Features
+git checkout -b feature/header
+# Desarrollar header
+git commit -m "feat: implementa header responsivo"
+
+git checkout -b feature/main-content
+# Desarrollar contenido principal
+git commit -m "feat: añade sección principal"
+
+# 4. Merge de Features
+git checkout main
+git merge feature/header
+git merge feature/main-content</code></pre>
+            </div>
+
+            <h2>8.2 Ejercicio: Resolución de Conflictos</h2>
+
+            <div class="conflict-exercise">
+                <h3>Escenario de Conflicto</h3>
+                <pre><code># Desarrollador 1
+git checkout -b feature/estilos-header
+# Modificar styles.css
+git commit -m "style: actualiza estilos del header"
+
+# Desarrollador 2
+git checkout -b feature/fix-header
+# Modificar los mismos estilos
+git commit -m "fix: corrige estilos del header"
+
+# Resolución
+git checkout main
+git merge feature/estilos-header
+git merge feature/fix-header
+# Resolver conflictos manualmente
+git add styles.css
+git commit -m "merge: resuelve conflictos en estilos header"</code></pre>
+            </div>
+
+            <h2>8.3 Ejercicio: Trabajando con Ramas</h2>
+
+            <div class="branch-exercise">
+                <h3>Gestión de Features y Releases</h3>
+                <pre><code># Crear rama de desarrollo
+git checkout -b develop
+git push -u origin develop
+
+# Feature branches
+git checkout -b feature/login
+# Desarrollar login
+git commit -m "feat: implementa sistema de login"
+
+# Preparar release
+git checkout -b release/v1.0
+# Ajustes finales
+git commit -m "chore: prepara versión 1.0"
+
+# Merge a main y develop
+git checkout main
+git merge release/v1.0
+git tag -a v1.0.0 -m "Primera versión estable"</code></pre>
+            </div>
+
+            <h2>8.4 Ejercicio: Colaboración en GitHub</h2>
+
+            <div class="github-exercise">
+                <h3>Proceso de Pull Request</h3>
+                <pre><code># Forkear repositorio en GitHub
+
+# Clonar fork
+git clone https://github.com/tu-usuario/proyecto.git
+
+# Crear branch para feature
+git checkout -b feature/nueva-funcionalidad
+
+# Desarrollar y commitear cambios
+git add .
+git commit -m "feat: añade nueva funcionalidad"
+
+# Push y crear PR
+git push origin feature/nueva-funcionalidad
+
+# Aplicar cambios solicitados
+git commit -m "fix: ajustes según revisión"
+git push origin feature/nueva-funcionalidad</code></pre>
+            </div>
+
+            <h2>8.5 Ejercicio: Git Flow Completo</h2>
+
+            <div class="gitflow-exercise">
+                <h3>Desarrollo de Nueva Característica</h3>
+                <pre><code># Iniciar Git Flow
+git flow init
+
+# Nueva feature
+git flow feature start auth-system
+
+# Desarrollo y commits
+git add .
+git commit -m "feat: implementa autenticación"
+
+# Finalizar feature
+git flow feature finish auth-system
+
+# Preparar release
+git flow release start v1.1.0
+
+# Ajustes finales
+git commit -m "chore: ajusta configuración para v1.1.0"
+
+# Finalizar release
+git flow release finish v1.1.0</code></pre>
+            </div>
+
+            <h2>8.6 Ejercicio: Automatización con GitHub Actions</h2>
+
+            <div class="actions-exercise">
+                <h3>Configuración de CI/CD</h3>
+                <pre><code># .github/workflows/ci.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Install Dependencies
+      run: npm install
+    - name: Run Tests
+      run: npm test
+    - name: Build
+      run: npm run build</code></pre>
+            </div>
+
+            <h2>8.7 Ejercicio: Recuperación de Errores</h2>
+
+            <div class="recovery-exercise">
+                <h3>Escenarios de Recuperación</h3>
+                <pre><code># Revertir último commit
+git revert HEAD
+
+# Recuperar archivo eliminado
+git checkout HEAD~1 archivo.txt
+
+# Recuperar rama eliminada
+git reflog
+git checkout -b rama-recuperada commit-hash
+
+# Limpiar historial
+git rebase -i HEAD~5
+# Squash commits relacionados</code></pre>
+            </div>
+
+            <div class="practice-tips">
+                <h3>💡 Consejos para los Ejercicios</h3>
+                <ul>
+                    <li>Crea un repositorio de práctica para cada ejercicio</li>
+                    <li>Documenta los pasos realizados</li>
+                    <li>Experimenta con diferentes escenarios</li>
+                    <li>Practica la resolución de conflictos</li>
+                    <li>Usa mensajes de commit descriptivos</li>
+                </ul>
+            </div>
+
+            <div class="challenge-section">
+                <h3>🏆 Retos Adicionales</h3>
+                <ol>
+                    <li>Implementa un flujo de trabajo completo para un proyecto personal</li>
+                    <li>Configura un pipeline de CI/CD personalizado</li>
+                    <li>Contribuye a un proyecto open source</li>
+                    <li>Crea un script de git hooks personalizado</li>
+                    <li>Implementa una estrategia de branching personalizada</li>
+                </ol>
+            </div>
+
+            <div class="project-ideas">
+                <h3>🚀 Ideas para Proyectos</h3>
+                <ul>
+                    <li>Blog personal con sistema de posts</li>
+                    <li>Aplicación de notas colaborativa</li>
+                    <li>Portfolio personal con CI/CD</li>
+                    <li>Dashboard de datos con actualizaciones automáticas</li>
+                    <li>Sistema de documentación técnica</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo07.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo09.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos - Formación Profesional</p>
+    </footer>
+</body>
+</html>

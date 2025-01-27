@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 3: Comandos Fundamentales y Flujo Básico - Manual de Git</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Git y GitHub</div>
+        <div class="nav-links">
+            <a href="../index.html">Inicio</a>
+            <a href="capitulo01.html">Cap. 1</a>
+            <a href="capitulo02.html">Cap. 2</a>
+            <a href="capitulo03.html" class="active">Cap. 3</a>
+            <a href="capitulo04.html">Cap. 4</a>
+            <a href="capitulo05.html">Cap. 5</a>
+            <a href="capitulo06.html">Cap. 6</a>
+            <a href="capitulo07.html">Cap. 7</a>
+            <a href="captitulo08.html">Cap. 8</a>
+            <a href="capitulo09.html">Cap. 9</a>
+            <a href="anexo.html">Anexo</a>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <h1>Capítulo 3: Comandos Fundamentales y Flujo Básico</h1>
+        
+        <div class="content">
+            <h2>3.1 Flujo de Trabajo Básico</h2>
+            
+            <div class="workflow-section">
+                <h3>El Ciclo Básico de Git</h3>
+                <ol>
+                    <li>Modificar archivos en el directorio de trabajo</li>
+                    <li>Preparar los archivos, añadiéndolos al área de staging</li>
+                    <li>Confirmar los cambios, creando un commit</li>
+                </ol>
+            </div>
+
+            <h2>3.2 Comandos Esenciales</h2>
+            
+            <div class="command-section">
+                <h3>Añadir Archivos al Staging Area</h3>
+                <pre><code># Añadir un archivo específico
+git add nombre_archivo.txt
+
+# Añadir varios archivos
+git add archivo1.js archivo2.js
+
+# Añadir todos los archivos modificados
+git add .
+
+# Añadir archivos de forma interactiva
+git add -i
+
+# Añadir partes específicas de archivos
+git add -p</code></pre>
+            </div>
+
+            <div class="command-section">
+                <h3>Crear Commits</h3>
+                <pre><code># Commit básico
+git commit -m "Mensaje del commit"
+
+# Commit añadiendo archivos modificados automáticamente
+git commit -am "Mensaje del commit"
+
+# Modificar el último commit
+git commit --amend
+
+# Commit vacío
+git commit --allow-empty -m "Commit inicial"</code></pre>
+            </div>
+
+            <div class="command-section">
+                <h3>Revisar Cambios</h3>
+                <pre><code># Ver cambios no staged
+git diff
+
+# Ver cambios staged
+git diff --staged
+
+# Ver cambios en un archivo específico
+git diff archivo.txt
+
+# Ver cambios entre commits
+git diff commit1..commit2
+
+# Ver historial de cambios
+git log
+git log --oneline
+git log --graph --oneline --all</code></pre>
+            </div>
+
+            <h2>3.3 Gestión de Cambios</h2>
+
+            <div class="command-section">
+                <h3>Deshacer Cambios</h3>
+                <pre><code># Descartar cambios en el directorio de trabajo
+git restore archivo.txt
+
+# Deshacer cambios staged (quitar del staging)
+git restore --staged archivo.txt
+
+# Revertir un commit (crear nuevo commit que deshace cambios)
+git revert commit_hash
+
+# Resetear al último commit (¡Cuidado!)
+git reset --hard HEAD
+
+# Resetear a un commit específico
+git reset --hard commit_hash</code></pre>
+
+                <div class="warning-box">
+                    <h4>⚠️ Advertencia</h4>
+                    <p>Los comandos como <code>git reset --hard</code> son destructivos y pueden causar pérdida de trabajo. 
+                    Úsalos con precaución y asegúrate de tener tus cambios respaldados.</p>
+                </div>
+            </div>
+
+            <h2>3.4 Gestión del Historial</h2>
+
+            <div class="command-section">
+                <h3>Explorar el Historial</h3>
+                <pre><code># Ver historial detallado
+git log --pretty=format:"%h - %an, %ar : %s"
+
+# Ver estadísticas
+git log --stat
+
+# Ver cambios en detalle
+git log -p
+
+# Buscar en el historial
+git log --grep="bug fix"
+
+# Ver historia de un archivo
+git log -p archivo.txt</code></pre>
+            </div>
+
+            <h2>3.5 Etiquetas (Tags)</h2>
+
+            <div class="command-section">
+                <h3>Gestión de Tags</h3>
+                <pre><code># Crear tag ligero
+git tag v1.0
+
+# Crear tag anotado
+git tag -a v1.1 -m "Versión 1.1"
+
+# Listar tags
+git tag
+
+# Ver información de un tag
+git show v1.1
+
+# Eliminar tag
+git tag -d v1.0</code></pre>
+            </div>
+
+            <h2>3.6 Guardado Temporal (Stash)</h2>
+
+            <div class="command-section">
+                <h3>Uso del Stash</h3>
+                <pre><code># Guardar cambios en el stash
+git stash save "Descripción del stash"
+
+# Listar stashes
+git stash list
+
+# Aplicar último stash
+git stash apply
+
+# Aplicar stash específico
+git stash apply stash@{2}
+
+# Eliminar último stash
+git stash drop
+
+# Aplicar y eliminar último stash
+git stash pop</code></pre>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Mejores Prácticas</h3>
+                <ul>
+                    <li>Haz commits frecuentes y pequeños</li>
+                    <li>Usa mensajes de commit descriptivos y consistentes</li>
+                    <li>Revisa siempre los cambios antes de hacer commit</li>
+                    <li>Usa stash para cambios temporales</li>
+                    <li>Crea tags para versiones importantes</li>
+                </ul>
+            </div>
+
+            <div class="exercise-section">
+                <h3>🔄 Ejercicio Práctico</h3>
+                <ol>
+                    <li>Crea un nuevo repositorio</li>
+                    <li>Añade algunos archivos</li>
+                    <li>Realiza varios commits</li>
+                    <li>Modifica archivos y usa git diff</li>
+                    <li>Prueba a deshacer cambios</li>
+                    <li>Crea y gestiona tags</li>
+                    <li>Practica el uso del stash</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="capitulo02.html" class="button">← Capítulo Anterior</a>
+            <a href="capitulo04.html" class="button">Siguiente Capítulo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manual creado con fines educativos</p>
+    </footer>
+</body>
+</html>
