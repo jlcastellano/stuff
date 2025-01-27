@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { 
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+code {
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+pre {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+</style>
+</head>
+<body>
+
+<p>En este apartado se verá otro problema típico de la programación concurrente: el de la compartición de recursos. Existen distintos hilos que utilizan recursos compartidos. Para realizar determinadas operaciones, los hilos necesitan obtener, previamente, acceso en exclusiva a un conjunto de recursos. Una vez terminada la operación, liberan los recursos, que pueden entonces ser utilizados por otros hilos.</p>
+
+<p>Los recursos se representan mediante objetos, y se obtiene acceso en exclusiva a ellos mediante bloques <code>synchronized</code>. Si se utiliza más de uno, se utilizan bloques <code>synchronized</code> anidados. Si fueran dos, se haría de la siguiente forma:</p>
+
+<pre>
+synchronized(r1) {
+    synchronized(r2) {
+        (realizar operaciones con r1 y r2)
+    }
+}
+</pre>
+
+<p>Los recursos se obtienen en el orden en que aparecen los bloques <code>synchronized</code> anidados. En el ejemplo anterior, cuando se obtiene el bloqueo sobre el primer recurso, <code>r1</code>, se queda a la espera de obtener el bloqueo sobre el segundo, <code>r2</code>.</p>
+
+<p>Puede producirse un interbloqueo (deadlock) cuando dos hilos quedan mutuamente bloqueados, cada uno a la espera de que el otro desbloquee un objeto que ha bloqueado.</p>
+
+<p>Las asignaciones de recursos pueden representarse en forma de grafos de asignación de recursos. En ellos se representan los hilos con cuadrados y los recursos, con círculos. La solicitud de un recurso, por parte de un hilo, se representa con una flecha del hilo al recurso. La asignación de un recurso a un hilo se representa con una flecha del recurso al hilo.</p>
+
+<p>Existe interbloqueo cuando se crea un ciclo en el grafo de asignación de recursos. En este ejemplo, el proceso H1 tiene asignado el recurso R1 y está a la espera de conseguir el recurso R2, y no liberará R1 mientras no consiga R2. Pero R2 está asignado a H2, que está a la espera de conseguir R1, y no liberará R2 mientras no consiga R1. Existe un bucle en el grafo de asignación de recursos y, por tanto, hay interbloqueo entre todos los hilos involucrados en el ciclo, en este caso, H1 y H2.</p>
+
+<p>Una forma sencilla de evitar el interbloqueo es establecer un orden entre los recursos, y que los hilos soliciten los recursos según ese orden. En este caso, podría ser primero R1 y luego R2. Si tanto H1 como H2 solicitan primero R1 y después R2, no se puede dar el interbloqueo.</p>
+
+<p>Un ejemplo de compartición de recursos entre hilos es un sistema para transferencias bancarias. Para realizar una transferencia de una cuenta <code>c1</code> a una cuenta <code>c2</code>, debe conseguirse el acceso en exclusiva a ambas cuentas, ya que, mientras se está realizando la transferencia, ningún otro proceso debe acceder a ninguna de las dos cuentas, ni siquiera para consultar su saldo. El método que realiza estas operaciones podría ser como sigue:</p>
+
+<pre>
+public boolean transferencia(Cuenta c1, Cuenta c2, int cantidad) {
+    boolean result = false;
+    synchronized(c1) {
+        synchronized(c2) {
+            if (c1.getSaldo() >= cantidad) {
+                c1.sacar(cantidad);
+                c2.ingresar(cantidad);
+                result = true;
+            }
+        }
+    }
+    return result;
+}
+</pre>
+
+<p>En este caso, el interbloqueo se puede producir cuando un hilo H1 intenta una transferencia de una cuenta C1 a una cuenta C2, y otro hilo H2 intenta una transferencia de C2 a C1. Si H1 adquiere el bloqueo intrínseco de C1 y, acto seguido, P2 adquiere el de C2, entonces se producirá interbloqueo entre ambos hilos: H1 estará bloqueado a la espera de conseguir el bloqueo de C2, y H2 estará bloqueado a la espera de conseguir el bloqueo de C1.</p>
+
+<p>Ya se ha comentado que este problema se puede solucionar estableciendo un orden entre los recursos, y reservando los recursos siempre en ese orden. El orden entre las cuentas podría ser, por ejemplo, el orden alfabético del número de cuenta.</p>
+
+<p>Se puede utilizar una clase auxiliar <code>GestorTransferencias</code> para realizar la transferencia entre dos cuentas y simplificar así el código en programas que tengan que realizar transferencias. Esta clase realiza siempre las transferencias de la que es menor, por orden alfabético, a la que es mayor. Si no se puede realizar una transferencia porque el saldo en la cuenta de origen es insuficiente, sencillamente se desiste y se libera el bloqueo sobre las dos cuentas.</p>
+
+<pre>
+public class GestorTransferencias {
+    public static boolean transferencia(Cuenta c1, Cuenta c2, int cantidad) {
+        Cuenta cuentaMenor, cuentaMayor;
+        if(c1.getNumCuenta().compareTo(c2.getNumCuenta()) < 0) {
+            cuentaMenor = c1;
+            cuentaMayor = c2;
+        }
+        else {
+            cuentaMenor = c2;
+            cuentaMayor = c1;
+        }
+        boolean result = false;
+        synchronized (cuentaMenor) {
+            synchronized (cuentaMayor) {
+                if (c1.getSaldo() >= cantidad) {
+                    c1.sacar(cantidad);
+                    c2.ingresar(cantidad);
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+}
+</pre>
+
+<p>Se muestra a continuación la clase <code>Cuenta</code>. Los métodos de esta clase que modifican o consultan el estado de la cuenta son métodos <code>synchronized</code>. Pero no es necesaria la sincronización para <code>numCuenta</code>, dado que nunca se modifica su valor una vez asignado.</p>
+
+<pre>
+public class Cuenta {
+    int saldo;
+    final String numCuenta;
+    
+    public Cuenta(String numCuenta, int saldoInicial) {
+        this.saldo = saldoInicial;
+        this.numCuenta = numCuenta;
+    }
+    
+    public synchronized int getSaldo() {
+        return this.saldo;
+    }
+    
+    public synchronized void ingresar(int cantidad) {
+        this.saldo += cantidad;
+    }
+    
+    public synchronized void sacar(int cantidad) {
+        this.saldo -= cantidad;
+    }
+    
+    public String getNumCuenta() {
+        return this.numCuenta;
+    }
+}
+</pre>
+
+<p>En la clase principal está el método <code>main</code>, que crea los hilos, los lanza y espera a que terminen. Un hilo realiza transferencias de la cuenta C1 a la cuenta C2, y otro de C2 a C1.</p>
+
+<pre>
+class Hilo implements Runnable {
+    Cuenta c1, c2;
+    String nomHilo;
+    
+    Hilo(Cuenta c1, Cuenta c2, String nomHilo) {
+        this.c1 = c1;
+        this.c2 = c2;
+        this.nomHilo = nomHilo;
+    }
+    
+    @Override
+    public void run() {
+        int cantidad = 10;
+        int numTransf = 0;
+        for (int i = 0; i < 10000; i++) {
+            if (GestorTransferencias.transferencia(c1, c2, cantidad)) {
+                numTransf++;
+            }
+        }
+        System.out.printf(
+            "***** FIN de %s, %d transferencias hechas de %s a %s.\n",
+            this.getNomHilo(), numTransf, c1.getNumCuenta(),
+            c2.getNumCuenta());
+    }
+    
+    public String getNomHilo() {
+        return nomHilo;
+    }
+}
+
+public class TransferenciaSinBloqueo {
+    public static void main(String[] args) {
+        Cuenta c1 = new Cuenta("ES1512345678901234567890", 12500);
+        Cuenta c2 = new Cuenta("ES4578901234567890123456", 23400);
+        
+        System.out.printf("Saldo inicial de %s: %d\n",
+            c1.getNumCuenta(), c1.getSaldo());
+        System.out.printf("Saldo inicial de %s: %d\n",
+            c2.getNumCuenta(), c2.getSaldo());
+        System.out.println("----------------------------------------");
+        
+        // Dos hilos: uno hace transferencias de c1 a c2, otro de c2 a c1
+        Thread h1 = new Thread(new Hilo(c1, c2, "H1"));
+        Thread h2 = new Thread(new Hilo(c2, c1, "H2"));
+        
+        h1.start();
+        h2.start();
+        
+        try {
+            h1.join();
+            h2.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        
+        System.out.println("----------------------------------------");
+        System.out.printf("Saldo final %s: %d\n", c1.getNumCuenta(),
+            c1.getSaldo());
+        System.out.printf("Saldo final %s: %d\n", c2.getNumCuenta(),
+            c2.getSaldo());
+    }
+}
+</pre>
+
+<p>Normalmente las transferencias no se realizarían de manera tan repetida y, por tanto, sería más difícil que se produjera interbloqueo, en el caso de que el bloqueo de las cuentas no fuera siempre en el mismo orden. Si se modifica la clase <code>GestorTransferencias</code>, para que realice el bloqueo de las cuentas en el orden en que se le dan, se puede comprobar que es muy fácil que se produzca el interbloqueo. Pero si se introduce una espera de duración aleatoria entre sucesivas transferencias realizadas por cada hilo, es mucho más difícil que se produzca el interbloqueo, aunque todavía podría suceder alguna vez. Este tipo de errores, que suceden sólo ocasionalmente, no son sencillos de detectar con una prueba unitaria. La cuestión es que no son fácilmente reproducibles. Los programas deben diseñarse y codificarse cuidadosamente para evitar interbloqueos.</p>
+
+</body>
+</html>
