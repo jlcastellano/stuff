@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { 
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+code {
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+pre {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+</style>
+</head>
+<body>
+
+
+<h3>Ejemplo de programa con hilos incrementadores y decrementadores</h3>
+
+<p>El siguiente programa de ejemplo es similar al de los hilos que incrementan un contador. Pero también existen hilos que decrementan el contador. El contador no puede nunca tener un valor negativo. Si un hilo no puede decrementar el contador, porque su valor es menor que uno, realiza una espera no activa hasta que un hilo incremente el contador y notifique que se puede decrementar el contador.</p>
+
+<pre><code>package hilosincdec;
+
+class Contador {
+    private int cuenta = 0;
+
+    Contador(int valorInicial) {
+        this.cuenta = valorInicial;
+    }
+
+    synchronized public int getCuenta() {
+        return cuenta;
+    }
+
+    synchronized public int incrementa() {
+        this.cuenta++;
+        return cuenta;
+    }
+
+    synchronized public int decrementa() {
+        this.cuenta--;
+        return cuenta;
+    }
+}
+
+class HiloIncr implements Runnable {
+    private final String id;
+    private final Contador cont;
+
+    HiloIncr(String id, Contador c) {
+        this.id = id;
+        this.cont = c;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (this.cont) {
+                this.cont.incrementa();
+                this.cont.notify();
+                System.out.printf("Hilo %s incrementa, valor contador: %d\n",
+                    this.id, this.cont.getCuenta());
+            }
+        }
+    }
+}
+
+class HiloDecr implements Runnable {
+    private final String id;
+    private final Contador cont;
+
+    HiloDecr(String id, Contador c) {
+        this.id = id;
+        this.cont = c;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (this.cont) {
+                while (this.cont.getCuenta() < 1) {
+                    System.out.printf(
+                        "!!! Hilo %s no puede decrementar, valor contador: %d\n",
+                        this.id, this.cont.getCuenta());
+                    try {
+                        this.cont.wait();
+                    } catch (InterruptedException ex) {
+                    }
+                }
+                this.cont.decrementa();
+                System.out.printf("Hilo %s decrementa, valor contador: %d\n",
+                    this.id, this.cont.getCuenta());
+            }
+        }
+    }
+}
+
+class HilosIncDec {
+    private static final int NUM_HILOS_INC = 10;
+    private static final int NUM_HILOS_DEC = 10;
+
+    public static void main(String[] args) {
+        Contador c = new Contador(0);
+        Thread[] hilosInc = new Thread[NUM_HILOS_INC];
+        for (int i = 0; i < NUM_HILOS_INC; i++) {
+            Thread th = new Thread(new HiloIncr("INC"+i, c));
+            hilosInc[i] = th;
+        }
+        Thread[] hiloDec = new Thread[NUM_HILOS_DEC];
+        for (int i = 0; i < NUM_HILOS_DEC; i++) {
+            Thread th = new Thread(new HiloDecr("DEC"+i, c));
+            hiloDec[i] = th;
+        }
+        for (int i = 0; i < NUM_HILOS_INC; i++) {
+            hilosInc[i].start();
+        }
+        for (int i = 0; i < NUM_HILOS_DEC; i++) {
+            hiloDec[i].start();
+        }
+    }
+}</code></pre>
+
+<p>En un objeto de la clase Puente se guarda el estado compartido por todos los hilos: el número de personas que están cruzando el puente y el peso total. Este objeto se pasa a todos los hilos de la clase Persona, en su constructor. Estos lo utilizan como como objeto de bloqueo. En esta clase, y esto es importante, se almacena este objeto en una variable de referencia de tipo final. Todos los métodos de esta clase que consultan o modifican su estado son synchronized. Para simplificar la programación, tiene un método autorizacionPaso que verifica si se cumplen las condiciones para que una persona entre en el puente y, si es así, actualiza su estado. Se invoca este método en un bloque synchronized sobre el propio objeto. El método terminaPaso también se invoca en un bloque sincronizado sobre el propio objeto, y después se llama a notifyAll, para dar la opción de entrar al puente a personas que estén esperando. Con notify se daría opción a una como máximo, lo que sería demasiado restrictivo, porque la salida de una persona podría permitir el paso de más de una.</p>
+</body>
+</html>
