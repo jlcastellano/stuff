@@ -1,0 +1,38 @@
+<div class="ejercicio">
+    <h2>Sistema de Reserva de Salas</h2>
+
+    <p>Desarrollar un sistema de reserva de salas para una biblioteca utilizando programación concurrente en Java. El sistema debe cumplir con los siguientes requisitos:</p>
+
+    <ol>
+        <li>La biblioteca tiene 3 salas de estudio (numeradas del 1 al 3)</li>
+        <li>Cada sala tiene una capacidad máxima de 4 personas</li>
+        <li>Los estudiantes (representados por hilos) intentan reservar una sala aleatoria</li>
+        <li>Un estudiante solo puede estar en una sala a la vez</li>
+        <li>El tiempo de uso de cada sala es aleatorio (entre 1 y 5 segundos)</li>
+        <li>Debe evitarse el interbloqueo</li>
+    </ol>
+
+    <h3>Requisitos específicos:</h3>
+    <ul>
+        <li>Crear una clase Sala que mantenga el control de su ocupación</li>
+        <li>Crear una clase Estudiante (que implementa Runnable) que intente acceder a las salas</li>
+        <li>Crear un gestor de reservas que evite interbloqueos</li>
+        <li>Implementar un método main que cree 10 estudiantes que intenten usar las salas</li>
+    </ul>
+
+    <h3>El programa debe mostrar mensajes indicando:</h3>
+    <ul>
+        <li>Cuando un estudiante intenta entrar en una sala</li>
+        <li>Cuando un estudiante consigue entrar en una sala</li>
+        <li>Cuando un estudiante sale de una sala</li>
+        <li>El número de personas en cada sala en cada momento</li>
+    </ul>
+
+    <h3>Consideraciones:</h3>
+    <ul>
+        <li>Usar synchronized para el control de acceso a las salas</li>
+        <li>Implementar wait() y notify() para la gestión de espera cuando una sala está llena</li>
+        <li>Establecer un orden en la reserva de recursos para evitar interbloqueos</li>
+    </ul>
+
+</div>

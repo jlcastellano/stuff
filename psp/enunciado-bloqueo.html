@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Java - Bloqueos en Biblioteca Digital</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background-color: #f8f9fa;
+        }
+        .subsection {
+            margin-left: 20px;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        .highlight {
+            background-color: #e1f5fe;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .objetivo {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicio Java: Sistema de Gestión de Recursos para Biblioteca Digital</h1>
+
+        <div class="section">
+            <h2>Contexto</h2>
+            <p>Sistema que simula una biblioteca digital donde varios usuarios intentan acceder simultáneamente a diferentes recursos del sistema, demostrando problemas de concurrencia y bloqueos (deadlocks).</p>
+        </div>
+
+        <div class="section">
+            <h2>Componentes del Sistema</h2>
+            
+            <h3>1. Recursos Compartidos:</h3>
+            <ul>
+                <li><strong>Base de datos de libros:</strong> Almacena la información de todos los libros</li>
+                <li><strong>Sistema de autenticación:</strong> Verifica credenciales de usuarios</li>
+                <li><strong>Servidor de archivos:</strong> Almacena los archivos PDF de los libros</li>
+            </ul>
+
+            <h3>2. Tipos de Usuarios (Hilos):</h3>
+            <div class="subsection">
+                <div class="highlight">
+                    <h4>Usuario Investigador (Tipo 1)</h4>
+                    <ol>
+                        <li>Consultar base de datos</li>
+                        <li>Autenticarse</li>
+                        <li>Acceder al servidor</li>
+                    </ol>
+                </div>
+
+                <div class="highlight">
+                    <h4>Usuario Normal (Tipo 2)</h4>
+                    <ol>
+                        <li>Autenticarse</li>
+                        <li>Acceder al servidor</li>
+                        <li>Consultar base de datos</li>
+                    </ol>
+                </div>
+
+                <div class="highlight">
+                    <h4>Usuario Administrador (Tipo 3)</h4>
+                    <ol>
+                        <li>Acceder al servidor</li>
+                        <li>Consultar base de datos</li>
+                        <li>Autenticarse</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Reglas de Funcionamiento</h2>
+            <ul>
+                <li>Cada recurso solo puede ser usado por un usuario a la vez</li>
+                <li>Un usuario debe mantener el recurso bloqueado mientras lo usa</li>
+                <li>No se puede saltar el orden establecido para cada tipo de usuario</li>
+                <li>Se debe simular un tiempo de uso para cada recurso</li>
+                <li>Después de usar todos los recursos, deben ser liberados</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Objetivos del Ejercicio</h2>
+            <div class="objetivo">
+                <h3>1. Demostrar el Deadlock</h3>
+                <p>Crear una situación donde los usuarios queden bloqueados mutuamente. Ejemplo:</p>
+                <ul>
+                    <li>Usuario 1 tiene la base de datos y espera autenticación</li>
+                    <li>Usuario 2 tiene autenticación y espera servidor</li>
+                    <li>Usuario 3 tiene servidor y espera base de datos</li>
+                </ul>
+            </div>
+
+            <div class="objetivo">
+                <h3>2. Implementar Soluciones</h3>
+                <p>Implementar al menos una de estas estrategias:</p>
+                <ul>
+                    <li>Ordenamiento de recursos</li>
+                    <li>Timeout</li>
+                    <li>Detección y recuperación</li>
+                    <li>Prevención</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Requisitos de Implementación</h2>
+            <ul>
+                <li>Usar synchronized o Lock para el bloqueo de recursos</li>
+                <li>Implementar mecanismos de espera (wait/notify o similares)</li>
+                <li>Mostrar mensajes de estado del sistema</li>
+                <li>Documentar la solución implementada</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Entregables Esperados</h2>
+            <ol>
+                <li>Clase para cada tipo de recurso</li>
+                <li>Clase para cada tipo de usuario (hilos)</li>
+                <li>Clase principal que demuestre el deadlock</li>
+                <li>Clase principal con la solución implementada</li>
+                <li>Documentación explicando:
+                    <ul>
+                        <li>Cómo se produce el deadlock</li>
+                        <li>Cómo lo soluciona tu implementación</li>
+                        <li>Ventajas y desventajas de la solución elegida</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
