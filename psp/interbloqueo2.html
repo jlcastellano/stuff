@@ -130,6 +130,5 @@ class HilosIncDec {
     }
 }</code></pre>
 
-<p>En un objeto de la clase Puente se guarda el estado compartido por todos los hilos: el número de personas que están cruzando el puente y el peso total. Este objeto se pasa a todos los hilos de la clase Persona, en su constructor. Estos lo utilizan como como objeto de bloqueo. En esta clase, y esto es importante, se almacena este objeto en una variable de referencia de tipo final. Todos los métodos de esta clase que consultan o modifican su estado son synchronized. Para simplificar la programación, tiene un método autorizacionPaso que verifica si se cumplen las condiciones para que una persona entre en el puente y, si es así, actualiza su estado. Se invoca este método en un bloque synchronized sobre el propio objeto. El método terminaPaso también se invoca en un bloque sincronizado sobre el propio objeto, y después se llama a notifyAll, para dar la opción de entrar al puente a personas que estén esperando. Con notify se daría opción a una como máximo, lo que sería demasiado restrictivo, porque la salida de una persona podría permitir el paso de más de una.</p>
 </body>
 </html>
