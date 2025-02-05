@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html><head>
+    <style>
+    body { 
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    code {
+        background-color: #f4f4f4;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+    pre {
+        background-color: #f4f4f4;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+    }
+    </style>
+    </head>
+<body>
+<p>El siguiente programa de ejemplo es del tipo clásico de productores y consumidores, del que existen muchas variantes. En este tipo de problemas, uno o más procesos productores ponen datos a disposición de uno o más procesos consumidores.</p>
+
+<p>Si un proceso consumidor intenta obtener un dato y no hay ninguno disponible, debe esperar a que algún proceso productor introduzca alguno. Los datos se suelen poner en una cola, de la que se extraen los elementos en el mismo orden en que se introducen, según un planteamiento FIFO o first in, first out. Se puede limitar el número de elementos que se admiten en la cola, de manera que cuando contiene el máximo número de datos, antes de introducir uno nuevo, los productores deben esperar a que algún proceso consumidor retire uno.</p>
+
+<p>En este programa existe un único productor y un único consumidor, y el contenedor puede almacenar un único dato. Por tanto, se alternan las operaciones de introducción de un dato por parte del productor y de extracción por parte del consumidor. La clase Contenedor es genérica, y en este programa se utiliza para almacenar números enteros, en objetos Integer. Se crea un Contenedor&lt;Integer&gt; y se pasa a los hilos productor y consumidor. Se puede ver que los hilos productor y consumidor son prácticamente iguales. Utilizan el propio contenedor como objeto de bloqueo. Cambia la operación que realiza sobre el contenedor (put para introducir un valor y get para obtenerlo) y la condición previa que debe cumplirse para realizarla (que el contenedor no contenga ningún objeto o que contenga alguno).</p>
+
+<pre>
+package productorconsumidor;
+
+class Contenedor<T> {
+    private T dato;
+    
+    synchronized public T get() {
+        T result = this.dato;
+        this.dato = null;
+        return result;
+    }
+    
+    synchronized public void put(T valor) {
+        this.dato = valor;
+    }
+    
+    synchronized boolean datoDisponible() {
+        return (this.dato != null);
+    }
+}
+
+class HiloProductor implements Runnable {
+    final Contenedor<Integer> cont;
+    String miNombre;
+    
+    HiloProductor(Contenedor<Integer> cont, String miNombre) {
+        this.cont = cont;
+        this.miNombre = miNombre;
+    }
+    
+    @Override
+    public void run() {
+        for (int i = 1;; i++) {
+            synchronized (this.cont) {
+                while (this.cont.datoDisponible()) {
+                    try {
+                        this.cont.wait();
+                    } catch (InterruptedException ex) {
+                    }
+                }
+                System.out.printf("Hilo %s produce valor %s.\n",
+                    this.miNombre, i);
+                this.cont.put(i);
+                this.cont.notify();
+            }
+        }
+    }
+}
+
+class HiloConsumidor implements Runnable {
+    final Contenedor<Integer> cont;
+    String miNombre;
+    
+    HiloConsumidor(Contenedor<Integer> cont, String miNombre) {
+        this.cont = cont;
+        this.miNombre = miNombre;
+    }
+    
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (this.cont) {
+                while (!this.cont.datoDisponible()) {
+                    try {
+                        this.cont.wait();
+                    } catch (InterruptedException ex) {
+                    }
+                }
+                Integer dato = this.cont.get();
+                this.cont.notify();
+                System.out.printf("Hilo %s consume valor %d.\n",
+                    this.miNombre, dato);
+            }
+        }
+    }
+}
+
+public class ProductorConsumidor {
+    public static void main(String[] args) {
+        Contenedor<Integer> almacen = new Contenedor<Integer>();
+        Thread hprod = new Thread(new HiloProductor(almacen, "P"));
+        Thread hcons = new Thread(new HiloConsumidor(almacen, "C"));
+        hprod.start();
+        hcons.start();
+    }
+}
+</pre>
+
+<p>Podría pensarse que el programa debería funcionar con más de un proceso productor y más de uno consumidor, sin más cambios que la creación y el lanzamiento de los hilos adicionales. Es decir, con el siguiente código dentro del método main:</p>
+
+<pre>
+public static void main(String[] args) {
+    Contenedor<Integer> almacen = new Contenedor<Integer>();
+    Thread hprod1 = new Thread(new HiloProductor(almacen, "P1"));
+    Thread hprod2 = new Thread(new HiloProductor(almacen, "P2"));
+    Thread hcons1 = new Thread(new HiloConsumidor(almacen, "C1"));
+    Thread hcons1 = new Thread(new HiloConsumidor(almacen, "C2"));
+    hprod1.start();
+    hprod2.start();
+    hcons1.start();
+    hcons2.start();
+}
+</pre>
+
+<p>Sin embargo, no es así. El programa se bloquea. No se trata de un interbloqueo, y así se puede verificar con el depurador (se puede ver cómo verificar esto en la sección posterior dedicada a la depuración de programas multihilo). El problema es que, cuando se hace this.cont.notify() en los hilos Productor y Consumidor, solo se notifica a un hilo, y este podría ser uno que no tiene ninguna posibilidad de continuar con su ejecución. A saber: un hilo consumidor si se acaba de obtener un dato del contenedor o un hilo productor si se acaba de introducir un dato en el contenedor. Este problema se puede solucionar de dos maneras.</p>
+
+<p>La más sencilla es utilizar notifyAll() en lugar de notify(). De esta forma, se notifica a todos los hilos suspendidos que pueden continuar su ejecución, y no solo a uno cualquiera. Como acceden al contenedor en un bloque synchronized, lo harán uno a uno. Los que no puedan realizar la operación quedarán bloqueados, pero al menos uno podrá realizarla.</p>
+
+<p>Otra manera es utilizar un objeto de bloqueo para introducir datos y otro para extraerlos.</p>
+</body>
+</html>
