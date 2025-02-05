@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalación y Configuración de Apache2, MySQL, PHP y phpMyAdmin</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        pre {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        code {
+            color: #e74c3c;
+        }
+        .comment {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <h2>Instalación y configuración básica</h2>
+    <pre>
+> sudo apt -y install apache2
+> sudo nano -l /etc/apache2/conf-enabled/security.conf
+
+<span class="comment"># line 25: change</span>
+ServerTokens Prod
+
+> sudo nano -l /etc/apache2/apache2.conf
+
+<span class="comment"># line 70: add to specify server name</span>
+ServerName www.despliegue.com
+
+> sudo ufw allow http
+> sudo systemctl restart apache2
+> ip a
+
+<span class="comment"># poner la ip en el navegador y se verá la página por defecto de Apache2</span>
+    </pre>
+
+    <h2>Host virtual</h2>
+    <pre>
+> sudo nano -l /etc/apache2/sites-available/despliegue.com.conf
+
+<span class="comment"># create new
+# settings for new domain</span>
+&lt;VirtualHost *:80&gt;
+    DocumentRoot /var/www/despliegue.com
+    ServerName www.despliegue.com
+    ServerAdmin webmaster@despliegue.com
+    ErrorLog /var/log/apache2/despliegue.com.error.log
+    CustomLog /var/log/apache2/despliegue.com.access.log combined
+&lt;/VirtualHost&gt;
+
+> sudo a2ensite despliegue.com
+> sudo a2dissite 000-default
+> sudo systemctl restart apache2
+> sudo mkdir /var/www/despliegue.com
+> sudo nano /var/www/despliegue.com/index.html
+
+&lt;html&gt;
+&lt;body&gt;
+&lt;div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;"&gt;
+        P&amp;aacute;gina de prueba de www.despliegue.com
+&lt;/div&gt;
+&lt;/body&gt;         
+&lt;/html&gt;
+    </pre>
+
+    <h2>Configurar SSL/TLS</h2>
+    <pre>
+> sudo mkdir /var/www/ssl-despliegue
+> sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /var/www/ssl-despliegue/despliegue.key.pem -out /var/www/ssl-despliegue/despliegue.cert.pem -days 365
+
+> sudo cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/despliegue.com-ssl.conf
+> sudo nano -l /etc/apache2/sites-available/despliegue.com-ssl.conf
+
+<span class="comment"># line 5: change dir</span>
+DocumentRoot /var/www/despliegue.com
+
+<span class="comment"># line 32,33: change to the certs gotten</span>
+SSLCertificateFile      /var/www/ssl-despliegue/despliegue.cert.pem
+SSLCertificateKeyFile   /var/www/ssl-despliegue/despliegue.key.pem
+
+> sudo a2ensite despliegue.com-ssl
+> sudo a2enmod ssl
+> sudo ufw allow https
+> sudo nano -l /etc/apache2/sites-available/despliegue.com.conf
+
+<span class="comment"># añadir</span>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+> sudo a2enmod rewrite
+> sudo systemctl restart apache2
+    </pre>
+
+    <h2>Instalar MySQL</h2>
+    <pre>
+> sudo apt -y install mysql-server
+> sudo mysql_secure_installation
+> sudo mysql
+    </pre>
+
+    <h2>Instalar PHP</h2>
+    <pre>
+> sudo apt install -y php php-mysql php-mbstring php-zip php-gd php-json php-curl
+> sudo nano /var/www/despliegue.com/info.php
+
+<span class="comment">#add</span>
+&lt;?php phpinfo(); ?&gt;
+    </pre>
+
+    <h2>Instalar phpMyAdmin</h2>
+    <pre>
+> sudo apt install -y phpmyadmin
+> sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+> sudo nano /etc/apache2/conf-available/phpmyadmin.conf
+<span class="comment">#add</span>
+&lt;IfModule mod_ssl.c&gt;
+    &lt;Directory /usr/share/phpmyadmin&gt;
+        Options FollowSymLinks
+        DirectoryIndex index.php
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+&lt;/IfModule&gt;
+
+> sudo a2enconf phpmyadmin
+> sudo systemctl restart apache2
+    </pre>
+</body>
+</html>
