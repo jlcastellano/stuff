@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionamiento de Apache como Proxy Inverso para Tomcat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c5282;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 5px;
+        }
+        .diagram {
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .note {
+            background-color: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .step {
+            background-color: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        pre {
+            background-color: #1a202c;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Funcionamiento del Sistema Apache-Tomcat con Proxy Inverso</h1>
+
+    <h2>1. Arquitectura General</h2>
+    
+    <div class="diagram">
+        <pre>
+Internet → [Apache (443/80)] ⟷ [AJP Connector] ⟷ [Tomcat (8009)]
+                    ↑                                    ↑
+              SSL Termination                    Aplicaciones Java
+        </pre>
+    </div>
+
+    <div class="note">
+        <strong>Componentes Principales:</strong>
+        <ul>
+            <li>Apache: Servidor web frontal (Front-end)</li>
+            <li>mod_proxy: Módulo de Apache para proxy</li>
+            <li>AJP (Apache JServ Protocol): Protocolo de comunicación</li>
+            <li>Tomcat: Servidor de aplicaciones Java (Back-end)</li>
+        </ul>
+    </div>
+
+    <h2>2. Flujo de una Petición</h2>
+
+    <div class="step">
+        <h3>2.1. Llegada de la Petición</h3>
+        <ol>
+            <li>El cliente realiza una petición HTTPS a Apache (puerto 443)</li>
+            <li>Apache maneja la terminación SSL (descifra la petición)</li>
+            <li>mod_proxy recibe la petición descifrada</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>2.2. Procesamiento en Apache</h3>
+        <ol>
+            <li>Apache verifica el VirtualHost correspondiente</li>
+            <li>Aplica las reglas de reescritura si existen</li>
+            <li>Procesa las directivas ProxyPass</li>
+            <li>Convierte la petición HTTP al protocolo AJP</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>2.3. Comunicación AJP</h3>
+        <ol>
+            <li>La petición se envía a Tomcat a través del puerto 8009</li>
+            <li>AJP mantiene conexiones persistentes para mejor rendimiento</li>
+            <li>Se transmiten headers y datos de la petición original</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>2.4. Procesamiento en Tomcat</h3>
+        <ol>
+            <li>Tomcat recibe la petición AJP</li>
+            <li>Procesa la petición en la aplicación Java correspondiente</li>
+            <li>Genera la respuesta</li>
+            <li>Envía la respuesta de vuelta a través de AJP</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>2.5. Respuesta al Cliente</h3>
+        <ol>
+            <li>Apache recibe la respuesta de Tomcat</li>
+            <li>Cifra la respuesta usando SSL</li>
+            <li>Envía la respuesta cifrada al cliente</li>
+        </ol>
+    </div>
+
+    <h2>3. Ventajas de esta Arquitectura</h2>
+
+    <div class="note">
+        <h3>3.1. Seguridad</h3>
+        <ul>
+            <li>Apache maneja toda la capa SSL</li>
+            <li>Tomcat no es accesible directamente desde Internet</li>
+            <li>AJP es más seguro que HTTP para comunicación interna</li>
+            <li>Posibilidad de implementar WAF en Apache</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>3.2. Rendimiento</h3>
+        <ul>
+            <li>AJP es más eficiente que HTTP para proxy</li>
+            <li>Conexiones persistentes entre Apache y Tomcat</li>
+            <li>Apache puede servir contenido estático directamente</li>
+            <li>Posibilidad de caché en Apache</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>3.3. Flexibilidad</h3>
+        <ul>
+            <li>Balanceo de carga posible</li>
+            <li>Múltiples instancias de Tomcat</li>
+            <li>Virtual Hosts en Apache</li>
+            <li>Reescritura de URLs</li>
+        </ul>
+    </div>
+
+    <h2>4. Protocolos y Puertos</h2>
+
+    <div class="diagram">
+        <pre>
+Cliente → HTTPS (443) → Apache
+Apache → AJP (8009) → Tomcat
+Tomcat → AJP (8009) → Apache
+Apache → HTTPS (443) → Cliente
+        </pre>
+    </div>
+
+    <h2>5. Elementos Clave de Configuración</h2>
+
+    <pre>
+# Apache VirtualHost
+&lt;VirtualHost *:443&gt;
+    SSLEngine on
+    ProxyPass / ajp://localhost:8009/
+    ProxyPassReverse / ajp://localhost:8009/
+&lt;/VirtualHost&gt;
+
+# Tomcat server.xml
+&lt;Connector protocol="AJP/1.3"
+    address="0.0.0.0"
+    port="8009"
+    redirectPort="8443" /&gt;
+    </pre>
+
+    <h2>6. Consideraciones de Funcionamiento</h2>
+
+    <div class="note">
+        <h3>6.1. Manejo de Sesiones</h3>
+        <ul>
+            <li>Las sesiones son manejadas por Tomcat</li>
+            <li>Apache pasa las cookies de sesión transparentemente</li>
+            <li>AJP mantiene información de sesión en sus headers</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>6.2. Headers y Proxy</h3>
+        <ul>
+            <li>X-Forwarded-For: IP original del cliente</li>
+            <li>X-Forwarded-Proto: Protocolo original</li>
+            <li>X-Real-IP: IP real del cliente</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>6.3. Optimización</h3>
+        <ul>
+            <li>Ajuste de threads en Apache y Tomcat</li>
+            <li>Configuración de timeouts</li>
+            <li>Tamaño de buffer AJP</li>
+            <li>Conexiones máximas</li>
+        </ul>
+    </div>
+
+</body>
+</html>
