@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación y Pruebas del Sistema Apache-Tomcat con SSL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c5282;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 5px;
+        }
+        .command {
+            background-color: #1a202c;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .test-step {
+            background-color: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #f0fff4;
+            border-left: 4px solid #48bb78;
+        }
+        .error {
+            background-color: #fff5f5;
+            border-left: 4px solid #f56565;
+        }
+        .warning {
+            background-color: #fffaf0;
+            border-left: 4px solid #ed8936;
+        }
+        .code-block {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verificación y Pruebas del Sistema Apache-Tomcat con SSL</h1>
+
+    <h2>1. Verificación de Servicios y Configuraciones</h2>
+
+    <div class="test-step">
+        <h3>1.1. Comprobar Estado de los Servicios</h3>
+        <div class="command"><pre>
+# Verificar Apache
+sudo systemctl status apache2
+
+# Verificar Tomcat
+sudo systemctl status tomcat
+
+# Verificar módulos Apache activos
+apache2ctl -M | grep ssl
+apache2ctl -M | grep proxy<pre>
+        </div>
+    </div>
+
+    <div class="test-step">
+        <h3>1.2. Verificar Configuración de SSL</h3>
+        <div class="command"><pre>
+# Verificar certificados
+openssl x509 -in /etc/apache2/ssl/tomcat.crt -text -noout
+
+# Verificar permisos de certificados
+ls -l /etc/apache2/ssl/</pre>
+        </div>
+    </div>
+
+    <h2>2. Pruebas de Conectividad</h2>
+
+    <div class="test-step success">
+        <h3>2.1. Pruebas de Puertos</h3>
+        <div class="command"><pre>
+# Verificar puertos en escucha
+sudo netstat -tulpn | grep -E ':80|:443|:8009|:8443'
+
+# Verificar conectividad SSL
+openssl s_client -connect localhost:443 -servername tu-dominio.com</pre>
+        </div>
+    </div>
+
+    <div class="test-step success">
+        <h3>2.2. Pruebas de Redirección HTTP a HTTPS</h3>
+        <div class="command"><pre>
+# Prueba de redirección
+curl -I http://localhost
+
+# Prueba de conexión HTTPS
+curl -I -k https://localhost
+        </div>
+        <p>Respuesta esperada para HTTP:</p>
+        <pre>
+HTTP/1.1 301 Moved Permanently
+Location: https://localhost/</pre>
+        </pre>
+    </div>
+
+    <h2>3. Pruebas de Seguridad SSL</h2>
+
+    <div class="test-step">
+        <h3>3.1. Verificar Configuración SSL</h3>
+        <div class="command"><pre>
+# Instalar testssl.sh
+git clone --depth 1 https://github.com/drwetter/testssl.sh.git
+cd testssl.sh
+./testssl.sh https://localhost</pre>
+        </div>
+    </div>
+
+    <div class="test-step">
+        <h3>3.2. Verificar Headers de Seguridad</h3>
+        <div class="command"><pre>
+curl -I -k https://localhost | grep -E "Strict-Transport-Security|X-Frame-Options|X-Content-Type-Options"</pre>
+        </div>
+    </div>
+
+    <h2>4. Pruebas de la Aplicación</h2>
+
+    <div class="test-step">
+        <h3>4.1. Crear Página de Prueba JSP</h3>
+        <div class="code-block">
+            <pre>
+sudo nano /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/ssltest.jsp
+
+&lt;%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Test SSL Proxy&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Información del Servidor SSL&lt;/h1&gt;
+    &lt;p&gt;Fecha y hora: &lt;%= new java.util.Date() %&gt;&lt;/p&gt;
+    &lt;p&gt;Servidor: &lt;%= application.getServerInfo() %&gt;&lt;/p&gt;
+    &lt;p&gt;Protocolo: &lt;%= request.getProtocol() %&gt;&lt;/p&gt;
+    &lt;p&gt;Esquema: &lt;%= request.getScheme() %&gt;&lt;/p&gt;
+    &lt;p&gt;SSL: &lt;%= request.isSecure() %&gt;&lt;/p&gt;
+    &lt;p&gt;Headers SSL:&lt;/p&gt;
+    &lt;pre&gt;
+    &lt;% 
+        java.util.Enumeration headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String headerName = (String)headerNames.nextElement();
+            out.println(headerName + ": " + request.getHeader(headerName));
+        }
+    %&gt;
+    &lt;/pre&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+        </div>
+    </div>
+
+    <h2>5. Monitorización y Logs</h2>
+
+    <div class="test-step">
+        <h3>5.1. Monitorizar Logs en Tiempo Real</h3>
+        <div class="command"><pre>
+# Apache SSL access log
+tail -f /var/log/apache2/access.ssl.log
+
+# Apache SSL error log
+tail -f /var/log/apache2/error.ssl.log
+
+# Tomcat logs
+tail -f /opt/tomcat/logs/catalina.out</pre>
+        </div>
+    </div>
+
+    <div class="test-step">
+        <h3>5.2. Verificar Rendimiento</h3>
+        <div class="command"><pre>
+# Instalar Apache Benchmark si no está instalado
+sudo apt install apache2-utils
+
+# Realizar prueba de rendimiento
+ab -n 1000 -c 10 -k -f TLS1.2 https://localhost/ssltest.jsp</pre>
+        </div>
+    </div>
+
+    <h2>6. Solución de Problemas Comunes</h2>
+
+    <div class="test-step error">
+        <h3>Error: SSL_ERROR_RX_RECORD_TOO_LONG</h3>
+        <ul>
+            <li>Verificar que el puerto 443 está correctamente configurado</li>
+            <li>Comprobar la directiva SSLEngine on</li>
+            <li>Verificar la configuración del VirtualHost SSL</li>
+        </ul>
+    </div>
+
+    <div class="test-step error">
+        <h3>Error: SSL certificate problem: self signed certificate</h3>
+        <ul>
+            <li>Es normal con certificados autofirmados</li>
+            <li>En producción, usar certificados de una CA reconocida</li>
+            <li>Para pruebas, usar el flag -k en curl o importar el certificado en el navegador</li>
+        </ul>
+    </div>
+
+    <div class="test-step warning">
+        <h3>Lista de Verificación Final</h3>
+        <ul>
+            <li>✓ Redirección HTTP a HTTPS funcionando</li>
+            <li>✓ Certificados SSL correctamente instalados</li>
+            <li>✓ Headers de seguridad presentes</li>
+            <li>✓ Proxy AJP funcionando</li>
+            <li>✓ Logs sin errores</li>
+            <li>✓ Permisos de archivos correctos</li>
+            <li>✓ Firewall configurado</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>Comandos Útiles para Diagnóstico</h3>
+        <div class="command"><pre>
+# Verificar sintaxis de configuración Apache
+sudo apache2ctl configtest
+
+# Verificar sintaxis de configuración SSL
+sudo apache2ctl -t
+
+# Verificar conectividad AJP
+nc -zv localhost 8009
+
+# Verificar certificado SSL
+echo | openssl s_client -connect localhost:443 2>/dev/null | openssl x509 -text
+
+# Verificar headers de seguridad
+curl -v -k https://localhost 2>&1 | grep -i "< server:"</pre>
+        </div>
+    </div>
+
+</body>
+</html>

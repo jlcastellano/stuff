@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración de Apache como Proxy Inverso con SSL para Tomcat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c5282;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 5px;
+        }
+        .command {
+            background-color: #1a202c;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Configuración de Apache como Proxy Inverso SSL para Tomcat</h1>
+
+    <h2>1. Instalación de Apache y Módulos Necesarios</h2>
+    <div class="command"><pre>
+        sudo apt update
+        sudo apt install apache2</pre>
+    </div>
+
+    <h3>1.1. Habilitar Módulos Apache</h3>
+    <div class="command"><pre>
+        sudo a2enmod ssl
+        sudo a2enmod proxy
+        sudo a2enmod proxy_ajp
+        sudo a2enmod proxy_balancer
+        sudo a2enmod proxy_http
+        sudo a2enmod headers
+        sudo a2enmod lbmethod_byrequests
+        sudo a2enmod rewrite</pre>
+    </div>
+
+    <h2>2. Configuración de SSL en Apache</h2>
+
+    <h3>2.1. Crear Directorio para Certificados</h3>
+    <div class="command"><pre>
+        sudo mkdir /etc/apache2/ssl
+        sudo cp /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.* /etc/apache2/ssl/</pre>
+    </div>
+
+    <h3>2.2. Ajustar Permisos</h3>
+    <div class="command"><pre>
+        sudo chmod 600 /etc/apache2/ssl/*
+        sudo chown root:root /etc/apache2/ssl/*</pre>
+    </div>
+
+    <h2>3. Configuración del Virtual Host SSL</h2>
+    
+    <h3>3.1. Crear Archivo de Configuración</h3>
+    <div class="command"><pre>
+        sudo nano /etc/apache2/sites-available/000-default-ssl.conf</pre>
+    </div>
+
+    <div class="code-block">
+        <pre>
+&lt;VirtualHost *:443&gt;
+    ServerName tu-dominio.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    # Configuración SSL
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/ssl/tomcat.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/tomcat.key
+
+    # Configuración de Seguridad SSL
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+    SSLHonorCipherOrder off
+    SSLSessionTickets off
+
+    # Headers de Seguridad
+    Header always set Strict-Transport-Security "max-age=63072000"
+    Header always set X-Frame-Options SAMEORIGIN
+    Header always set X-Content-Type-Options nosniff
+
+    # Configuración del Proxy
+    &lt;Proxy balancer://tomcat_cluster&gt;
+        BalancerMember ajp://localhost:8009
+        ProxySet lbmethod=byrequests
+    &lt;/Proxy&gt;
+
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyPass / balancer://tomcat_cluster/
+    ProxyPassReverse / balancer://tomcat_cluster/
+
+    # Logs
+    ErrorLog ${APACHE_LOG_DIR}/error.ssl.log
+    CustomLog ${APACHE_LOG_DIR}/access.ssl.log combined
+&lt;/VirtualHost&gt;
+        </pre>
+    </div>
+
+    <h3>3.2. Configurar Redirección HTTP a HTTPS</h3>
+    <div class="command"><pre>
+        sudo nano /etc/apache2/sites-available/000-default.conf</pre>
+    </div>
+
+    <div class="code-block">
+        <pre>
+&lt;VirtualHost *:80&gt;
+    ServerName tu-dominio.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+&lt;/VirtualHost&gt;
+        </pre>
+    </div>
+
+    <h2>4. Configuración de AJP Seguro en Tomcat</h2>
+
+    <h3>4.1. Modificar server.xml en Tomcat</h3>
+    <div class="command"><pre>
+        sudo nano /opt/tomcat/apache-tomcat-10.1.35/conf/server.xml</pre>
+    </div>
+
+    <div class="code-block">
+        <pre>
+&lt;Connector protocol="AJP/1.3"
+    address="0.0.0.0"
+    port="8009"
+    redirectPort="8443"
+    secretRequired="false"
+    URIEncoding="UTF-8"
+    enableLookups="false"
+    tomcatAuthentication="false" /&gt;
+        </pre>
+    </div>
+
+    <h2>5. Habilitar Sitios y Reiniciar Servicios</h2>
+    
+    <div class="command"><pre>
+        sudo a2ensite 000-default-ssl.conf
+        sudo systemctl restart tomcat
+        sudo systemctl restart apache2</pre>
+    </div>
+
+    <h2>6. Configuración del Firewall</h2>
+    <div class="command"><pre>
+        sudo ufw allow 80/tcp
+        sudo ufw allow 443/tcp
+        sudo ufw deny 8080/tcp
+        sudo ufw deny 8443/tcp
+        sudo ufw status</pre>
+    </div>
+
+    <div class="warning">
+        <h3>Consideraciones de Seguridad:</h3>
+        <ul>
+            <li>Asegúrate de que el puerto AJP (8009) solo sea accesible localmente</li>
+            <li>Mantén actualizados los certificados SSL</li>
+            <li>Configura regular rotación de logs</li>
+            <li>Revisa periódicamente las configuraciones de seguridad SSL</li>
+            <li>Considera implementar WAF (Web Application Firewall)</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>Optimización de Rendimiento:</h3>
+        <ul>
+            <li>Ajusta el número de trabajadores de Apache según los recursos del servidor</li>
+            <li>Configura el caché de SSL session</li>
+            <li>Monitoriza el uso de recursos</li>
+            <li>Considera usar HTTP/2 para mejor rendimiento</li>
+        </ul>
+    </div>
+
+    <h2>7. Parámetros Adicionales Recomendados</h2>
+    <p>Añadir al archivo de configuración SSL para mejorar el rendimiento:</p>
+    <div class="code-block">
+        <pre>
+    # Caché SSL
+    SSLSessionCache shmcb:/var/run/apache2/ssl_scache(512000)
+    SSLSessionCacheTimeout 300
+
+    # Configuración OCSP Stapling
+    SSLUseStapling On
+    SSLStaplingCache "shmcb:logs/ssl_stapling(32768)"
+    SSLStaplingResponseMaxAge 86400
+        </pre>
+    </div>
+
+</body>
+</html>

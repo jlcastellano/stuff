@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Instalación de Apache Tomcat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c5282;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 5px;
+        }
+        .command {
+            background-color: #1a202c;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manual de Instalación de Apache Tomcat 10.1.35</h1>
+
+    <h2>1. Prerequisitos - Instalación de Java</h2>
+    <p>Tomcat requiere Java JDK para funcionar. Instalaremos OpenJDK:</p>
+    <div class="command"><pre>
+        sudo apt update
+        sudo apt install default-jdk</pre>
+    </div>
+    <p>Verificar la instalación:</p>
+    <div class="command">java -version</div>
+
+    <h2>2. Crear Usuario y Grupo para Tomcat</h2>
+    <p>Por seguridad, crearemos un usuario específico para Tomcat:</p>
+    <div class="command"><pre>
+        sudo groupadd tomcat
+        sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat</pre>
+    </div>
+
+    <h2>3. Descargar e Instalar Tomcat</h2>
+    <div class="command"><pre>
+        cd /tmp
+        wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.35/bin/apache-tomcat-10.1.35.tar.gz</pre>
+    </div>
+
+    <p>Crear el directorio de instalación y extraer el archivo:</p>
+    <div class="command"><pre>
+        sudo mkdir /opt/tomcat
+        sudo tar xzvf apache-tomcat-10*tar.gz -C /opt/tomcat/</pre>
+    </div>
+
+    <p>Configurar permisos:</p>
+    <div class="command"><pre>
+        sudo chown -R tomcat: /opt/tomcat
+        sudo sh -c 'chmod +x /opt/tomcat/apache-tomcat-10.1.35/bin/*.sh'</pre>
+    </div>
+
+    <h2>4. Configuración de Tomcat</h2>
+    <p>Configurar usuarios y roles:</p>
+    <div class="command">
+        sudo nano /opt/tomcat/apache-tomcat-10.1.35/conf/tomcat-users.xml
+    </div>
+
+    <p>Agregar las siguientes líneas antes de &lt;/tomcat-users&gt;:</p>
+
+    <div class="command"><pre>
+    &lt;role rolename="manager-gui"/&gt;
+    &lt;role rolename="admin-gui"/&gt;
+    &lt;user username="admin" password="TU_CONTRASEÑA" roles="manager-gui,admin-gui"/&gt;</pre>
+    </div>
+
+    <h2>5. Crear Servicio Systemd</h2>
+    <div class="command">
+        sudo nano /etc/systemd/system/tomcat.service
+    </div>
+
+    <p>Contenido del archivo tomcat.service:</p>
+    <div class="command"><pre>
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+Environment="JAVA_HOME=/usr/lib/jvm/default-java"
+Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
+Environment="CATALINA_BASE=/opt/tomcat/apache-tomcat-10.1.35"
+Environment="CATALINA_HOME=/opt/tomcat/apache-tomcat-10.1.35"
+Environment="CATALINA_PID=/opt/tomcat/apache-tomcat-10.1.35/temp/tomcat.pid"
+Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+ExecStart=/opt/tomcat/apache-tomcat-10.1.35/bin/startup.sh
+ExecStop=/opt/tomcat/apache-tomcat-10.1.35/bin/shutdown.sh
+
+[Install]
+WantedBy=multi-user.target</pre>
+    </div>
+
+    <h2>6. Iniciar y Habilitar el Servicio</h2>
+    <div class="command"><pre>
+        sudo systemctl daemon-reload
+        sudo systemctl start tomcat.service
+        sudo systemctl enable tomcat.service</pre>
+    </div>
+
+    <p>Verificar el estado del servicio:</p>
+    <div class="command">
+        sudo systemctl status tomcat.service
+    </div>
+
+    <h2>7. Configurar Acceso Remoto</h2>
+    <p>Para permitir acceso remoto al Manager y Host Manager:</p>
+    <div class="command"><pre>
+        sudo nano /opt/tomcat/apache-tomcat-10.1.35/webapps/manager/META-INF/context.xml
+        sudo nano /opt/tomcat/apache-tomcat-10.1.35/webapps/host-manager/META-INF/context.xml</pre>
+    </div>
+
+    <div class="note">
+        <p>En ambos archivos, comentar la sección de Valve para permitir acceso desde cualquier IP:</p>
+        <pre>
+            &lt;!-- &lt;Valve className="org.apache.catalina.valves.RemoteAddrValve" 
+                allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /&gt; --&gt;
+        </pre>
+    </div>
+
+    <h2>8. Acceder a Tomcat</h2>
+    <p>Abrir en el navegador:</p>
+    <div class="command">http://localhost:8080</div>
+
+    <div class="warning">
+        <p><strong>Notas importantes:</strong></p>
+        <ul>
+            <li>Reemplaza "TU_CONTRASEÑA" por una contraseña segura</li>
+            <li>El puerto predeterminado es 8080</li>
+            <li>Asegúrate de tener los puertos necesarios abiertos en el firewall</li>
+        </ul>
+    </div>
+
+</body>
+</html>
