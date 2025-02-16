@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Seguridad, Criptografía y TLS/SSL en Java</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                margin: 0;
+                padding: 20px;
+                max-width: 1200px;
+                margin: 0 auto;
+                color: #333;
+            }
+    
+            h1, h2, h3 {
+                color: #2c3e50;
+            }
+    
+            .container {
+                background-color: #f9f9f9;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+    
+            .intro-box {
+                background-color: #e3f2fd;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                border-left: 5px solid #1976d2;
+            }
+    
+            .tls-box {
+                background-color: #f3e5f5;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                border-left: 5px solid #7b1fa2;
+            }
+    
+            .cert-box {
+                background-color: #e8f5e9;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                border-left: 5px solid #388e3c;
+            }
+    
+            .handshake-box {
+                background-color: #fff3e0;
+                padding: 20px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                border-left: 5px solid #e65100;
+            }
+    
+            pre {
+                background-color: #f1f1f1;
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+            }
+    
+            code {
+                font-family: 'Courier New', Courier, monospace;
+            }
+    
+            .warning {
+                background-color: #fff3cd;
+                border-left: 5px solid #ffc107;
+                padding: 10px;
+                margin: 10px 0;
+            }
+    
+            .danger {
+                background-color: #f8d7da;
+                border-left: 5px solid #dc3545;
+                padding: 10px;
+                margin: 10px 0;
+            }
+    
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+    
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+    
+            th {
+                background-color: #f5f5f5;
+            }
+    
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                pre {
+                    font-size: 14px;
+                }
+            }
+    
+            .diagram {
+                font-family: monospace;
+                white-space: pre;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 5px;
+            }
+            .explanation-box {
+                background-color: #f8f9fa;
+                border-left: 5px solid #0d6efd;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 0 5px 5px 0;
+            }
+            
+            .explanation-box h4 {
+                color: #0d6efd;
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+            
+            .explanation-box ul, .explanation-box ol {
+                margin-top: 5px;
+                margin-bottom: 10px;
+                padding-left: 25px;
+            }
+        </style>
+    </head>
+<body>
+    <h1>Criptografía en Java</h1>
+
+    <div class="intro-box">
+        <h2>Introducción a la Criptografía</h2>
+        <p>La criptografía es la práctica y estudio de técnicas para asegurar la comunicación y los datos. En Java, el framework JCA (Java Cryptography Architecture) proporciona una arquitectura completa para trabajar con criptografía.</p>
+        
+        <h3>Tipos de Criptografía</h3>
+        <ul>
+            <li>Simétrica (clave única)</li>
+            <li>Asimétrica (clave pública/privada)</li>
+            <li>Hashing (una vía)</li>
+            <li>Firma Digital</li>
+        </ul>
+    </div>
+
+    <!-- Cifrado Simétrico -->
+    <div class="container">
+        <h3>Cifrado Simétrico (AES)</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema de cifrado que utiliza la misma clave para encriptar y desencriptar datos, implementando el estándar AES (Advanced Encryption Standard).</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Proteger datos confidenciales</li>
+                <li>Asegurar comunicaciones rápidas y eficientes</li>
+                <li>Mantener la confidencialidad de la información</li>
+                <li>Implementar cifrado simétrico estándar</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Genera una clave secreta AES de 256 bits</li>
+                <li>Crea un vector de inicialización (IV) aleatorio</li>
+                <li>Cifra los datos usando modo CBC con padding PKCS5</li>
+                <li>Devuelve el texto cifrado en formato Base64</li>
+            </ol>
+        </div>
+        <pre><code>
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import java.security.*;
+import java.util.Base64;
+
+public class AESUtil {
+    private static final int KEY_SIZE = 256;
+    private static final int IV_SIZE = 16;
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+
+    public static String encrypt(String plainText, SecretKey key, IvParameterSpec iv) 
+            throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+        byte[] encrypted = cipher.doFinal(plainText.getBytes());
+        return Base64.getEncoder().encodeToString(encrypted);
+    }
+
+    public static String decrypt(String cipherText, SecretKey key, IvParameterSpec iv) 
+            throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, key, iv);
+        byte[] plainText = cipher.doFinal(
+            Base64.getDecoder().decode(cipherText)
+        );
+        return new String(plainText);
+    }
+
+    public static SecretKey generateKey() throws NoSuchAlgorithmException {
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(KEY_SIZE, SecureRandom.getInstanceStrong());
+        return keyGen.generateKey();
+    }
+
+    public static IvParameterSpec generateIv() {
+        byte[] iv = new byte[IV_SIZE];
+        SecureRandom.getInstanceStrong().nextBytes(iv);
+        return new IvParameterSpec(iv);
+    }
+}
+        </code></pre>
+    </div>
+
+    <!-- Cifrado Asimétrico -->
+    <div class="container">
+        <h3>Cifrado Asimétrico (RSA)</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema de cifrado que utiliza un par de claves (pública y privada) para encriptar y desencriptar información de forma segura.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Intercambiar claves de forma segura</li>
+                <li>Implementar firmas digitales</li>
+                <li>Asegurar la autenticidad del remitente</li>
+                <li>Proteger información crítica</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Genera par de claves RSA de 2048 bits</li>
+                <li>Utiliza padding OAEP para mayor seguridad</li>
+                <li>Cifra con clave pública, descifra con privada</li>
+                <li>Implementa cifrado seguro para mensajes cortos</li>
+            </ol>
+        </div>
+
+        <pre><code>
+public class RSAUtil {
+    private static final int KEY_SIZE = 2048;
+
+    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
+        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+        keyPairGen.initialize(KEY_SIZE, SecureRandom.getInstanceStrong());
+        return keyPairGen.generateKeyPair();
+    }
+
+    public static String encrypt(String plainText, PublicKey publicKey) 
+            throws Exception {
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        return Base64.getEncoder().encodeToString(
+            cipher.doFinal(plainText.getBytes())
+        );
+    }
+
+    public static String decrypt(String cipherText, PrivateKey privateKey) 
+            throws Exception {
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        return new String(cipher.doFinal(
+            Base64.getDecoder().decode(cipherText)
+        ));
+    }
+}
+        </code></pre>
+    </div>
+
+    <!-- Funciones Hash -->
+    <div class="container">
+        <h3>Funciones Hash</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema que genera huellas digitales únicas de datos, proporcionando integridad y funciones de verificación de una vía.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Verificar integridad de datos</li>
+                <li>Almacenar contraseñas de forma segura</li>
+                <li>Generar identificadores únicos</li>
+                <li>Implementar firmas digitales</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Implementa SHA-256 para hashing general</li>
+                <li>Usa BCrypt para hash seguro de contraseñas</li>
+                <li>Proporciona HMAC para autenticación de mensajes</li>
+                <li>Genera hashes únicos y verificables</li>
+            </ol>
+        </div>
+        <pre><code>
+public class HashUtil {
+    public static String sha256Hash(String input) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hash = md.digest(input.getBytes());
+        return Base64.getEncoder().encodeToString(hash);
+    }
+
+    public static String bcryptHash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
+
+    public static boolean bcryptVerify(String password, String hash) {
+        return BCrypt.checkpw(password, hash);
+    }
+
+    public static String hmacSHA256(String message, String key) 
+            throws Exception {
+        Mac mac = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(
+            key.getBytes(), 
+            "HmacSHA256"
+        );
+        mac.init(secretKeySpec);
+        return Base64.getEncoder().encodeToString(
+            mac.doFinal(message.getBytes())
+        );
+    }
+}
+        </code></pre>
+    </div>
+
+    <!-- Firma Digital -->
+    <div class="container">
+        <h3>Firma Digital</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema que permite firmar documentos digitalmente y verificar su autenticidad e integridad.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Garantizar autenticidad de documentos</li>
+                <li>Verificar integridad de mensajes</li>
+                <li>Proporcionar no repudio</li>
+                <li>Implementar autenticación segura</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Utiliza algoritmo SHA256withRSA</li>
+                <li>Firma datos con clave privada</li>
+                <li>Verifica firma con clave pública</li>
+                <li>Garantiza integridad y autenticidad</li>
+            </ol>
+        </div>
+        <pre><code>
+public class DigitalSignatureUtil {
+    public static byte[] sign(PrivateKey privateKey, byte[] data) 
+            throws Exception {
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privateKey);
+        signature.update(data);
+        return signature.sign();
+    }
+
+    public static boolean verify(PublicKey publicKey, byte[] data, byte[] sig) 
+            throws Exception {
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initVerify(publicKey);
+        signature.update(data);
+        return signature.verify(sig);
+    }
+}
+        </code></pre>
+    </div>
+
+    <!-- Generación de Números Aleatorios -->
+    <div class="container">
+        <h3>Generación de Números Aleatorios Seguros</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema para generar números y tokens aleatorios criptográficamente seguros.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Generar claves y tokens seguros</li>
+                <li>Crear contraseñas aleatorias</li>
+                <li>Implementar valores de inicialización</li>
+                <li>Asegurar aleatoriedad criptográfica</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Utiliza SecureRandom para generación segura</li>
+                <li>Crea tokens en formato Base64URL</li>
+                <li>Genera contraseñas seguras y aleatorias</li>
+                <li>Proporciona bytes aleatorios seguros</li>
+            </ol>
+        </div>
+        <pre><code>
+public class SecureRandomUtil {
+    private static final SecureRandom secureRandom = new SecureRandom();
+
+    public static byte[] generateRandomBytes(int length) {
+        byte[] randomBytes = new byte[length];
+        secureRandom.nextBytes(randomBytes);
+        return randomBytes;
+    }
+
+    public static String generateToken(int length) {
+        byte[] randomBytes = generateRandomBytes(length);
+        return Base64.getUrlEncoder().withoutPadding()
+                     .encodeToString(randomBytes);
+    }
+
+    public static String generatePassword(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                    + "0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+        StringBuilder password = new StringBuilder();
+        
+        for (int i = 0; i < length; i++) {
+            int randomIndex = secureRandom.nextInt(chars.length());
+            password.append(chars.charAt(randomIndex));
+        }
+        
+        return password.toString();
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="warning">
+        <h3>Mejores Prácticas de Criptografía</h3>
+        <ul>
+            <li>Nunca implementar algoritmos criptográficos propios</li>
+            <li>Usar algoritmos probados y bibliotecas actualizadas</li>
+            <li>Manejar las claves de forma segura</li>
+            <li>Usar longitudes de clave adecuadas</li>
+            <li>Implementar rotación de claves</li>
+            <li>Usar modos de operación seguros (por ejemplo, CBC con IV aleatorio)</li>
+            <li>Implementar padding seguro</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h3>Tabla de Algoritmos Recomendados</h3>
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Algoritmo</th>
+                <th>Tamaño Mínimo</th>
+                <th>Uso Recomendado</th>
+            </tr>
+            <tr>
+                <td>Simétrico</td>
+                <td>AES</td>
+                <td>256 bits</td>
+                <td>Cifrado de datos</td>
+            </tr>
+            <tr>
+                <td>Asimétrico</td>
+                <td>RSA</td>
+                <td>2048 bits</td>
+                <td>Firmas, intercambio de claves</td>
+            </tr>
+            <tr>
+                <td>Hash</td>
+                <td>SHA-256/SHA-3</td>
+                <td>256 bits</td>
+                <td>Integridad de datos</td>
+            </tr>
+            <tr>
+                <td>MAC</td>
+                <td>HMAC-SHA256</td>
+                <td>256 bits</td>
+                <td>Autenticación de mensajes</td>
+            </tr>
+            <tr>
+                <td>Curva Elíptica</td>
+                <td>ECDSA</td>
+                <td>256 bits</td>
+                <td>Firmas digitales</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="importante">
+        <h3>Dependencias Maven</h3>
+        <pre><code>
+&lt;!-- Para criptografía avanzada --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.bouncycastle&lt;/groupId&gt;
+    &lt;artifactId&gt;bcprov-jdk15on&lt;/artifactId&gt;
+    &lt;version&gt;1.70&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Para manejo de contraseñas seguras --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.mindrot&lt;/groupId&gt;
+    &lt;artifactId&gt;jbcrypt&lt;/artifactId&gt;
+    &lt;version&gt;0.4&lt;/version&gt;
+&lt;/dependency&gt;
+        </code></pre>
+    </div>
+
+
+</body>
+</html>

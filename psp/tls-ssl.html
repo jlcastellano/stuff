@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad, Criptografía y TLS/SSL en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-box {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1976d2;
+        }
+
+        .tls-box {
+            background-color: #f3e5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #7b1fa2;
+        }
+
+        .cert-box {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #388e3c;
+        }
+
+        .handshake-box {
+            background-color: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e65100;
+        }
+
+        pre {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .danger {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            pre {
+                font-size: 14px;
+            }
+        }
+
+        .diagram {
+            font-family: monospace;
+            white-space: pre;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .explanation-box {
+            background-color: #f8f9fa;
+            border-left: 5px solid #0d6efd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .explanation-box h4 {
+            color: #0d6efd;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .explanation-box ul, .explanation-box ol {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding-left: 25px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TLS/SSL en Java</h1>
+
+    <div class="intro-box">
+        <h2>Introducción a TLS/SSL</h2>
+        <p>TLS (Transport Layer Security) y su predecesor SSL (Secure Sockets Layer) son protocolos criptográficos diseñados para proporcionar comunicaciones seguras a través de una red.</p>
+        
+        <h3>Evolución del Protocolo</h3>
+        <ul>
+            <li>SSL 2.0 (1995) - Obsoleto</li>
+            <li>SSL 3.0 (1996) - Obsoleto</li>
+            <li>TLS 1.0 (1999) - Deprecado</li>
+            <li>TLS 1.1 (2006) - Deprecado</li>
+            <li>TLS 1.2 (2008) - Ampliamente usado</li>
+            <li>TLS 1.3 (2018) - Versión actual recomendada</li>
+        </ul>
+    </div>
+
+    <!-- Configuración Básica de TLS -->
+    <div class="container">
+        <h3>Configuración Básica de TLS</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema de configuración que establece los parámetros básicos para crear conexiones seguras TLS, incluyendo la gestión de certificados y claves.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Establecer conexiones seguras entre cliente y servidor</li>
+                <li>Gestionar certificados digitales</li>
+                <li>Configurar parámetros de seguridad</li>
+                <li>Implementar cifrado en las comunicaciones</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Carga el almacén de claves (KeyStore)</li>
+                <li>Configura los gestores de claves y certificados</li>
+                <li>Inicializa el contexto SSL con los parámetros seguros</li>
+                <li>Implementa la configuración para el handshake TLS</li>
+            </ol>
+        </div>
+        <pre><code>
+import javax.net.ssl.*;
+import java.security.*;
+
+public class TLSConfig {
+    public static SSLContext createSSLContext() throws Exception {
+        // Crear KeyStore
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        keyStore.load(
+            new FileInputStream("keystore.p12"),
+            "password".toCharArray()
+        );
+
+        // Configurar KeyManagerFactory
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(
+            KeyManagerFactory.getDefaultAlgorithm()
+        );
+        kmf.init(keyStore, "password".toCharArray());
+
+        // Configurar TrustManagerFactory
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(
+            TrustManagerFactory.getDefaultAlgorithm()
+        );
+        tmf.init(keyStore);
+
+        // Crear y configurar SSLContext
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(
+            kmf.getKeyManagers(),
+            tmf.getTrustManagers(),
+            new SecureRandom()
+        );
+
+        return sslContext;
+    }
+}
+        </code></pre>
+    </div>
+
+    <!-- Proceso de Handshake TLS -->
+    <div class="container">
+        <h3>Proceso de Handshake TLS</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Proceso de negociación inicial entre cliente y servidor que establece los parámetros de seguridad y verifica la identidad de las partes.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Establecer una conexión segura</li>
+                <li>Verificar la identidad de las partes</li>
+                <li>Negociar parámetros de cifrado</li>
+                <li>Generar claves de sesión</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Cliente envía ClientHello con capacidades de cifrado</li>
+                <li>Servidor responde con certificado y parámetros</li>
+                <li>Cliente verifica certificado y envía clave de sesión</li>
+                <li>Ambas partes confirman establecimiento seguro</li>
+            </ol>
+        </div>
+        <div class="diagram">
+Cliente                                     Servidor
+   |                                           |
+   |------- ClientHello ---------------------->|
+   |                                           |
+   |<------ ServerHello -----------------------|
+   |<------ Certificate -----------------------|
+   |<------ ServerKeyExchange -----------------|
+   |<------ ServerHelloDone -------------------|
+   |                                           |
+   |------- ClientKeyExchange ---------------->|
+   |------- ChangeCipherSpec ----------------->|
+   |------- Finished ------------------------->|
+   |                                           |
+   |<------ ChangeCipherSpec ------------------|
+   |<------ Finished --------------------------|
+   |                                           |
+        </div>
+
+        <h4>Implementación del Handshake</h4>
+        <pre><code>
+public class TLSHandshake {
+    private SSLSocket createSecureSocket(String host, int port) 
+            throws Exception {
+        SSLContext context = TLSConfig.createSSLContext();
+        SSLSocketFactory factory = context.getSocketFactory();
+        
+        SSLSocket socket = (SSLSocket) factory.createSocket(host, port);
+        
+        // Configurar protocolos permitidos
+        socket.setEnabledProtocols(new String[] {"TLSv1.2", "TLSv1.3"});
+        
+        // Configurar cipher suites
+        socket.setEnabledCipherSuites(
+            getSecureCipherSuites(socket.getSupportedCipherSuites())
+        );
+        
+        return socket;
+    }
+
+    private String[] getSecureCipherSuites(String[] supported) {
+        List<String> secure = new ArrayList<>();
+        for (String suite : supported) {
+            // Seleccionar solo cipher suites seguros
+            if (suite.contains("_GCM_") || 
+                suite.contains("_CHACHA20_") ||
+                suite.contains("_ECDHE_")) {
+                secure.add(suite);
+            }
+        }
+        return secure.toArray(new String[0]);
+    }
+}
+        </code></pre>
+    </div>
+
+    <!-- Gestión de Certificados -->
+    <div class="container">
+        <h3>Gestión de Certificados</h3>
+        
+        <div class="explanation-box">
+            <h4>Qué es:</h4>
+            <p>Sistema para crear, gestionar y almacenar certificados digitales que son fundamentales para la autenticación y el cifrado en TLS.</p>
+            
+            <h4>Por qué es necesario:</h4>
+            <ul>
+                <li>Generar certificados para autenticación</li>
+                <li>Almacenar certificados de forma segura</li>
+                <li>Gestionar claves públicas y privadas</li>
+                <li>Implementar infraestructura de clave pública</li>
+            </ul>
+            
+            <h4>Funcionamiento:</h4>
+            <ol>
+                <li>Genera par de claves RSA</li>
+                <li>Crea certificado autofirmado</li>
+                <li>Configura información y extensiones del certificado</li>
+                <li>Almacena certificado en KeyStore</li>
+            </ol>
+        </div>
+        <pre><code>
+public class CertificateManager {
+    public static X509Certificate generateSelfSignedCertificate() 
+            throws Exception {
+        // Generar par de claves
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        // Crear información del certificado
+        X500Name issuer = new X500Name("CN=Test CA");
+        X500Name subject = new X500Name("CN=Test Server");
+        BigInteger serial = BigInteger.valueOf(System.currentTimeMillis());
+        Date notBefore = new Date();
+        Date notAfter = new Date(System.currentTimeMillis() + 365 * 24 * 60 * 60 * 1000L);
+
+        // Crear generador de certificados
+        X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
+            issuer,
+            serial,
+            notBefore,
+            notAfter,
+            subject,
+            keyPair.getPublic()
+        );
+
+        // Añadir extensiones básicas
+        certBuilder.addExtension(
+            Extension.basicConstraints,
+            true,
+            new BasicConstraints(false)
+        );
+
+        // Firmar el certificado
+        ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withRSA")
+            .build(keyPair.getPrivate());
+
+        return new JcaX509CertificateConverter()
+            .getCertificate(certBuilder.build(contentSigner));
+    }
+
+    public static void storeCertificate(X509Certificate cert, 
+            PrivateKey privateKey, String alias, String password) 
+            throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        keyStore.load(null, null);
+
+        keyStore.setKeyEntry(
+            alias,
+            privateKey,
+            password.toCharArray(),
+            new Certificate[]{cert}
+        );
+
+        try (FileOutputStream fos = new FileOutputStream("keystore.p12")) {
+            keyStore.store(fos, password.toCharArray());
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h3>Mejores Prácticas de TLS</h3>
+        <ul>
+            <li>Usar solo TLS 1.2 o superior</li>
+            <li>Deshabilitar todos los cipher suites débiles</li>
+            <li>Implementar Perfect Forward Secrecy (PFS)</li>
+            <li>Validar certificados correctamente</li>
+            <li>Mantener actualizadas las bibliotecas de seguridad</li>
+            <li>Implementar HSTS en servidores web</li>
+            <li>Usar longitudes de clave adecuadas</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <h3>Configuración de Cipher Suites Recomendados</h3>
+        <pre><code>
+String[] recommendedCiphers = new String[] {
+    "TLS_AES_256_GCM_SHA384",           // TLS 1.3
+    "TLS_CHACHA20_POLY1305_SHA256",     // TLS 1.3
+    "TLS_AES_128_GCM_SHA256",           // TLS 1.3
+    "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+    "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+    "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+    "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+    "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+    "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+};
+        </code></pre>
+    </div>
+    <div class="importante">
+        <h3>Dependencias Maven</h3>
+        <pre><code>
+&lt;!-- Para soporte TLS adicional --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.bouncycastle&lt;/groupId&gt;
+    &lt;artifactId&gt;bcprov-jdk15on&lt;/artifactId&gt;
+    &lt;version&gt;1.70&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Para manejo de certificados --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.bouncycastle&lt;/groupId&gt;
+    &lt;artifactId&gt;bcpkix-jdk15on&lt;/artifactId&gt;
+    &lt;version&gt;1.70&lt;/version&gt;
+&lt;/dependency&gt;
+        </code></pre>
+    </div>
+
+
+</body>
+</html>
