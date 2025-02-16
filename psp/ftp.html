@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo FTP en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-box {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1976d2;
+        }
+
+        .architecture-box {
+            background-color: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e65100;
+        }
+
+        .modes-box {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #388e3c;
+        }
+
+        .commands-box {
+            background-color: #f3e5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #7b1fa2;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #2196f3;
+            background-color: #fff;
+        }
+
+        pre {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #2c3e50;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .nota {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .importante {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .diagram {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            pre {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Protocolo FTP en Java</h1>
+
+    <div class="intro-box">
+        <h2>Introducción al Protocolo FTP</h2>
+        <p>El Protocolo de Transferencia de Archivos (FTP - File Transfer Protocol) es uno de los protocolos más antiguos y utilizados de Internet, diseñado específicamente para la transferencia de archivos entre sistemas conectados a una red TCP.</p>
+        
+        <h3>¿Qué es FTP?</h3>
+        <p>FTP es un protocolo de nivel de aplicación que permite la transferencia de archivos entre un cliente y un servidor. Fue desarrollado en 1971 y desde entonces ha sido una herramienta fundamental para:</p>
+        <ul>
+            <li>Transferencia de archivos entre sistemas remotos</li>
+            <li>Gestión de sitios web</li>
+            <li>Distribución de software</li>
+            <li>Copias de seguridad remotas</li>
+            <li>Compartir archivos en redes corporativas</li>
+        </ul>
+    </div>
+
+    <div class="architecture-box">
+        <h3>Arquitectura del Protocolo</h3>
+        <p>FTP utiliza una arquitectura cliente-servidor con algunas características únicas:</p>
+        
+        <div class="diagram">
+            <pre>
+Cliente FTP                    Servidor FTP
+    |                              |
+    |------ Control (21) --------->|
+    |                              |
+    |------ Datos (20) ----------->|
+            </pre>
+        </div>
+
+        <h4>Características Principales:</h4>
+        <ul>
+            <li><strong>Canal de Control (Puerto 21):</strong> 
+                <ul>
+                    <li>Maneja comandos y respuestas</li>
+                    <li>Mantiene la sesión activa</li>
+                    <li>Gestiona la autenticación</li>
+                </ul>
+            </li>
+            <li><strong>Canal de Datos (Puerto 20):</strong>
+                <ul>
+                    <li>Transferencia real de archivos</li>
+                    <li>Se establece para cada transferencia</li>
+                    <li>Puede operar en diferentes modos</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="modes-box">
+        <h3>Modos de Operación</h3>
+        
+        <h4>1. Modo Activo</h4>
+        <p>En el modo activo:</p>
+        <ul>
+            <li>El cliente inicia la conexión de control</li>
+            <li>El servidor inicia la conexión de datos</li>
+            <li>Puede tener problemas con firewalls</li>
+        </ul>
+
+        <h4>2. Modo Pasivo</h4>
+        <p>En el modo pasivo:</p>
+        <ul>
+            <li>El cliente inicia ambas conexiones</li>
+            <li>Mejor compatibilidad con firewalls</li>
+            <li>Más utilizado en la actualidad</li>
+        </ul>
+    </div>
+
+    <div class="commands-box">
+        <h3>Comandos FTP Principales</h3>
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th style="padding: 10px;">Comando</th>
+                <th style="padding: 10px;">Descripción</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">USER</td>
+                <td style="padding: 10px;">Nombre de usuario</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">PASS</td>
+                <td style="padding: 10px;">Contraseña</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">LIST</td>
+                <td style="padding: 10px;">Listar archivos</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">RETR</td>
+                <td style="padding: 10px;">Descargar archivo</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">STOR</td>
+                <td style="padding: 10px;">Subir archivo</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">QUIT</td>
+                <td style="padding: 10px;">Cerrar sesión</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="container">
+        <h3>Tipos de Transferencia</h3>
+        <ul>
+            <li><strong>ASCII:</strong> Para archivos de texto</li>
+            <li><strong>Binario:</strong> Para archivos no textuales</li>
+        </ul>
+    </div>
+
+    <div class="importante">
+        <h3>Consideraciones de Seguridad</h3>
+        <ul>
+            <li>FTP transmite datos en texto plano</li>
+            <li>Las credenciales no están cifradas</li>
+            <li>Vulnerable a ataques de intercepción</li>
+            <li>Se recomienda usar FTPS o SFTP para conexiones seguras</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h3>Alternativas Seguras</h3>
+        <ul>
+            <li><strong>FTPS (FTP over SSL):</strong>
+                <ul>
+                    <li>FTP con capa de seguridad SSL/TLS</li>
+                    <li>Mantiene la compatibilidad con FTP estándar</li>
+                </ul>
+            </li>
+            <li><strong>SFTP (SSH File Transfer Protocol):</strong>
+                <ul>
+                    <li>Protocolo completamente diferente basado en SSH</li>
+                    <li>Mayor seguridad integral</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="nota">
+        <h3>Ventajas y Desventajas</h3>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Ventajas</h4>
+                <ul>
+                    <li>Protocolo ampliamente soportado</li>
+                    <li>Simple y fácil de implementar</li>
+                    <li>Eficiente para grandes transferencias</li>
+                    <li>Permite reanudar transferencias interrumpidas</li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Desventajas</h4>
+                <ul>
+                    <li>Falta de seguridad inherente</li>
+                    <li>Problemas con firewalls</li>
+                    <li>No cifra la transferencia de datos</li>
+                    <li>Requiere dos conexiones</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>1. Conceptos Básicos FTP</h2>
+        <p>El protocolo FTP (File Transfer Protocol) opera en el modelo cliente-servidor y utiliza dos canales:</p>
+        <ul>
+            <li>Canal de control (puerto 21): Para comandos y respuestas</li>
+            <li>Canal de datos (puerto 20): Para la transferencia de archivos</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>2. Principales Clases Java para FTP</h2>
+        <pre><code>
+// Importaciones necesarias
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>3. Ejemplos de Implementación</h2>
+        
+        <h3>A. Conexión básica:</h3>
+        <pre><code>
+public class FTPExample {
+    private FTPClient ftpClient;
+    
+    public void connect(String server, int port, String user, String password) throws IOException {
+        ftpClient = new FTPClient();
+        
+        try {
+            // Conectar al servidor
+            ftpClient.connect(server, port);
+            
+            // Verificar la conexión
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+                throw new IOException("Error al conectar al servidor FTP");
+            }
+            
+            // Login
+            if (!ftpClient.login(user, password)) {
+                throw new IOException("Error en la autenticación");
+            }
+            
+            // Configurar modo pasivo
+            ftpClient.enterLocalPassiveMode();
+            
+            // Configurar tipo de transferencia
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+        } catch (IOException e) {
+            if (ftpClient.isConnected()) {
+                ftpClient.disconnect();
+            }
+            throw e;
+        }
+    }
+}
+        </code></pre>
+
+        <h3>B. Subir un archivo:</h3>
+        <pre><code>
+public void uploadFile(String localFilePath, String remoteFilePath) throws IOException {
+    FileInputStream fis = null;
+    try {
+        fis = new FileInputStream(new File(localFilePath));
+        boolean success = ftpClient.storeFile(remoteFilePath, fis);
+        if (!success) {
+            throw new IOException("Error al subir el archivo");
+        }
+    } finally {
+        if (fis != null) {
+            fis.close();
+        }
+    }
+}
+        </code></pre>
+
+        <h3>C. Descargar un archivo:</h3>
+        <pre><code>
+public void downloadFile(String remoteFilePath, String localFilePath) throws IOException {
+    FileOutputStream fos = null;
+    try {
+        fos = new FileOutputStream(new File(localFilePath));
+        boolean success = ftpClient.retrieveFile(remoteFilePath, fos);
+        if (!success) {
+            throw new IOException("Error al descargar el archivo");
+        }
+    } finally {
+        if (fos != null) {
+            fos.close();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>4. Manejo de Errores y Buenas Prácticas</h2>
+        <pre><code>
+public class FTPErrorHandling {
+    private FTPClient ftpClient;
+    
+    public void handleFTPOperations() {
+        try {
+            // Configurar timeout
+            ftpClient.setConnectTimeout(5000);
+            ftpClient.setDataTimeout(5000);
+            
+            // Verificar estado después de cada operación
+            if (!FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
+                throw new IOException("Operación FTP fallida");
+            }
+            
+        } catch (IOException e) {
+            System.err.println("Error FTP: " + e.getMessage());
+        } finally {
+            disconnect();
+        }
+    }
+    
+    public void disconnect() {
+        try {
+            if (ftpClient != null && ftpClient.isConnected()) {
+                ftpClient.logout();
+                ftpClient.disconnect();
+            }
+        } catch (IOException e) {
+            // Manejar error de desconexión
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>5. Consideraciones Adicionales</h2>
+        <div class="importante">
+            <ul>
+                <li>Siempre usar try-with-resources para streams</li>
+                <li>Implementar reintentos para operaciones fallidas</li>
+                <li>Manejar timeouts adecuadamente</li>
+                <li>Considerar el uso de pools de conexiones para aplicaciones con alto tráfico</li>
+                <li>Implementar logging apropiado</li>
+                <li>Considerar el uso de SSL/TLS para conexiones seguras (FTPS)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>6. Ejemplo Completo de Uso</h2>
+        <pre><code>
+public class FTPManager {
+    private FTPClient ftpClient;
+    
+    public static void main(String[] args) {
+        FTPManager manager = new FTPManager();
+        try {
+            // Conectar
+            manager.connect("ftp.ejemplo.com", 21, "usuario", "contraseña");
+            
+            // Subir archivo
+            manager.uploadFile("local/archivo.txt", "/remoto/archivo.txt");
+            
+            // Listar archivos
+            FTPFile[] files = manager.listFiles("/remoto");
+            for (FTPFile file : files) {
+                System.out.println("Archivo: " + file.getName());
+            }
+            
+            // Descargar archivo
+            manager.downloadFile("/remoto/archivo.txt", "local/archivo_descargado.txt");
+            
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            manager.disconnect();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>Notas Importantes</h2>
+        <div class="nota">
+            <p>Este manual asume que tienes la librería Apache Commons Net incluida en tu proyecto. 
+            Puedes agregarla a tu proyecto Maven añadiendo la siguiente dependencia:</p>
+            <pre><code>
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-net&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-net&lt;/artifactId&gt;
+    &lt;version&gt;3.9.0&lt;/version&gt;
+&lt;/dependency&gt;
+            </code></pre>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Telnet en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-box {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1976d2;
+        }
+
+        .history-box {
+            background-color: #f3e5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #7b1fa2;
+        }
+
+        .features-box {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #388e3c;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #2196f3;
+            background-color: #fff;
+        }
+
+        pre {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #2c3e50;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .nota {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .importante {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            pre {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Protocolo Telnet en Java</h1>
+
+    <div class="intro-box">
+        <h2>Introducción al Protocolo Telnet</h2>
+        <p>Telnet (TELecommunication NETwork) es uno de los protocolos más antiguos de Internet, desarrollado en 1969 como parte del proyecto ARPANET. Es un protocolo de red que proporciona una interfaz de comunicación bidireccional orientada a texto entre dos máquinas.</p>
+        
+        <h3>¿Qué es Telnet?</h3>
+        <p>Telnet es un protocolo cliente-servidor que permite a un usuario conectarse a un equipo remoto (host) a través de una red, estableciendo una sesión de terminal virtual. Esta sesión permite al usuario interactuar con el sistema remoto como si estuviera físicamente presente en esa máquina.</p>
+    </div>
+
+    <div class="features-box">
+        <h3>Características Principales</h3>
+        <ul>
+            <li><strong>Comunicación bidireccional:</strong> Permite el intercambio de datos en ambas direcciones</li>
+            <li><strong>Orientado a caracteres:</strong> Transmite datos carácter por carácter</li>
+            <li><strong>Puerto estándar:</strong> Utiliza por defecto el puerto TCP 23</li>
+            <li><strong>Sin cifrado:</strong> Los datos se transmiten en texto plano</li>
+            <li><strong>Terminal virtual:</strong> Emula una terminal remota</li>
+            <li><strong>Negociación de opciones:</strong> Permite configurar parámetros de la conexión</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h3>Usos Comunes</h3>
+        <ul>
+            <li><strong>Administración remota:</strong> Gestión de servidores y dispositivos de red</li>
+            <li><strong>Diagnóstico de red:</strong> Pruebas de conectividad y debugging</li>
+            <li><strong>Acceso a bases de datos:</strong> Conexión a sistemas legacy</li>
+            <li><strong>Configuración de equipos:</strong> Routers, switches y otros dispositivos de red</li>
+        </ul>
+    </div>
+
+    <div class="history-box">
+        <h3>Evolución Histórica</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>1969:</strong> Desarrollo inicial como parte de ARPANET
+            </div>
+            <div class="timeline-item">
+                <strong>1983:</strong> Estandarización en RFC 854
+            </div>
+            <div class="timeline-item">
+                <strong>1990s:</strong> Amplio uso en administración de sistemas
+            </div>
+            <div class="timeline-item">
+                <strong>2000s:</strong> Declive debido a preocupaciones de seguridad
+            </div>
+            <div class="timeline-item">
+                <strong>Actualidad:</strong> Reemplazado mayormente por SSH en entornos de producción
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Ventajas y Desventajas</h3>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Ventajas</h4>
+                <ul>
+                    <li>Simplicidad de implementación</li>
+                    <li>Bajo consumo de recursos</li>
+                    <li>Ampliamente soportado</li>
+                    <li>Útil para debugging</li>
+                    <li>Compatible con sistemas legacy</li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Desventajas</h4>
+                <ul>
+                    <li>Sin cifrado de datos</li>
+                    <li>Vulnerable a ataques de intercepción</li>
+                    <li>No soporta transferencia de archivos</li>
+                    <li>Limitado a interfaz de texto</li>
+                    <li>Problemas de seguridad inherentes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Alternativas Modernas</h3>
+        <ul>
+            <li><strong>SSH (Secure Shell):</strong> Versión segura con cifrado</li>
+            <li><strong>RDP (Remote Desktop Protocol):</strong> Para interfaces gráficas</li>
+            <li><strong>VNC (Virtual Network Computing):</strong> Control remoto gráfico</li>
+        </ul>
+    </div>
+
+    <div class="importante">
+        <h3>Consideraciones de Seguridad</h3>
+        <p>Debido a que Telnet transmite datos en texto plano, incluyendo contraseñas y comandos, se recomienda:</p>
+        <ul>
+            <li>Usar SSH en lugar de Telnet cuando sea posible</li>
+            <li>Restringir el acceso Telnet a redes confiables</li>
+            <li>Implementar firewalls y control de acceso</li>
+            <li>Monitorear activamente las conexiones Telnet</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>1. Conceptos Básicos Telnet</h2>
+        <p>Telnet es un protocolo de red que permite acceder a una máquina remota y gestionarla como si estuviéramos sentados delante de ella. Características principales:</p>
+        <ul>
+            <li>Puerto por defecto: 23</li>
+            <li>Comunicación bidireccional orientada a texto</li>
+            <li>Protocolo sin cifrado (texto plano)</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>2. Implementación básica usando Apache Commons Net</h2>
+        <pre><code>
+import org.apache.commons.net.telnet.TelnetClient;
+import org.apache.commons.net.telnet.TelnetNotificationHandler;
+import org.apache.commons.net.telnet.SimpleOptionHandler;
+import java.io.*;
+
+public class TelnetExample {
+    private TelnetClient telnet;
+    private InputStream in;
+    private PrintStream out;
+    
+    public TelnetExample() {
+        telnet = new TelnetClient();
+    }
+    
+    public void connect(String server, int port) throws IOException {
+        try {
+            // Establecer conexión
+            telnet.connect(server, port);
+            
+            // Obtener streams de entrada/salida
+            in = telnet.getInputStream();
+            out = new PrintStream(telnet.getOutputStream());
+            
+        } catch (IOException e) {
+            disconnect();
+            throw e;
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>3. Métodos de Lectura y Escritura</h2>
+        <pre><code>
+public class TelnetIO {
+    private TelnetClient telnet;
+    private InputStream in;
+    private PrintStream out;
+
+    // Método para escribir comandos
+    public void writeCommand(String command) {
+        out.println(command);
+        out.flush();
+    }
+
+    // Método para leer respuesta
+    public String readUntil(String pattern) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            char lastChar = pattern.charAt(pattern.length() - 1);
+            char ch;
+            
+            while ((ch = (char) in.read()) != -1) {
+                sb.append(ch);
+                if (ch == lastChar && sb.toString().endsWith(pattern)) {
+                    return sb.toString();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>4. Manejo de Terminal Virtual</h2>
+        <pre><code>
+public class TelnetTerminal {
+    private TelnetClient telnet;
+    
+    public void configureTelnetClient() {
+        try {
+            // Configurar opciones del terminal
+            TerminalTypeOptionHandler ttopt = 
+                new TerminalTypeOptionHandler("VT100", false, false, true, false);
+            EchoOptionHandler echoopt = 
+                new EchoOptionHandler(true, false, true, false);
+            SuppressGAOptionHandler gaopt = 
+                new SuppressGAOptionHandler(true, true, true, true);
+
+            telnet.addOptionHandler(ttopt);
+            telnet.addOptionHandler(echoopt);
+            telnet.addOptionHandler(gaopt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>5. Ejemplo Completo de Cliente Telnet</h2>
+        <pre><code>
+public class TelnetClient implements Runnable {
+    private TelnetClient telnet;
+    private String server;
+    private int port;
+    private String username;
+    private String password;
+    
+    public TelnetClient(String server, int port, String username, String password) {
+        this.server = server;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+        telnet = new TelnetClient();
+    }
+    
+    @Override
+    public void run() {
+        try {
+            // Conectar al servidor
+            telnet.connect(server, port);
+            
+            // Obtener streams
+            InputStream in = telnet.getInputStream();
+            PrintStream out = new PrintStream(telnet.getOutputStream());
+            
+            // Login
+            readUntil("login: ");
+            write(username);
+            readUntil("Password: ");
+            write(password);
+            
+            // Esperar prompt
+            readUntil("$");
+            
+            // Ejecutar comandos
+            write("ls");
+            String response = readUntil("$");
+            System.out.println("Respuesta del servidor: " + response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            disconnect();
+        }
+    }
+    
+    private void write(String value) {
+        PrintStream out = new PrintStream(telnet.getOutputStream());
+        out.println(value);
+        out.flush();
+    }
+    
+    private String readUntil(String pattern) {
+        try {
+            char lastChar = pattern.charAt(pattern.length() - 1);
+            StringBuilder sb = new StringBuilder();
+            InputStream in = telnet.getInputStream();
+            
+            char ch = (char) in.read();
+            while (true) {
+                sb.append(ch);
+                if (ch == lastChar && sb.toString().endsWith(pattern)) {
+                    return sb.toString();
+                }
+                ch = (char) in.read();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    private void disconnect() {
+        try {
+            telnet.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>6. Ejemplo de Uso</h2>
+        <pre><code>
+public class TelnetMain {
+    public static void main(String[] args) {
+        TelnetClient client = new TelnetClient("servidor.ejemplo.com", 23, "usuario", "contraseña");
+        Thread telnetThread = new Thread(client);
+        telnetThread.start();
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h2>7. Consideraciones de Seguridad</h2>
+        <div class="importante">
+            <ul>
+                <li>Telnet transmite datos en texto plano, incluyendo contraseñas</li>
+                <li>Se recomienda usar SSH en lugar de Telnet para conexiones seguras</li>
+                <li>Implementar timeout para evitar conexiones colgadas</li>
+                <li>Manejar excepciones adecuadamente</li>
+                <li>Cerrar siempre las conexiones después de su uso</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>8. Dependencias Maven</h2>
+        <div class="nota">
+            <p>Para utilizar estas clases, necesitas incluir Apache Commons Net en tu proyecto:</p>
+            <pre><code>
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-net&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-net&lt;/artifactId&gt;
+    &lt;version&gt;3.9.0&lt;/version&gt;
+&lt;/dependency&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>9. Mejores Prácticas</h2>
+        <ul>
+            <li>Implementar timeouts para todas las operaciones</li>
+            <li>Usar try-with-resources para manejar recursos</li>
+            <li>Implementar un sistema de reintentos para conexiones fallidas</li>
+            <li>Manejar adecuadamente los eventos de desconexión</li>
+            <li>Implementar logging para debug y monitoreo</li>
+        </ul>
+    </div>
+
+</body>
+</html>

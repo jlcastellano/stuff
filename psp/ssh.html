@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo SSH en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-box {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1976d2;
+        }
+
+        .security-box {
+            background-color: #ffebee;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #c62828;
+        }
+
+        .protocol-box {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #388e3c;
+        }
+
+        .implementation-box {
+            background-color: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e65100;
+        }
+
+        pre {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .nota {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .importante {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            pre {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Protocolo SSH en Java</h1>
+
+    <div class="intro-box">
+        <h2>Introducción al Protocolo SSH</h2>
+        <p>SSH (Secure Shell) es un protocolo de red criptográfico que permite la operación segura de servicios de red sobre una red no segura. Proporciona un canal seguro sobre una red no segura en una arquitectura cliente-servidor.</p>
+        
+        <h3>Historia y Evolución</h3>
+        <ul>
+            <li><strong>1995:</strong> SSH-1 creado por Tatu Ylönen</li>
+            <li><strong>1996:</strong> Comercialización y creación de SSH Communications Security</li>
+            <li><strong>2006:</strong> SSH-2 se convierte en estándar (RFC 4251-4256)</li>
+        </ul>
+    </div>
+
+    <div class="protocol-box">
+        <h3>Características Principales</h3>
+        <ul>
+            <li><strong>Puerto por defecto:</strong> 22</li>
+            <li><strong>Autenticación fuerte</strong></li>
+            <li><strong>Cifrado de datos</strong></li>
+            <li><strong>Integridad de datos</strong></li>
+            <li><strong>Túnel de reenvío (Port Forwarding)</strong></li>
+            <li><strong>Compresión de datos</strong></li>
+        </ul>
+    </div>
+
+    <div class="security-box">
+        <h3>Seguridad y Criptografía</h3>
+        
+        <h4>1. Cifrado</h4>
+        <ul>
+            <li>AES (128-bit y 256-bit)</li>
+            <li>Blowfish</li>
+            <li>3DES</li>
+            <li>ChaCha20</li>
+        </ul>
+
+        <h4>2. Intercambio de Claves</h4>
+        <ul>
+            <li>Diffie-Hellman</li>
+            <li>ECDH (Elliptic Curve Diffie-Hellman)</li>
+            <li>RSA</li>
+        </ul>
+
+        <h4>3. Integridad</h4>
+        <ul>
+            <li>HMAC-SHA1</li>
+            <li>HMAC-SHA2-256</li>
+            <li>HMAC-SHA2-512</li>
+        </ul>
+    </div>
+
+    <div class="implementation-box">
+        <h3>Implementación en Java con JSch</h3>
+        <pre><code>
+import com.jcraft.jsch.*;
+
+public class SSHClient {
+    private JSch jsch;
+    private Session session;
+    
+    public void connect(String host, String user, String password) {
+        try {
+            jsch = new JSch();
+            session = jsch.getSession(user, host, 22);
+            session.setPassword(password);
+            
+            // Configuración
+            Properties config = new Properties();
+            config.put("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+            
+            // Conectar
+            session.connect();
+            
+        } catch (JSchException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void executeCommand(String command) {
+        try {
+            Channel channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            
+            channel.setInputStream(null);
+            ((ChannelExec) channel).setErrStream(System.err);
+            
+            InputStream in = channel.getInputStream();
+            channel.connect();
+            
+            byte[] tmp = new byte[1024];
+            while (true) {
+                while (in.available() > 0) {
+                    int i = in.read(tmp, 0, 1024);
+                    if (i < 0) break;
+                    System.out.print(new String(tmp, 0, i));
+                }
+                if (channel.isClosed()) {
+                    break;
+                }
+                Thread.sleep(100);
+            }
+            
+            channel.disconnect();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h3>Modos de Uso Común</h3>
+        
+        <h4>1. Shell Remoto Seguro</h4>
+        <pre><code>
+Channel channel = session.openChannel("shell");
+channel.connect();
+        </code></pre>
+
+        <h4>2. Transferencia de Archivos (SFTP)</h4>
+        <pre><code>
+ChannelSftp sftpChannel = (ChannelSftp) session.openChannel("sftp");
+sftpChannel.connect();
+sftpChannel.put(localFile, remoteFile);
+        </code></pre>
+
+        <h4>3. Port Forwarding</h4>
+        <pre><code>
+session.setPortForwardingL(localPort, remoteHost, remotePort);
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h3>Autenticación</h3>
+        
+        <h4>1. Por Contraseña</h4>
+        <pre><code>
+session.setPassword(password);
+        </code></pre>
+
+        <h4>2. Por Clave Pública</h4>
+        <pre><code>
+jsch.addIdentity(privateKeyPath);
+        </code></pre>
+    </div>
+
+    <div class="importante">
+        <h3>Mejores Prácticas de Seguridad</h3>
+        <ul>
+            <li>Usar siempre la última versión de SSH-2</li>
+            <li>Implementar autenticación de dos factores cuando sea posible</li>
+            <li>Limitar los intentos de inicio de sesión</li>
+            <li>Usar claves SSH en lugar de contraseñas</li>
+            <li>Mantener las claves privadas seguras</li>
+            <li>Actualizar regularmente los algoritmos criptográficos</li>
+        </ul>
+    </div>
+
+    <div class="nota">
+        <h3>Ventajas sobre Otros Protocolos</h3>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Ventajas sobre Telnet</h4>
+                <ul>
+                    <li>Comunicación cifrada</li>
+                    <li>Autenticación segura</li>
+                    <li>Integridad de datos</li>
+                    <li>Túneles seguros</li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Ventajas sobre FTP</h4>
+                <ul>
+                    <li>Canal único seguro</li>
+                    <li>Mejor manejo de firewalls</li>
+                    <li>Transferencias cifradas</li>
+                    <li>Más funcionalidades</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Ejemplos de Uso Común</h3>
+        <pre><code>
+// Ejemplo de conexión básica
+SSHClient ssh = new SSHClient();
+ssh.connect("servidor.ejemplo.com", "usuario", "contraseña");
+
+// Ejecutar comando remoto
+ssh.executeCommand("ls -la");
+
+// Transferir archivo
+ssh.executeCommand("scp archivo.txt usuario@servidor:/ruta/destino");
+
+// Túnel SSH
+ssh.executeCommand("ssh -L 8080:localhost:80 usuario@servidor");
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h3>Solución de Problemas Comunes</h3>
+        <ul>
+            <li>Problemas de conexión
+                <ul>
+                    <li>Verificar firewall</li>
+                    <li>Comprobar puerto 22</li>
+                    <li>Verificar claves SSH</li>
+                </ul>
+            </li>
+            <li>Problemas de autenticación
+                <ul>
+                    <li>Verificar permisos de archivos de claves</li>
+                    <li>Comprobar formato de claves</li>
+                    <li>Verificar usuario y contraseña</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+        <div class="importante">
+            <h3>Dependencias Maven</h3>
+            <p>Para utilizar SSH en Java con JSch, necesitas incluir la siguiente dependencia en tu archivo pom.xml:</p>
+            <pre><code>
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.jcraft&lt;/groupId&gt;
+        &lt;artifactId&gt;jsch&lt;/artifactId&gt;
+        &lt;version&gt;0.1.55&lt;/version&gt;
+    &lt;/dependency&gt;
+            </code></pre>
+            
+            <p>Si prefieres usar Apache MINA SSHD (una alternativa moderna a JSch), puedes usar estas dependencias:</p>
+            <pre><code>
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.sshd&lt;/groupId&gt;
+        &lt;artifactId&gt;sshd-core&lt;/artifactId&gt;
+        &lt;version&gt;2.10.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.sshd&lt;/groupId&gt;
+        &lt;artifactId&gt;sshd-sftp&lt;/artifactId&gt;
+        &lt;version&gt;2.10.0&lt;/version&gt;
+    &lt;/dependency&gt;
+            </code></pre>
+    
+            <h4>Dependencias Opcionales</h4>
+            <p>Para características adicionales como logging y manejo de claves:</p>
+            <pre><code>
+    &lt;!-- Para logging --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+        &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+        &lt;version&gt;1.7.36&lt;/version&gt;
+    &lt;/dependency&gt;
+    
+    &lt;!-- Para soporte de claves ED25519 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;net.i2p.crypto&lt;/groupId&gt;
+        &lt;artifactId&gt;eddsa&lt;/artifactId&gt;
+        &lt;version&gt;0.3.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    
+    &lt;!-- Para soporte de Bouncy Castle (criptografía adicional) --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.bouncycastle&lt;/groupId&gt;
+        &lt;artifactId&gt;bcprov-jdk15on&lt;/artifactId&gt;
+        &lt;version&gt;1.70&lt;/version&gt;
+    &lt;/dependency&gt;
+            </code></pre>
+        </div>
+    
+        <div class="nota">
+            <h3>Notas sobre las Dependencias</h3>
+            <ul>
+                <li><strong>JSch vs MINA SSHD:</strong>
+                    <ul>
+                        <li>JSch es más antiguo y ampliamente utilizado</li>
+                        <li>MINA SSHD es más moderno y activamente mantenido</li>
+                        <li>MINA SSHD tiene mejor soporte para características modernas</li>
+                    </ul>
+                </li>
+                <li><strong>Versiones:</strong>
+                    <ul>
+                        <li>Siempre verifica las últimas versiones estables</li>
+                        <li>Considera la compatibilidad con tu versión de Java</li>
+                        <li>Revisa las notas de cambios para características nuevas</li>
+                    </ul>
+                </li>
+                <li><strong>Dependencias Opcionales:</strong>
+                    <ul>
+                        <li>Incluye solo las que necesites para tu caso de uso</li>
+                        <li>El logging es recomendado para desarrollo/debugging</li>
+                        <li>Las dependencias criptográficas son necesarias para algunos algoritmos específicos</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+  
+    </body>
+    </html>

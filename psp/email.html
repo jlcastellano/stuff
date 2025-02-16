@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolos de Correo Electrónico en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-box {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1976d2;
+        }
+
+        .smtp-box {
+            background-color: #f3e5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #7b1fa2;
+        }
+
+        .pop3-box {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #388e3c;
+        }
+
+        .imap-box {
+            background-color: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e65100;
+        }
+
+        pre {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .nota {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .importante {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .protocol-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .protocol-comparison th, 
+        .protocol-comparison td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .protocol-comparison th {
+            background-color: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            pre {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Protocolos de Correo Electrónico en Java</h1>
+
+    <div class="intro-box">
+        <h2>Introducción a los Protocolos de Correo Electrónico</h2>
+        <p>Los protocolos de correo electrónico son conjuntos de reglas que permiten la transmisión de mensajes entre servidores y clientes de correo. Los tres protocolos principales son:</p>
+        <ul>
+            <li><strong>SMTP (Simple Mail Transfer Protocol):</strong> Para envío de correos</li>
+            <li><strong>POP3 (Post Office Protocol version 3):</strong> Para recepción de correos</li>
+            <li><strong>IMAP (Internet Message Access Protocol):</strong> Para gestión avanzada de correos</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h3>Comparativa de Protocolos</h3>
+        <table class="protocol-comparison">
+            <tr>
+                <th>Característica</th>
+                <th>SMTP</th>
+                <th>POP3</th>
+                <th>IMAP</th>
+            </tr>
+            <tr>
+                <td>Puerto (No SSL)</td>
+                <td>25</td>
+                <td>110</td>
+                <td>143</td>
+            </tr>
+            <tr>
+                <td>Puerto (SSL)</td>
+                <td>465/587</td>
+                <td>995</td>
+                <td>993</td>
+            </tr>
+            <tr>
+                <td>Función Principal</td>
+                <td>Envío</td>
+                <td>Descarga</td>
+                <td>Sincronización</td>
+            </tr>
+            <tr>
+                <td>Estado de Mensajes</td>
+                <td>N/A</td>
+                <td>Local</td>
+                <td>Servidor</td>
+            </tr>
+            <tr>
+                <td>Múltiples Clientes</td>
+                <td>Sí</td>
+                <td>No</td>
+                <td>Sí</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="smtp-box">
+        <h3>SMTP (Simple Mail Transfer Protocol)</h3>
+        <p>Protocolo para el envío de correos electrónicos.</p>
+
+        <h4>Ejemplo de Implementación SMTP</h4>
+        <pre><code>
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import java.util.Properties;
+
+public class SMTPExample {
+    public void sendEmail(String to, String subject, String body) {
+        // Configuración del servidor SMTP
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        // Crear sesión con autenticación
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("usuario@gmail.com", "contraseña");
+            }
+        });
+
+        try {
+            // Crear mensaje
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("from@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setSubject(subject);
+            message.setText(body);
+
+            // Enviar mensaje
+            Transport.send(message);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="pop3-box">
+        <h3>POP3 (Post Office Protocol 3)</h3>
+        <p>Protocolo para la descarga de correos electrónicos.</p>
+
+        <h4>Ejemplo de Implementación POP3</h4>
+        <pre><code>
+public class POP3Example {
+    public void readEmails() {
+        Properties props = new Properties();
+        props.put("mail.pop3.host", "pop.gmail.com");
+        props.put("mail.pop3.port", "995");
+        props.put("mail.pop3.ssl.enable", "true");
+
+        Session session = Session.getDefaultInstance(props);
+
+        try {
+            // Conectar al servidor POP3
+            Store store = session.getStore("pop3s");
+            store.connect("pop.gmail.com", "usuario@gmail.com", "contraseña");
+
+            // Abrir carpeta INBOX
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+
+            // Obtener mensajes
+            Message[] messages = inbox.getMessages();
+            for (Message message : messages) {
+                System.out.println("From: " + message.getFrom()[0]);
+                System.out.println("Subject: " + message.getSubject());
+                System.out.println("Content: " + message.getContent());
+            }
+
+            // Cerrar conexiones
+            inbox.close(false);
+            store.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="imap-box">
+        <h3>IMAP (Internet Message Access Protocol)</h3>
+        <p>Protocolo para la gestión avanzada de correos electrónicos.</p>
+
+        <h4>Ejemplo de Implementación IMAP</h4>
+        <pre><code>
+public class IMAPExample {
+    public void manageEmails() {
+        Properties props = new Properties();
+        props.put("mail.imap.host", "imap.gmail.com");
+        props.put("mail.imap.port", "993");
+        props.put("mail.imap.ssl.enable", "true");
+
+        Session session = Session.getDefaultInstance(props);
+
+        try {
+            // Conectar al servidor IMAP
+            Store store = session.getStore("imaps");
+            store.connect("imap.gmail.com", "usuario@gmail.com", "contraseña");
+
+            // Obtener carpeta y crear nueva si no existe
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_WRITE);
+
+            // Buscar mensajes específicos
+            SearchTerm searchTerm = new SubjectTerm("importante");
+            Message[] messages = inbox.search(searchTerm);
+
+            // Procesar mensajes
+            for (Message message : messages) {
+                // Marcar como leído
+                message.setFlag(Flags.Flag.SEEN, true);
+                
+                // Mover a otra carpeta
+                Folder destFolder = store.getFolder("Archivado");
+                if (!destFolder.exists()) {
+                    destFolder.create(Folder.HOLDS_MESSAGES);
+                }
+                
+                Message[] moveMessages = {message};
+                inbox.copyMessages(moveMessages, destFolder);
+                message.setFlag(Flags.Flag.DELETED, true);
+            }
+
+            // Cerrar conexiones
+            inbox.close(true);
+            store.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="container">
+        <h3>Consideraciones de Seguridad</h3>
+        <ul>
+            <li>Siempre usar SSL/TLS para conexiones seguras</li>
+            <li>Implementar timeouts para evitar conexiones colgadas</li>
+            <li>No almacenar credenciales en texto plano</li>
+            <li>Manejar excepciones adecuadamente</li>
+            <li>Cerrar todas las conexiones después de su uso</li>
+        </ul>
+    </div>
+
+    <div class="nota">
+        <h3>Mejores Prácticas</h3>
+        <ul>
+            <li>Usar builder patterns para crear mensajes complejos</li>
+            <li>Implementar retry mechanism para conexiones fallidas</li>
+            <li>Manejar diferentes tipos de contenido (HTML, adjuntos)</li>
+            <li>Implementar logging para debugging</li>
+            <li>Usar connection pooling para mejor rendimiento</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h3>Ejemplo de Manejo de Adjuntos</h3>
+        <pre><code>
+public void sendEmailWithAttachment(String to, String subject, String body, String filePath) {
+    // ... configuración similar a los ejemplos anteriores ...
+
+    try {
+        Message message = new MimeMessage(session);
+        // ... configuración básica del mensaje ...
+
+        // Crear el contenido multipart
+        Multipart multipart = new MimeMultipart();
+
+        // Parte del texto
+        BodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setText(body);
+        multipart.addBodyPart(messageBodyPart);
+
+        // Parte del adjunto
+        messageBodyPart = new MimeBodyPart();
+        DataSource source = new FileDataSource(filePath);
+        messageBodyPart.setDataHandler(new DataHandler(source));
+        messageBodyPart.setFileName(new File(filePath).getName());
+        multipart.addBodyPart(messageBodyPart);
+
+        // Establecer el contenido del mensaje
+        message.setContent(multipart);
+
+        Transport.send(message);
+
+    } catch (MessagingException e) {
+        throw new RuntimeException(e);
+    }
+}
+        </code></pre>
+    </div>
+    <div class="importante">
+        <h3>Dependencias Maven</h3>
+        <p>Para trabajar con correo electrónico en Java, necesitas las siguientes dependencias:</p>
+        <pre><code>
+&lt;!-- Jakarta Mail API (anteriormente JavaMail) --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.sun.mail&lt;/groupId&gt;
+    &lt;artifactId&gt;jakarta.mail&lt;/artifactId&gt;
+    &lt;version&gt;2.0.1&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Para soporte de autenticación --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;javax.activation&lt;/groupId&gt;
+    &lt;artifactId&gt;activation&lt;/artifactId&gt;
+    &lt;version&gt;1.1.1&lt;/version&gt;
+&lt;/dependency&gt;
+        </code></pre>
+    </div>
+
+
+</body>
+</html>
