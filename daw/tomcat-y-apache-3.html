@@ -79,10 +79,10 @@ apache2ctl -M | grep proxy<pre>
         <h3>1.2. Verificar Configuración de SSL</h3>
         <div class="command"><pre>
 # Verificar certificados
-openssl x509 -in /etc/apache2/ssl/tomcat.crt -text -noout
+sudo openssl x509 -in /etc/apache2/ssl/tomcat.crt -text -noout
 
 # Verificar permisos de certificados
-ls -l /etc/apache2/ssl/</pre>
+sudo ls -l /etc/apache2/ssl/</pre>
         </div>
     </div>
 

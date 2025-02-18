@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo Formulario con Servlet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c5282;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 5px;
+        }
+        .command {
+            background-color: #1a202c;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .test-step {
+            background-color: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #f0fff4;
+            border-left: 4px solid #48bb78;
+        }
+        .error {
+            background-color: #fff5f5;
+            border-left: 4px solid #f56565;
+        }
+        .warning {
+            background-color: #fffaf0;
+            border-left: 4px solid #ed8936;
+        }
+        .code-block {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplo Formulario con Servlet</h1>
+
+    <h2>1. Creación de los archivos de prueba</h2>
+
+    <div class="test-step">
+        <h3>1.1. Configurar web.xml</h3>
+        <div class="command"><pre>
+sudo nano /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/WEB-INF/web.xml
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0"&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;PruebaServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;PruebaServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;PruebaServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/PruebaServlet&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;</pre>
+        </div>
+    </div>
+
+    <div class="test-step">
+        <h3>1.2. Crear Formulario</h3>
+        <div class="command"><pre>
+sudo nano /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/formulario.html
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Formulario de Prueba&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h2&gt;Formulario de Prueba&lt;/h2&gt;
+        &lt;form action="PruebaServlet" method="post"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="nombre"&gt;Nombre:&lt;/label&gt;
+                &lt;input type="text" id="nombre" name="nombre" required&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="email"&gt;Email:&lt;/label&gt;
+                &lt;input type="email" id="email" name="email" required&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="mensaje"&gt;Mensaje:&lt;/label&gt;
+                &lt;textarea id="mensaje" name="mensaje" rows="4" required&gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;input type="submit" value="Enviar"&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+    </div>
+
+    <div class="test-step">
+        <h3>1.3. Crear el Servlet</h3>
+        <div class="command"><pre>
+sudo nano /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/WEB-INF/classes/PruebaServlet.java
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+
+@WebServlet("/PruebaServlet")
+public class PruebaServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String nombre = request.getParameter("nombre");
+        String email = request.getParameter("email");
+        String mensaje = request.getParameter("mensaje");
+        
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        
+        out.println("&lt;!DOCTYPE html&gt;");
+        out.println("&lt;html&gt;");
+        out.println("&lt;head&gt;");
+        out.println("&lt;title&gt;Respuesta del Servidor&lt;/title&gt;");
+        out.println("&lt;style&gt;");
+        out.println("body { font-family: Arial, sans-serif; margin: 40px; }");
+        out.println(".container { max-width: 600px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }");
+        out.println(".info { background-color: #f9f9f9; padding: 15px; margin-top: 20px; border-radius: 4px; }");
+        out.println("&lt;/style&gt;");
+        out.println("&lt;/head&gt;");
+        out.println("&lt;body&gt;");
+        
+        out.println("&lt;div class='container'&gt;");
+        out.println("&lt;h2&gt;Datos Recibidos&lt;/h2&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Nombre:&lt;/strong&gt; " + nombre + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; " + email + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Mensaje:&lt;/strong&gt; " + mensaje + "&lt;/p&gt;");
+        
+        out.println("&lt;div class='info'&gt;");
+        out.println("&lt;h3&gt;Información de la Solicitud&lt;/h3&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Fecha y Hora:&lt;/strong&gt; " + new Date() + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Método:&lt;/strong&gt; " + request.getMethod() + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Protocolo:&lt;/strong&gt; " + request.getProtocol() + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Esquema:&lt;/strong&gt; " + request.getScheme() + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;SSL Activo:&lt;/strong&gt; " + request.isSecure() + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Servidor:&lt;/strong&gt; " + request.getServerName() + "&lt;/p&gt;");
+        out.println("&lt;p&gt;&lt;strong&gt;Puerto:&lt;/strong&gt; " + request.getServerPort() + "&lt;/p&gt;");
+        out.println("&lt;/div&gt;");
+        
+        out.println("&lt;p&gt;&lt;a href='formulario.html'&gt;Volver al formulario&lt;/a&gt;&lt;/p&gt;");
+        out.println("&lt;/div&gt;");
+        
+        out.println("&lt;/body&gt;");
+        out.println("&lt;/html&gt;");
+    }
+}</pre>
+        </div>
+    </div>
+
+    <h2>2. Pruebas de Conectividad</h2>    
+    <div class="test-step">
+        <h3>2.1. Compilar el Servlet</h3>
+        <div class="command"><pre>
+# Crear directorio temporal
+mkdir ~/temp_servlet
+
+# Copiar el archivo Java
+cp /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/WEB-INF/classes/PruebaServlet.java ~/temp_servlet/
+
+# Cambiar al directorio temporal
+cd ~/temp_servlet
+
+# Compilar en el directorio temporal
+javac -cp "/opt/tomcat/apache-tomcat-10.1.35/lib/servlet-api.jar" PruebaServlet.java
+
+# Mover el archivo compilado a la ubicación final
+sudo mv PruebaServlet.class /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/WEB-INF/classes/</pre>        </div>
+</div>
+<div class="test-step">
+    <h3>2.2. Ajustar permisos</h3>
+    <div class="command"><pre>
+sudo chown tomcat:tomcat /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/WEB-INF/classes/PruebaServlet.class
+sudo chmod 644 /opt/tomcat/apache-tomcat-10.1.35/webapps/ROOT/WEB-INF/classes/PruebaServlet.class
+</pre>
+        </div>
+    </div>
+
+    <h2>3. Pruebas</h2>
+
+    <div class="test-step success">
+        <div class="command"><pre>
+https://localhost/formulario.html</pre>
+        </div>
+    </div>
+
+
+</body>
+</html>
