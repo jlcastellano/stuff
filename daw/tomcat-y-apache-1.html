@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,15 +13,11 @@
             padding: 20px;
             color: #333;
         }
-
-        h1,
-        h2,
-        h3 {
+        h1, h2, h3 {
             color: #2c5282;
             border-bottom: 2px solid #4299e1;
             padding-bottom: 5px;
         }
-
         .command {
             background-color: #1a202c;
             color: #fff;
@@ -32,21 +27,18 @@
             margin: 10px 0;
             overflow-x: auto;
         }
-
         .note {
             background-color: #ebf8ff;
             border-left: 4px solid #4299e1;
             padding: 10px;
             margin: 10px 0;
         }
-
         .warning {
             background-color: #fff5f5;
             border-left: 4px solid #f56565;
             padding: 10px;
             margin: 10px 0;
         }
-
         .code-block {
             background-color: #f7fafc;
             border: 1px solid #e2e8f0;
@@ -56,41 +48,35 @@
         }
     </style>
 </head>
-
 <body>
     <h1>Instalación y Configuración de Apache Tomcat con SSL</h1>
 
     <h2>1. Prerequisitos</h2>
-
+    
     <h3>1.1. Instalación de Java</h3>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo apt update
         sudo apt install default-jdk</pre>
     </div>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         java -version</pre>
     </div>
 
     <h3>1.2. Instalación de Herramientas SSL</h3>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo apt install openssl</pre>
     </div>
 
     <h2>2. Configuración Inicial</h2>
 
     <h3>2.1. Crear Usuario y Grupo</h3>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo groupadd tomcat
         sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat</pre>
     </div>
 
     <h3>2.2. Descargar e Instalar Tomcat</h3>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         cd /tmp
         wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.35/bin/apache-tomcat-10.1.35.tar.gz
         sudo mkdir /opt/tomcat
@@ -105,26 +91,23 @@
     <div class="note">
         <p>Para entorno de producción, se recomienda usar un certificado de una CA reconocida.</p>
     </div>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo mkdir /opt/tomcat/apache-tomcat-10.1.35/conf/ssl
         cd /opt/tomcat/apache-tomcat-10.1.35/conf/ssl
         
         sudo openssl req -new -newkey rsa:2048 -nodes -keyout tomcat.key -out tomcat.csr -subj "/C=ES/ST=Estado/L=Ciudad/O=Organizacion/CN=localhost"
         sudo openssl x509 -req -days 365 -in tomcat.csr -signkey tomcat.key -out tomcat.crt
         sudo openssl pkcs12 -export -in tomcat.crt -inkey tomcat.key -out tomcat.p12 -name tomcat -CAfile tomcat.crt -caname root</pre>
-        <p>Asegúrate que los archivos tienen los permisos correctos:</p>
-        <div class="command">
-            <pre>
-            sudo chown tomcat:tomcat /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.p12
-            sudo chmod 640 /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.p12</pre>
-        </div>
     </div>
-
-    <h3>3.2. Configurar Tomcat para SSL</h3>
-    <p>Editar el archivo server.xml:</p>
+    <p>Asegúrate de que los permisos son correctos:</p>
     <div class="command">
         <pre>
+        sudo chown tomcat:tomcat /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.p12
+        sudo chmod 640 /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.p12</pre>
+    </div>
+    <h3>3.2. Configurar Tomcat para SSL</h3>
+    <p>Editar el archivo server.xml:</p>
+    <div class="command"><pre>
         sudo nano /opt/tomcat/apache-tomcat-10.1.35/conf/server.xml</pre>
     </div>
 
@@ -150,8 +133,7 @@
     </div>
 
     <h3>3.3. Configurar usuarios y roles</h3>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo nano /opt/tomcat/apache-tomcat-10.1.35/conf/tomcat-users.xml</pre>
     </div>
 
@@ -195,16 +177,14 @@ WantedBy=multi-user.target
     </div>
 
     <h2>4. Iniciar y Habilitar Tomcat</h2>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo systemctl daemon-reload
         sudo systemctl start tomcat
         sudo systemctl enable tomcat</pre>
     </div>
 
     <h2>5. Configurar Firewall</h2>
-    <div class="command">
-        <pre>
+    <div class="command"><pre>
         sudo ufw allow 8443/tcp
         sudo ufw status</pre>
     </div>
@@ -226,5 +206,4 @@ WantedBy=multi-user.target
     </div>
 
 </body>
-
 </html>
