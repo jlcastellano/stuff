@@ -74,7 +74,10 @@
     <h3>2.1. Crear Directorio para Certificados</h3>
     <div class="command"><pre>
         sudo mkdir /etc/apache2/ssl
-        sudo cp /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.* /etc/apache2/ssl/</pre>
+        sudo cp /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.crt /etc/apache2/ssl/
+        sudo cp /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.csr /etc/apache2/ssl/
+        sudo cp /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.key /etc/apache2/ssl/
+        sudo cp /opt/tomcat/apache-tomcat-10.1.35/conf/ssl/tomcat.p12 /etc/apache2/ssl/</pre>
     </div>
 
     <h3>2.2. Ajustar Permisos</h3>
@@ -209,21 +212,6 @@
             <li>Monitoriza el uso de recursos</li>
             <li>Considera usar HTTP/2 para mejor rendimiento</li>
         </ul>
-    </div>
-
-    <h2>7. Parámetros Adicionales Recomendados</h2>
-    <p>Añadir al archivo de configuración SSL para mejorar el rendimiento:</p>
-    <div class="code-block">
-        <pre>
-    # Caché SSL
-    SSLSessionCache shmcb:/var/run/apache2/ssl_scache(512000)
-    SSLSessionCacheTimeout 300
-
-    # Configuración OCSP Stapling
-    SSLUseStapling On
-    SSLStaplingCache "shmcb:logs/ssl_stapling(32768)"
-    SSLStaplingResponseMaxAge 86400
-        </pre>
     </div>
 
 </body>
