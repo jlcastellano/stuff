@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redes en Docker - Cap. 5</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html" class="active">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>5. Redes en Docker</h1>
+
+            <section>
+                <h2>5.1 Tipos de Redes</h2>
+                <div class="workflow-section">
+                    <h3>Redes Predeterminadas</h3>
+                    <ul>
+                        <li><strong>bridge:</strong> Red por defecto para contenedores</li>
+                        <li><strong>host:</strong> Comparte la red del host</li>
+                        <li><strong>none:</strong> Sin acceso a red</li>
+                    </ul>
+
+                    <pre># Ver redes disponibles
+docker network ls
+
+# Crear una nueva red
+docker network create mi_red</pre>
+
+                    <h3>Redes Personalizadas</h3>
+                    <pre>docker network create \
+    --driver bridge \
+    --subnet 172.20.0.0/16 \
+    --gateway 172.20.0.1 \
+    mi_red_personalizada</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>5.2 Comunicación entre Contenedores</h2>
+                <div class="workflow-section">
+                    <h3>Métodos de Comunicación</h3>
+                    <ul>
+                        <li><strong>DNS automático:</strong> Contenedores en la misma red</li>
+                        <li><strong>Enlaces legacy (--link):</strong> Método antiguo, no recomendado</li>
+                        <li><strong>Redes definidas por el usuario:</strong> Método recomendado</li>
+                    </ul>
+
+                    <h3>Ejemplo de comunicación:</h3>
+                    <pre># Crear red
+docker network create app_network
+
+# Ejecutar contenedores en la red
+docker run -d --name db --network app_network mysql
+docker run -d --name web --network app_network nginx</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>5.3 Port Mapping</h2>
+                <div class="workflow-section">
+                    <h3>Exposición de Puertos</h3>
+                    <ul>
+                        <li>Mapeo de puertos entre el host y los contenedores</li>
+                        <li>Puerto host : Puerto contenedor</li>
+                        <li>Múltiples mapeos permitidos</li>
+                        <li>Puertos dinámicos o específicos</li>
+                    </ul>
+
+                    <pre># Mapeo básico
+docker run -p 8080:80 nginx
+
+# Múltiples puertos
+docker run -p 8080:80 -p 443:443 nginx
+
+# Puerto dinámico
+docker run -P nginx</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>5.4 Configuración de Red Avanzada</h2>
+                <div class="workflow-section">
+                    <h3>Opciones Avanzadas</h3>
+                    <p>Características disponibles:</p>
+                    <ul>
+                        <li>Control de MTU</li>
+                        <li>Configuración de DNS</li>
+                        <li>Políticas de red</li>
+                        <li>IPV6</li>
+                    </ul>
+
+                    <pre># Configuración DNS personalizada
+docker run --dns 8.8.8.8 nginx
+
+# Configuración de hosts
+docker run --add-host host.docker.internal:host-gateway nginx</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>5.5 Patrones de Red Comunes</h2>
+                <div class="workflow-section">
+                    <h3>Escenarios de Uso</h3>
+                    <p>[Cliente] → [Load Balancer] → [Web Servers] → [Database]</p>
+
+                    <h3>Implementación típica:</h3>
+                    <pre># Red frontend
+docker network create frontend
+
+# Red backend
+docker network create backend
+
+# Conectar servicios
+docker run -d --name lb --network frontend nginx
+docker run -d --name web --network frontend --network backend app
+docker run -d --name db --network backend mysql</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>5.6 Mejores Prácticas</h2>
+                <div class="workflow-section">
+                    <ul>
+                        <li>Usar redes definidas por el usuario en lugar de la red bridge por defecto</li>
+                        <li>Planificar la segmentación de red según los servicios</li>
+                        <li>Limitar el acceso a la red host</li>
+                        <li>Documentar la arquitectura de red</li>
+                        <li>Implementar políticas de seguridad a nivel de red</li>
+                        <li>Monitorear el tráfico de red</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>5.7 Herramientas de Diagnóstico</h2>
+                <div class="workflow-section">
+                    <pre># Inspeccionar red
+docker network inspect mi_red
+
+# Verificar conectividad
+docker exec contenedor ping otro_contenedor
+
+# Debug de red
+docker run --rm --net container:contenedor nicolaka/netshoot</pre>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-4.html" class="button">← Cap. 4</a>
+                <a href="dockers-6.html" class="button">Cap. 6 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

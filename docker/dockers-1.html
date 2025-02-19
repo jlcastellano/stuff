@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conceptos Fundamentales de Docker - Cap. 1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html" class="active">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>1. Conceptos Fundamentales de Docker</h1>
+
+            <section>
+                <h2>1.1 ¿Qué es la Containerización?</h2>
+                <div class="workflow-section">
+                    <p>La containerización es una tecnología que permite empaquetar una aplicación y todas sus dependencias en un contenedor virtual. Este contenedor puede ejecutarse de manera consistente en cualquier infraestructura que soporte Docker.</p>
+                    <p>Imagina que tienes una caja que contiene todo lo necesario para que tu aplicación funcione: código, runtime, herramientas del sistema, librerías - básicamente, todo lo que instalarías en un servidor para ejecutar tu aplicación.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>1.2 Diferencia entre Máquinas Virtuales y Contenedores</h2>
+                
+                <div class="workflow-section">
+                    <h3>Máquinas Virtuales</h3>
+                    <ul>
+                        <li>Incluyen sistema operativo completo</li>
+                        <li>Mayor consumo de recursos</li>
+                        <li>Arranque más lento (minutos)</li>
+                        <li>Aislamiento completo</li>
+                        <li>Tamaño: GigaBytes</li>
+                    </ul>
+
+                    <h3>Contenedores</h3>
+                    <ul>
+                        <li>Comparten el SO del host</li>
+                        <li>Consumo mínimo de recursos</li>
+                        <li>Arranque rápido (segundos)</li>
+                        <li>Aislamiento a nivel de proceso</li>
+                        <li>Tamaño: MegaBytes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>1.3 Arquitectura Básica de Docker</h2>
+                <div class="workflow-section">
+                    <p>Docker utiliza una arquitectura cliente-servidor. Los componentes principales son:</p>
+                    <ul>
+                        <li><strong>Docker Daemon (dockerd):</strong> El servidor que gestiona los objetos Docker</li>
+                        <li><strong>REST API:</strong> Interface para comunicar con el daemon</li>
+                        <li><strong>Cliente Docker:</strong> Interface de línea de comandos (CLI)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>1.4 Ventajas en el Desarrollo y Despliegue</h2>
+                <div class="workflow-section">
+                    <ul>
+                        <li><strong>Consistencia:</strong> "Funciona en mi máquina" deja de ser un problema</li>
+                        <li><strong>Velocidad:</strong> Desarrollo, testing y producción con entornos idénticos</li>
+                        <li><strong>Aislamiento:</strong> Las aplicaciones y sus dependencias no interfieren entre sí</li>
+                        <li><strong>Escalabilidad:</strong> Fácil replicación y distribución de contenedores</li>
+                        <li><strong>Versionado:</strong> Control preciso de versiones de la infraestructura</li>
+                        <li><strong>Portabilidad:</strong> Ejecuta en cualquier lugar que tenga Docker instalado</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>1.5 Conceptos Clave Adicionales</h2>
+                <div class="workflow-section">
+                    <ul>
+                        <li><strong>Imagen Docker:</strong> Plantilla de solo lectura con instrucciones para crear un contenedor</li>
+                        <li><strong>Contenedor:</strong> Instancia ejecutable de una imagen</li>
+                        <li><strong>Registry:</strong> Repositorio para almacenar y distribuir imágenes Docker</li>
+                        <li><strong>DockerFile:</strong> Archivo de texto con instrucciones para construir una imagen</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-0.html" class="button">← Cap. 0</a>
+                <a href="dockers-2.html" class="button">Cap. 2 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

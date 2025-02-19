@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes Principales de Docker - Cap. 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html" class="active">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>2. Componentes Principales de Docker</h1>
+
+            <section>
+                <h2>2.1 Docker Engine</h2>
+                <div class="workflow-section">
+                    <h3>El núcleo de Docker</h3>
+                    <p>Docker Engine es el componente central que actúa como motor de ejecución de contenedores. Consiste en:</p>
+                    <ul>
+                        <li><strong>Daemon:</strong> Proceso en segundo plano que gestiona objetos Docker</li>
+                        <li><strong>API REST:</strong> Interface para comunicación con el daemon</li>
+                        <li><strong>CLI:</strong> Interfaz de línea de comandos para interactuar con Docker</li>
+                    </ul>
+                    <pre># Verificar la instalación y versión
+docker --version
+docker info</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>2.2 Docker Hub</h2>
+                <div class="workflow-section">
+                    <h3>Registro público de imágenes</h3>
+                    <p>Docker Hub es el registro más grande de imágenes Docker, ofreciendo:</p>
+                    <ul>
+                        <li>Repositorios públicos y privados</li>
+                        <li>Imágenes oficiales verificadas</li>
+                        <li>Integración con GitHub/BitBucket</li>
+                        <li>Automatización de builds</li>
+                    </ul>
+                    <p>Las imágenes oficiales son mantenidas por Docker y los desarrolladores originales del software.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>2.3 Docker Desktop</h2>
+                <div class="workflow-section">
+                    <h3>Entorno de desarrollo integrado</h3>
+                    <p>Aplicación para Windows y macOS que incluye:</p>
+                    <ul>
+                        <li>Docker Engine</li>
+                        <li>Docker CLI client</li>
+                        <li>Docker Compose</li>
+                        <li>Docker Content Trust</li>
+                        <li>Kubernetes</li>
+                        <li>Interfaz gráfica de usuario</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>2.4 Docker Compose</h2>
+                <div class="workflow-section">
+                    <h3>Orquestación de contenedores</h3>
+                    <p>Herramienta para definir y ejecutar aplicaciones multi-contenedor:</p>
+                    <ul>
+                        <li>Define servicios en archivo YAML</li>
+                        <li>Gestiona múltiples contenedores</li>
+                        <li>Configura redes y volúmenes</li>
+                    </ul>
+                    <pre>version: '3'
+services:
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=example</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>2.5 Dockerfile</h2>
+                <div class="workflow-section">
+                    <h3>Archivo de configuración de imagen</h3>
+                    <p>Script que contiene instrucciones para construir una imagen Docker:</p>
+                    <ul>
+                        <li>Define el entorno del contenedor</li>
+                        <li>Especifica dependencias y configuraciones</li>
+                        <li>Automatiza el proceso de construcción</li>
+                    </ul>
+                    <pre>FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]</pre>
+                    <p>Los Dockerfiles siguen un conjunto de mejores prácticas para optimizar el tamaño y la seguridad de las imágenes.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>2.6 Interrelación entre Componentes</h2>
+                <div class="workflow-section">
+                    <p>Los componentes de Docker trabajan en conjunto para proporcionar un ecosistema completo:</p>
+                    <ul>
+                        <li><strong>Docker Engine:</strong> ejecuta los contenedores</li>
+                        <li><strong>Docker Hub:</strong> proporciona las imágenes base</li>
+                        <li><strong>Dockerfile:</strong> construye imágenes personalizadas</li>
+                        <li><strong>Docker Compose:</strong> orquesta múltiples contenedores</li>
+                        <li><strong>Docker Desktop:</strong> integra todo en una interfaz amigable</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-1.html" class="button">← Cap. 1</a>
+                <a href="dockers-3.html" class="button">Cap. 3 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

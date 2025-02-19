@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalación de Docker - Cap. 0</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html" class="active">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>0. Instalación de Docker</h1>
+
+            <section>
+                <h2>0.1 Instalación en Ubuntu</h2>
+                
+                <div class="workflow-section">
+                    <h3>Requisitos Previos</h3>
+                    <ul>
+                        <li>Ubuntu 20.04 LTS o superior</li>
+                        <li>Usuario con privilegios sudo</li>
+                        <li>Terminal abierta</li>
+                        <li>Conexión a Internet</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-section">
+                    <h3>Pasos de Instalación</h3>
+                    <pre># 1. Actualizar el sistema
+sudo apt update
+sudo apt upgrade -y
+
+# 2. Instalar paquetes previos
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+# 3. Añadir clave GPG oficial de Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# 4. Configurar repositorio estable
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 5. Instalar Docker Engine
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+
+# 6. Añadir usuario al grupo docker (opcional, para ejecutar sin sudo)
+sudo usermod -aG docker $USER</pre>
+                </div>
+
+                <div class="workflow-section">
+                    <h3>Verificación de la Instalación</h3>
+                    <pre># Verificar versión de Docker
+docker --version
+
+# Verificar instalación con contenedor de prueba
+docker run hello-world</pre>
+                </div>
+
+                <div class="workflow-section">
+                    <h3>Instalación de Docker Compose</h3>
+                    <pre># 1. Descargar Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# 2. Aplicar permisos de ejecución
+sudo chmod +x /usr/local/bin/docker-compose
+
+# 3. Verificar instalación
+docker-compose --version</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>0.2 Instalación en Windows</h2>
+                
+                <div class="workflow-section">
+                    <h3>Requisitos del Sistema</h3>
+                    <ul>
+                        <li>Windows 10/11 Pro, Enterprise o Education</li>
+                        <li>Virtualización habilitada en BIOS</li>
+                        <li>WSL 2 instalado</li>
+                        <li>Mínimo 4GB RAM</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-section">
+                    <h3>Instalación de WSL 2 (Prerequisito)</h3>
+                    <pre># 1. Abrir PowerShell como administrador y ejecutar:
+wsl --install
+
+# 2. Habilitar el subsistema de Windows para Linux
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# 3. Habilitar características de máquina virtual
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# 4. Reiniciar el sistema
+
+# 5. Establecer WSL 2 como versión predeterminada
+wsl --set-default-version 2</pre>
+                </div>
+
+                <div class="workflow-section">
+                    <h3>Verificación en Windows</h3>
+                    <pre># Abrir PowerShell y verificar versión
+docker --version
+
+# Probar instalación
+docker run hello-world</pre>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="index.html" class="button">← Inicio</a>
+                <a href="dockers-1.html" class="button">Cap. 1 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

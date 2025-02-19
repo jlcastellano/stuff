@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad en Docker - Cap. 8</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html" class="active">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>8. Seguridad en Docker</h1>
+
+            <section>
+                <h2>8.1 Fundamentos de Seguridad</h2>
+                <div class="workflow-section">
+                    <h3>Principios Básicos</h3>
+                    <ul>
+                        <li>Principio de mínimo privilegio</li>
+                        <li>Aislamiento de contenedores</li>
+                        <li>Actualización regular de imágenes</li>
+                        <li>Escaneo de vulnerabilidades</li>
+                        <li>Control de acceso</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>8.2 Escaneo de Vulnerabilidades</h2>
+                <div class="workflow-section">
+                    <h3>Herramientas y Prácticas</h3>
+                    <pre># Escanear imagen con Trivy
+trivy image nginx:latest
+
+# Escanear con Docker Scan
+docker scan nginx:latest
+
+# Análisis detallado
+docker scan --file Dockerfile --severity high</pre>
+
+                    <h3>Herramientas populares:</h3>
+                    <ul>
+                        <li>Trivy</li>
+                        <li>Clair</li>
+                        <li>Snyk</li>
+                        <li>Anchore</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>8.3 Configuración Segura</h2>
+                <div class="workflow-section">
+                    <h3>Mejores Prácticas</h3>
+                    <pre># Ejecutar como usuario no root
+FROM nginx
+RUN useradd -r -s /bin/false nginx
+USER nginx
+
+# Limitar recursos
+docker run --memory="256m" --cpus="0.5" nginx
+
+# Deshabilitar privilegios
+docker run --security-opt=no-new-privileges nginx</pre>
+
+                    <h3>Prácticas a evitar:</h3>
+                    <ul>
+                        <li>Ejecutar contenedores como root</li>
+                        <li>Exponer el socket de Docker</li>
+                        <li>Usar imágenes no oficiales sin verificar</li>
+                        <li>Almacenar secretos en imágenes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>8.4 Gestión de Secretos</h2>
+                <div class="workflow-section">
+                    <h3>Manejo Seguro de Credenciales</h3>
+                    <pre># Crear un secreto
+docker secret create db_password password.txt
+
+# Usar secretos en servicios
+docker service create \
+    --secret db_password \
+    --name db \
+    mysql:8.0</pre>
+
+                    <h3>Docker Compose con secretos:</h3>
+                    <pre>version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    secrets:
+      - db_password
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_password
+
+secrets:
+  db_password:
+    external: true</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>8.5 Control de Acceso</h2>
+                <div class="workflow-section">
+                    <h3>RBAC y Autenticación</h3>
+                    <p>Niveles de control:</p>
+                    <ul>
+                        <li>Control de acceso a nivel de daemon</li>
+                        <li>Control de acceso a nivel de registro</li>
+                        <li>Control de acceso a nivel de contenedor</li>
+                        <li>Políticas de red</li>
+                    </ul>
+
+                    <pre># Configurar TLS para el daemon
+{
+  "tls": true,
+  "tlscert": "/path/to/server-cert.pem",
+  "tlskey": "/path/to/server-key.pem",
+  "tlsverify": true
+}</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>8.6 Monitoreo y Auditoría</h2>
+                <div class="workflow-section">
+                    <h3>Herramientas de Monitoreo</h3>
+                    <pre># Ver eventos de Docker
+docker events
+
+# Monitorear recursos
+docker stats
+
+# Logs de contenedor
+docker logs --follow container_name</pre>
+
+                    <h3>Aspectos a monitorear:</h3>
+                    <ul>
+                        <li>Uso de recursos</li>
+                        <li>Eventos de seguridad</li>
+                        <li>Accesos y autenticación</li>
+                        <li>Cambios en la configuración</li>
+                        <li>Actividad de red</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>8.7 Hardening de Contenedores</h2>
+                <div class="workflow-section">
+                    <h3>Fortalecimiento de Seguridad</h3>
+                    <pre># AppArmor profile
+docker run --security-opt apparmor=docker-default nginx
+
+# Seccomp profile
+docker run --security-opt seccomp=/path/to/seccomp.json nginx
+
+# Capabilities
+docker run --cap-drop ALL --cap-add NET_BIND_SERVICE nginx</pre>
+
+                    <h3>Checklist de seguridad:</h3>
+                    <ul>
+                        <li>Actualizar regularmente las imágenes base</li>
+                        <li>Implementar least privilege</li>
+                        <li>Configurar perfiles de seguridad</li>
+                        <li>Limitar capabilities</li>
+                        <li>Usar redes aisladas</li>
+                        <li>Implementar logging y monitoreo</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-7.html" class="button">← Cap. 7</a>
+                <a href="dockers-9.html" class="button">Cap. 9 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

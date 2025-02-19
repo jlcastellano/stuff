@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creación de Imágenes Docker - Cap. 4</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html" class="active">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>4. Creación de Imágenes Docker</h1>
+
+            <section>
+                <h2>4.1 Estructura Básica de un Dockerfile</h2>
+                <div class="workflow-section">
+                    <h3>Instrucciones fundamentales</h3>
+                    <pre>FROM ubuntu:20.04
+LABEL maintainer="tu@email.com"
+RUN apt-get update && apt-get install -y nginx
+COPY ./app /var/www/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</pre>
+
+                    <h3>Instrucciones principales:</h3>
+                    <ul>
+                        <li><strong>FROM:</strong> Imagen base a utilizar</li>
+                        <li><strong>LABEL:</strong> Metadatos de la imagen</li>
+                        <li><strong>RUN:</strong> Ejecuta comandos en el contenedor</li>
+                        <li><strong>COPY/ADD:</strong> Copia archivos al contenedor</li>
+                        <li><strong>EXPOSE:</strong> Puertos a exponer</li>
+                        <li><strong>CMD/ENTRYPOINT:</strong> Comando por defecto al ejecutar</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>4.2 Buenas Prácticas en la Creación</h2>
+                <div class="workflow-section">
+                    <h3>Optimización y seguridad</h3>
+                    <ul>
+                        <li>Usar imágenes base oficiales y específicas</li>
+                        <li>Minimizar el número de capas</li>
+                        <li>Combinar comandos RUN usando &&</li>
+                        <li>Eliminar archivos innecesarios</li>
+                        <li>Usar .dockerignore</li>
+                    </ul>
+
+                    <h3>Ejemplo de optimización:</h3>
+                    <pre># Mal ejemplo
+RUN apt-get update
+RUN apt-get install -y nginx
+RUN apt-get install -y python3
+
+# Buen ejemplo
+RUN apt-get update && \
+    apt-get install -y \
+    nginx \
+    python3 && \
+    rm -rf /var/lib/apt/lists/*</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>4.3 Capas y Optimización</h2>
+                <div class="workflow-section">
+                    <h3>Gestión eficiente de capas</h3>
+                    <p>Cada instrucción en el Dockerfile crea una nueva capa:</p>
+                    <ul>
+                        <li>Las capas son cacheadas</li>
+                        <li>Las capas son inmutables</li>
+                        <li>Solo las capas modificadas se reconstruyen</li>
+                    </ul>
+
+                    <h3>Estrategias de optimización:</h3>
+                    <ul>
+                        <li>Ordenar instrucciones de menos a más cambiantes</li>
+                        <li>Usar caché de manera eficiente</li>
+                        <li>Minimizar el tamaño de las capas</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>4.4 Multi-stage Builds</h2>
+                <div class="workflow-section">
+                    <h3>Construcción en múltiples etapas</h3>
+                    <p>Permite reducir el tamaño final de la imagen separando el proceso de build del runtime.</p>
+                    <pre># Etapa de construcción
+FROM node:14 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Etapa final
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</pre>
+
+                    <h3>Ventajas:</h3>
+                    <ul>
+                        <li>Imágenes finales más pequeñas</li>
+                        <li>Separación de dependencias de desarrollo y producción</li>
+                        <li>Mayor seguridad al no incluir herramientas de construcción</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>4.5 Comandos para Construcción y Gestión</h2>
+                <div class="workflow-section">
+                    <pre># Construir imagen
+docker build -t nombre_imagen:tag .
+
+# Construir con argumentos
+docker build --build-arg VAR=valor -t nombre_imagen .
+
+# Construir sin caché
+docker build --no-cache -t nombre_imagen .
+
+# Construir etapa específica
+docker build --target builder -t nombre_imagen .</pre>
+
+                    <h3>Consejos prácticos:</h3>
+                    <ul>
+                        <li>Usar tags específicos para versionar imágenes</li>
+                        <li>Documentar argumentos de construcción</li>
+                        <li>Revisar el tamaño final de la imagen</li>
+                        <li>Implementar pruebas automatizadas en el proceso de build</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-3.html" class="button">← Cap. 3</a>
+                <a href="dockers-5.html" class="button">Cap. 5 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volúmenes y Persistencia de Datos - Cap. 6</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html" class="active">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>6. Volúmenes y Persistencia de Datos</h1>
+
+            <section>
+                <h2>6.1 Tipos de Almacenamiento en Docker</h2>
+                <div class="workflow-section">
+                    <h3>Tres Tipos Principales</h3>
+                    <ul>
+                        <li><strong>Volumes:</strong> Gestionados por Docker</li>
+                        <li><strong>Bind Mounts:</strong> Enlaces directos al sistema de archivos del host</li>
+                        <li><strong>tmpfs Mounts:</strong> Almacenamiento temporal en memoria (solo Linux)</li>
+                    </ul>
+
+                    <pre>[Docker Host]
+        ├── /var/lib/docker/volumes/  (Volumes)
+        ├── /path/to/host/            (Bind Mounts)
+        └── RAM                       (tmpfs)</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>6.2 Docker Volumes</h2>
+                <div class="workflow-section">
+                    <h3>Gestión de Volúmenes</h3>
+                    <pre># Crear un volumen
+docker volume create mi_volumen
+
+# Listar volúmenes
+docker volume ls
+
+# Inspeccionar un volumen
+docker volume inspect mi_volumen
+
+# Eliminar un volumen
+docker volume rm mi_volumen
+
+# Eliminar volúmenes no utilizados
+docker volume prune</pre>
+
+                    <h3>Uso con contenedores:</h3>
+                    <pre># Montar un volumen
+docker run -v mi_volumen:/data mysql
+
+# Volumen anónimo
+docker run -v /data mysql</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>6.3 Bind Mounts</h2>
+                <div class="workflow-section">
+                    <h3>Enlaces al Sistema Host</h3>
+                    <pre># Montar directorio del host
+docker run -v /host/path:/container/path nginx
+
+# Usando --mount (sintaxis más explícita)
+docker run --mount type=bind,source=/host/path,target=/container/path nginx</pre>
+
+                    <h3>Consideraciones:</h3>
+                    <ul>
+                        <li>Acceso directo al sistema de archivos del host</li>
+                        <li>Mayor flexibilidad para desarrollo</li>
+                        <li>Posibles problemas de seguridad</li>
+                        <li>Dependencia de la estructura del host</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>6.4 Persistencia de Datos</h2>
+                <div class="workflow-section">
+                    <h3>Estrategias de Persistencia</h3>
+                    <p>Casos de uso comunes:</p>
+                    <ul>
+                        <li>Bases de datos</li>
+                        <li>Caché de aplicaciones</li>
+                        <li>Archivos de configuración</li>
+                        <li>Archivos estáticos</li>
+                    </ul>
+
+                    <pre>version: '3.8'
+services:
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_PASSWORD=secret
+
+volumes:
+  postgres_data:</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>6.5 Backup y Restauración</h2>
+                <div class="workflow-section">
+                    <h3>Gestión de Backups</h3>
+                    <pre># Backup de un volumen
+docker run --rm -v mi_volumen:/source -v $(pwd):/backup alpine \
+    tar czf /backup/mi_volumen.tar.gz -C /source .
+
+# Restaurar un backup
+docker run --rm -v mi_volumen:/target -v $(pwd):/backup alpine \
+    tar xzf /backup/mi_volumen.tar.gz -C /target</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>6.6 Mejores Prácticas</h2>
+                <div class="workflow-section">
+                    <ul>
+                        <li>Usar volúmenes nombrados para datos persistentes</li>
+                        <li>Implementar estrategias de backup regulares</li>
+                        <li>Documentar la estructura de volúmenes</li>
+                        <li>Utilizar bind mounts solo en desarrollo</li>
+                        <li>Considerar permisos y propiedad de archivos</li>
+                        <li>Planificar la limpieza de volúmenes no utilizados</li>
+                        <li>Monitorear el uso de espacio en disco</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>6.7 Problemas Comunes y Soluciones</h2>
+                <div class="workflow-section">
+                    <h3>Problemas frecuentes:</h3>
+
+                    <h4>Permisos incorrectos</h4>
+                    <pre># Solución: Ajustar permisos
+docker run --user 1000:1000 ...</pre>
+
+                    <h4>Volúmenes huérfanos</h4>
+                    <pre># Solución: Limpieza regular
+docker volume prune</pre>
+
+                    <h4>Problemas de rendimiento</h4>
+                    <ul>
+                        <li>Usar volúmenes en lugar de bind mounts</li>
+                        <li>Optimizar la cantidad de datos</li>
+                        <li>Considerar el sistema de archivos subyacente</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-5.html" class="button">← Cap. 5</a>
+                <a href="dockers-7.html" class="button">Cap. 7 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

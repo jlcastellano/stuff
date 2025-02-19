@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Compose - Cap. 7</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html" class="active">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>7. Docker Compose</h1>
+
+            <section>
+                <h2>7.1 Introducción a Docker Compose</h2>
+                <div class="workflow-section">
+                    <p>Docker Compose es una herramienta para definir y ejecutar aplicaciones Docker multi-contenedor. Permite:</p>
+                    <ul>
+                        <li>Definir toda la infraestructura en un archivo YAML</li>
+                        <li>Gestionar múltiples servicios con un solo comando</li>
+                        <li>Mantener el entorno de desarrollo consistente</li>
+                        <li>Automatizar el despliegue de aplicaciones complejas</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>7.2 Estructura del archivo docker-compose.yml</h2>
+                <div class="workflow-section">
+                    <h3>Componentes Principales</h3>
+                    <pre>version: '3.8'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=user
+      
+  db:
+    image: mysql:8.0
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      
+volumes:
+  db_data:</pre>
+
+                    <h3>Elementos clave:</h3>
+                    <ul>
+                        <li>version: Versión de la sintaxis de Compose</li>
+                        <li>services: Definición de contenedores</li>
+                        <li>volumes: Almacenamiento persistente</li>
+                        <li>networks: Configuración de redes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>7.3 Comandos Básicos de Docker Compose</h2>
+                <div class="workflow-section">
+                    <pre># Iniciar servicios
+docker-compose up
+
+# Iniciar en modo detached
+docker-compose up -d
+
+# Detener servicios
+docker-compose down
+
+# Ver logs
+docker-compose logs
+
+# Escalar servicios
+docker-compose up -d --scale web=3</pre>
+
+                    <h3>Ciclo de vida típico:</h3>
+                    <pre>docker-compose build
+docker-compose up
+docker-compose ps
+docker-compose logs
+docker-compose down</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>7.4 Configuraciones Avanzadas</h2>
+                <div class="workflow-section">
+                    <h3>Características Avanzadas</h3>
+                    <pre>version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+      args:
+        - BUILD_ENV=development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M</pre>
+
+                    <h3>Características destacadas:</h3>
+                    <ul>
+                        <li>Healthchecks</li>
+                        <li>Límites de recursos</li>
+                        <li>Replicación de servicios</li>
+                        <li>Variables de entorno</li>
+                        <li>Secretos y configuraciones</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>7.5 Entornos de Desarrollo vs Producción</h2>
+                <div class="workflow-section">
+                    <h3>Múltiples Configuraciones</h3>
+                    <p>Estructura de archivos:</p>
+                    <pre>docker-compose.yml          # Configuración base
+docker-compose.dev.yml      # Desarrollo
+docker-compose.prod.yml     # Producción</pre>
+
+                    <pre># Desarrollo
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+# Producción
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>7.6 Mejores Prácticas</h2>
+                <div class="workflow-section">
+                    <ul>
+                        <li>Usar variables de entorno para configuraciones</li>
+                        <li>Implementar healthchecks para todos los servicios</li>
+                        <li>Definir dependencias claras entre servicios</li>
+                        <li>Mantener los archivos Compose bajo control de versiones</li>
+                        <li>Separar configuraciones de desarrollo y producción</li>
+                        <li>Documentar las variables de entorno requeridas</li>
+                        <li>Utilizar volúmenes nombrados para datos persistentes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>7.7 Ejemplos Prácticos</h2>
+                <div class="workflow-section">
+                    <h3>Aplicación Web Típica</h3>
+                    <pre>version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      
+  api:
+    build: ./api
+    environment:
+      - DB_HOST=db
+    depends_on:
+      - db
+      
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+    secrets:
+      - db_password
+
+volumes:
+  postgres_data:
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt</pre>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-6.html" class="button">← Cap. 6</a>
+                <a href="dockers-8.html" class="button">Cap. 8 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

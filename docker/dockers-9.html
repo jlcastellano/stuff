@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casos Prácticos Iniciales - Cap. 9</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html" class="active">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>9. Casos Prácticos Iniciales</h1>
+
+            <section>
+                <h2>9.1 Despliegue de Aplicación Web Simple</h2>
+                <div class="workflow-section">
+                    <h3>Aplicación Node.js con Nginx</h3>
+                    <p>[Cliente] → [Nginx (80)] → [Node.js App (3000)]</p>
+
+                    <h4>Dockerfile para Node.js</h4>
+                    <pre>FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]</pre>
+
+                    <h4>docker-compose.yml:</h4>
+                    <pre>version: '3.8'
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+      
+  app:
+    build: .
+    expose:
+      - "3000"</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>9.2 Base de Datos Containerizada</h2>
+                <div class="workflow-section">
+                    <h3>PostgreSQL con Persistencia</h3>
+                    <h4>Consideraciones clave:</h4>
+                    <ul>
+                        <li>Persistencia de datos</li>
+                        <li>Variables de entorno seguras</li>
+                        <li>Backups automáticos</li>
+                        <li>Monitoreo de salud</li>
+                    </ul>
+
+                    <pre>version: '3.8'
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_PASSWORD=secreto
+      - POSTGRES_DB=miapp
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>9.3 Stack LAMP Básico</h2>
+                <div class="workflow-section">
+                    <h3>Linux + Apache + MySQL + PHP</h3>
+                    <p>[Cliente] → [Apache + PHP] → [MySQL]</p>
+
+                    <pre>version: '3.8'
+services:
+  web:
+    image: php:7.4-apache
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=lamp_db
+      - MYSQL_USER=lamp_user
+      - MYSQL_PASSWORD=lamp_pass
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=db
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>9.4 Stack MEAN Básico</h2>
+                <div class="workflow-section">
+                    <h3>MongoDB + Express + Angular + Node.js</h3>
+                    <h4>Estructura del proyecto:</h4>
+                    <pre>mean-app/
+├── frontend/     # Angular app
+├── backend/      # Express + Node.js
+└── docker-compose.yml</pre>
+
+                    <pre>version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - database
+    environment:
+      - MONGO_URI=mongodb://database:27017/mean_app
+
+  database:
+    image: mongo:4.4
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodb_data:</pre>
+
+                    <h4>Pasos de implementación:</h4>
+                    <ol>
+                        <li>Crear estructura de directorios</li>
+                        <li>Configurar Dockerfiles para frontend y backend</li>
+                        <li>Configurar docker-compose.yml</li>
+                        <li>Inicializar la base de datos</li>
+                        <li>Levantar los servicios</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section>
+                <h2>9.5 Comandos Útiles para los Casos Prácticos</h2>
+                <div class="workflow-section">
+                    <pre># Construir e iniciar servicios
+docker-compose up --build
+
+# Ver logs de servicios
+docker-compose logs -f [servicio]
+
+# Verificar estado de servicios
+docker-compose ps
+
+# Detener servicios
+docker-compose down
+
+# Ejecutar comandos en contenedores
+docker-compose exec [servicio] [comando]
+
+# Backup de base de datos
+docker-compose exec db mysqldump -u root -p [database] > backup.sql</pre>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-8.html" class="button">← Cap. 8</a>
+                <a href="index.html" class="button">Inicio</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>

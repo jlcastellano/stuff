@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos Básicos de Docker - Cap. 3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-title">Manual de Docker</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="dockers-0.html">Cap. 0</a>
+            <a href="dockers-1.html">Cap. 1</a>
+            <a href="dockers-2.html">Cap. 2</a>
+            <a href="dockers-3.html" class="active">Cap. 3</a>
+            <a href="dockers-4.html">Cap. 4</a>
+            <a href="dockers-5.html">Cap. 5</a>
+            <a href="dockers-6.html">Cap. 6</a>
+            <a href="dockers-7.html">Cap. 7</a>
+            <a href="dockers-8.html">Cap. 8</a>
+            <a href="dockers-9.html">Cap. 9</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h1>3. Comandos Básicos de Docker</h1>
+
+            <section>
+                <h2>3.1 docker pull</h2>
+                <div class="workflow-section">
+                    <h3>Descarga de imágenes</h3>
+                    <p>Descarga imágenes desde un registro (por defecto, Docker Hub)</p>
+                    <pre>docker pull [opciones] nombre_imagen[:tag]</pre>
+                    <p>Ejemplos:</p>
+                    <pre>docker pull ubuntu:latest
+docker pull nginx:1.19
+docker pull mysql:8.0</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>3.2 docker run</h2>
+                <div class="workflow-section">
+                    <h3>Ejecución de contenedores</h3>
+                    <p>Crea y arranca un nuevo contenedor basado en una imagen</p>
+                    <pre>docker run [opciones] nombre_imagen [comando]</pre>
+                    <p>Ejemplos comunes:</p>
+                    <pre>docker run -d nginx                    # Modo detached
+docker run -it ubuntu bash             # Modo interactivo
+docker run -p 8080:80 nginx           # Mapeo de puertos
+docker run --name mi_web nginx        # Nombre personalizado</pre>
+                    <p>Las opciones más utilizadas son:</p>
+                    <ul>
+                        <li>-d (detached mode)</li>
+                        <li>-it (interactive terminal)</li>
+                        <li>-p (port mapping)</li>
+                        <li>--name (nombre del contenedor)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>3.3 docker ps</h2>
+                <div class="workflow-section">
+                    <h3>Listar contenedores</h3>
+                    <p>Muestra los contenedores en ejecución</p>
+                    <pre>docker ps [opciones]</pre>
+                    <p>Variaciones:</p>
+                    <pre>docker ps           # Contenedores en ejecución
+docker ps -a        # Todos los contenedores
+docker ps -q        # Solo IDs
+docker ps --format "table {{.ID}}\t{{.Names}}"</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>3.4 docker images</h2>
+                <div class="workflow-section">
+                    <h3>Listar imágenes</h3>
+                    <p>Muestra las imágenes descargadas localmente</p>
+                    <pre>docker images [opciones]</pre>
+                    <p>Ejemplos:</p>
+                    <pre>docker images
+docker images -q    # Solo IDs
+docker images --format "{{.Repository}}:{{.Tag}}"</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>3.5 docker stop/start</h2>
+                <div class="workflow-section">
+                    <h3>Control de contenedores</h3>
+                    <pre>docker stop [contenedor]
+docker start [contenedor]</pre>
+                    <p>Ejemplos:</p>
+                    <pre>docker stop mi_contenedor
+docker start mi_contenedor
+docker stop $(docker ps -q)    # Detener todos</pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>3.6 docker rm/rmi</h2>
+                <div class="workflow-section">
+                    <h3>Eliminación de contenedores e imágenes</h3>
+                    <pre>docker rm [contenedor]    # Eliminar contenedor
+docker rmi [imagen]       # Eliminar imagen</pre>
+                    <p>Ejemplos:</p>
+                    <pre>docker rm mi_contenedor
+docker rmi nginx:latest
+docker rm $(docker ps -aq)    # Eliminar todos los contenedores</pre>
+                    <p>Para eliminar una imagen, todos los contenedores que la utilizan deben estar eliminados primero.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>3.7 Comandos Adicionales Útiles</h2>
+                <div class="workflow-section">
+                    <ul>
+                        <li><strong>docker logs [contenedor]:</strong> Ver logs del contenedor</li>
+                        <li><strong>docker exec -it [contenedor] [comando]:</strong> Ejecutar comando en contenedor en ejecución</li>
+                        <li><strong>docker inspect [contenedor/imagen]:</strong> Ver información detallada</li>
+                        <li><strong>docker cp [origen] [destino]:</strong> Copiar archivos entre host y contenedor</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <a href="dockers-2.html" class="button">← Cap. 2</a>
+                <a href="dockers-4.html" class="button">Cap. 4 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>@jlcastellano</p>
+    </footer>
+</body>
+</html>
