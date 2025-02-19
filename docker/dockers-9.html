@@ -34,7 +34,49 @@
                     <h3>Aplicación Node.js con Nginx</h3>
                     <p>[Cliente] → [Nginx (80)] → [Node.js App (3000)]</p>
 
-                    <h4>Dockerfile para Node.js</h4>
+                    <h4>Crear estructura del proyecto</h4>
+                    <pre>mkdir node-nginx-app
+cd node-nginx-app</pre>
+
+<h4>Crear package.json</h4>
+<pre>{
+  "name": "node-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}</pre>
+
+<h4>Crear app.js</h4>
+<pre>const express = require('express');
+  const app = express();
+  const port = 3000;
+  
+  app.get('/', (req, res) =&gt; {
+    res.send('¡Hola desde Node.js!');
+  });
+  
+  app.listen(port, () =&gt; {
+    console.log(`Aplicación corriendo en puerto ${port}`);
+  });</pre>
+
+  <h4>Crear nginx.conf</h4>
+<pre>server {
+  listen 80;
+  
+  location / {
+      proxy_pass http://app:3000;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+  }
+}</pre>
+                        <h4>Crear Dockerfile</h4>
                     <pre>FROM node:14
 WORKDIR /app
 COPY package*.json ./
@@ -59,22 +101,45 @@ services:
     build: .
     expose:
       - "3000"</pre>
+      
+<h4>Construye y ejecuta los contenedores</h4>
+<pre>docker-compose up --build</pre>
+
                 </div>
             </section>
 
             <section>
-                <h2>9.2 Base de Datos Containerizada</h2>
-                <div class="workflow-section">
-                    <h3>PostgreSQL con Persistencia</h3>
-                    <h4>Consideraciones clave:</h4>
-                    <ul>
-                        <li>Persistencia de datos</li>
-                        <li>Variables de entorno seguras</li>
-                        <li>Backups automáticos</li>
-                        <li>Monitoreo de salud</li>
-                    </ul>
+              <h2>9.2 Base de Datos Containerizada</h2>
+              <h3>PostgreSQL con Persistencia</h3>
+  
+              <h4>Pasos de implementación:</h4>
+              <p>Crear estructura:</p>
+              <pre>
+mkdir -p postgres-project/backups
+cd postgres-project</pre>
+  
+              <p>Crear init.sql:</p>
+              <pre>
+  CREATE TABLE usuarios (
+      id SERIAL PRIMARY KEY,
+      nombre VARCHAR(100),
+      email VARCHAR(100)
+  );
+  
+  INSERT INTO usuarios (nombre, email) 
+  VALUES ('Usuario Test', 'test@example.com');</pre>
+  
+              <p>Crear script de backup (nano backup-db.sh): </p>
+              <pre>
+  #!/bin/bash
+  docker-compose exec -T db pg_dump -U postgres miapp > backup_$(date +%Y%m%d).sql</pre>
+  
+  <p>Dar permisos de ejecución</p>   
+  <pre>chmod +x backup-db.sh</pre>
 
-                    <pre>version: '3.8'
+  <p>docker-compose.yml</p> 
+              <pre>
+version: '3.8'
 services:
   db:
     image: postgres:13
@@ -92,129 +157,94 @@ services:
       timeout: 5s
       retries: 5
 
+  backup:
+    image: postgres:13
+    volumes:
+      - ./backups:/backups
+      - ./backup-db.sh:/backup.sh
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_PASSWORD=secreto
+      - POSTGRES_DB=miapp
+    entrypoint: []
+    command: sh -c "while true; do /backup.sh; sleep 86400; done"
+
 volumes:
   postgres_data:</pre>
-                </div>
-            </section>
 
-            <section>
-                <h2>9.3 Stack LAMP Básico</h2>
-                <div class="workflow-section">
-                    <h3>Linux + Apache + MySQL + PHP</h3>
-                    <p>[Cliente] → [Apache + PHP] → [MySQL]</p>
+  <p>Conectarse a la base de datos</p>   
+  <pre>docker-compose exec db psql -U postgres -d miapp</pre>
+  
+  <h4>Consideraciones clave:</h4>
+  <ul>
+      <li>Persistencia de datos</li>
+      <li>Variables de entorno seguras</li>
+      <li>Backups automáticos</li>
+      <li>Monitoreo de salud</li>
+  </ul>
+</section>
+  
+          <section>
+              <h2>9.3 Stack LAMP Básico</h2>
+              <h3>Linux + Apache + MySQL + PHP</h3>
+              <p>[Cliente] → [Apache + PHP] → [MySQL]</p>
+  
+              <h4>Pasos de implementación:</h4>
+              <p>Crear estructura:</p>
+              <pre>
+  mkdir -p lamp-stack/src
+  cd lamp-stack</pre>
+  
+              <p>Crear archivo PHP de prueba (nano src/index.php):</p>
+              <pre>
+  &lt;?php
+  $conn = new mysqli("db", "lamp_user", "lamp_pass", "lamp_db");
+  if ($conn->connect_error) {
+      die("Conexión fallida: " . $conn->connect_error);
+  }
+  echo "¡Conexión exitosa a MySQL!";
+  ?&gt;</pre>
+  <p>Crear Dockerfile:</p>
+  <pre>
+FROM php:7.4-apache
+RUN docker-php-ext-install mysqli;</pre>
 
-                    <pre>version: '3.8'
-services:
-  web:
-    image: php:7.4-apache
-    volumes:
-      - ./src:/var/www/html
-    ports:
-      - "80:80"
-    depends_on:
-      - db
-
-  db:
-    image: mysql:5.7
-    volumes:
-      - mysql_data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=lamp_db
-      - MYSQL_USER=lamp_user
-      - MYSQL_PASSWORD=lamp_pass
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - "8080:80"
-    environment:
-      - PMA_HOST=db
-    depends_on:
-      - db
-
-volumes:
-  mysql_data:</pre>
-                </div>
-            </section>
-
-            <section>
-                <h2>9.4 Stack MEAN Básico</h2>
-                <div class="workflow-section">
-                    <h3>MongoDB + Express + Angular + Node.js</h3>
-                    <h4>Estructura del proyecto:</h4>
-                    <pre>mean-app/
-├── frontend/     # Angular app
-├── backend/      # Express + Node.js
-└── docker-compose.yml</pre>
-
-                    <pre>version: '3.8'
-services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-
-  backend:
-    build: ./backend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-    depends_on:
-      - database
-    environment:
-      - MONGO_URI=mongodb://database:27017/mean_app
-
-  database:
-    image: mongo:4.4
-    volumes:
-      - mongodb_data:/data/db
-    ports:
-      - "27017:27017"
-
-volumes:
-  mongodb_data:</pre>
-
-                    <h4>Pasos de implementación:</h4>
-                    <ol>
-                        <li>Crear estructura de directorios</li>
-                        <li>Configurar Dockerfiles para frontend y backend</li>
-                        <li>Configurar docker-compose.yml</li>
-                        <li>Inicializar la base de datos</li>
-                        <li>Levantar los servicios</li>
-                    </ol>
-                </div>
-            </section>
-
-            <section>
-                <h2>9.5 Comandos Útiles para los Casos Prácticos</h2>
-                <div class="workflow-section">
-                    <pre># Construir e iniciar servicios
-docker-compose up --build
-
-# Ver logs de servicios
-docker-compose logs -f [servicio]
-
-# Verificar estado de servicios
-docker-compose ps
-
-# Detener servicios
-docker-compose down
-
-# Ejecutar comandos en contenedores
-docker-compose exec [servicio] [comando]
-
-# Backup de base de datos
-docker-compose exec db mysqldump -u root -p [database] > backup.sql</pre>
-                </div>
-            </section>
+  <p>docker-compose.yml</p> 
+              <pre>
+  version: '3.8'
+  services:
+    web:
+      build: .
+      volumes:
+        - ./src:/var/www/html
+      ports:
+        - "80:80"
+      depends_on:
+        - db
+  
+    db:
+      image: mysql:5.7
+      volumes:
+        - mysql_data:/var/lib/mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=lamp_db
+        - MYSQL_USER=lamp_user
+        - MYSQL_PASSWORD=lamp_pass
+  
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      ports:
+        - "8080:80"
+      environment:
+        - PMA_HOST=db
+      depends_on:
+        - db
+  
+  volumes:
+    mysql_data:</pre>
+          </section>
 
             <div class="navigation-buttons">
                 <a href="dockers-8.html" class="button">← Cap. 8</a>
