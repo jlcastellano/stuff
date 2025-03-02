@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .ejercicio {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .protocolo {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .udp {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .tcp {
+            background-color: #2ecc71;
+            color: white;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejercicios de Protocolos de Red</h1>
+
+
+
+    <div class="ejercicio">
+        <span class="protocolo tcp">TCP</span>
+        <h2>3. Servidor de Archivos</h2>
+        <h3>Descripción:</h3>
+        <p>Implementar un servidor de archivos con funcionalidades básicas de almacenamiento y recuperación usando TCP.</p>
+        <h3>Requisitos:</h3>
+        <ul>
+            <li>El servidor debe:
+                <ul>
+                    <li>Manejar múltiples conexiones concurrentes usando hilos</li>
+                    <li>Mantener una estructura de directorios organizada</li>
+                    <li>Implementar un sistema de logs para todas las operaciones</li>
+                    <li>Verificar la integridad de los archivos transferidos</li>
+                </ul>
+            </li>
+            <li>Los clientes deben poder:
+                <ul>
+                    <li>Listar archivos disponibles en el servidor</li>
+                    <li>Subir archivos de cualquier tipo</li>
+                    <li>Descargar archivos existentes</li>
+                    <li>Recibir información sobre el progreso de las transferencias</li>
+                </ul>
+            </li>
+            <li>Implementar un protocolo de comunicación que incluya:
+                <ul>
+                    <li>Comandos para cada operación (LIST, UPLOAD, DOWNLOAD)</li>
+                    <li>Respuestas con códigos de estado</li>
+                    <li>Manejo de errores y excepciones</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+</body>
+</html>

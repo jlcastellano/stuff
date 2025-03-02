@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .ejercicio {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .protocolo {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .udp {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .tcp {
+            background-color: #2ecc71;
+            color: white;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejercicios de Protocolos de Red</h1>
+
+    <div class="ejercicio">
+        <span class="protocolo udp">UDP</span>
+        <h2>1. Sistema de Chat Multiusuario</h2>
+        <h3>Descripción:</h3>
+        <p>Desarrollar un sistema de chat que permita la comunicación entre múltiples usuarios a través de UDP.</p>
+        <h3>Requisitos:</h3>
+        <ul>
+            <li>El servidor debe poder recibir mensajes de múltiples clientes simultáneamente</li>
+            <li>Por cada mensaje recibido, el servidor debe:
+                <ul>
+                    <li>Registrar la dirección IP y puerto del remitente</li>
+                    <li>Mostrar el mensaje en su consola</li>
+                    <li>Reenviar el mensaje a todos los demás clientes conectados</li>
+                </ul>
+            </li>
+            <li>Los clientes deben poder:
+                <ul>
+                    <li>Conectarse al servidor especificando una dirección IP y puerto</li>
+                    <li>Enviar mensajes al servidor</li>
+                    <li>Recibir mensajes de otros clientes a través del servidor</li>
+                    <li>Mostrar los mensajes recibidos con la información del remitente</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

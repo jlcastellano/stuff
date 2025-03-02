@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .ejercicio {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .protocolo {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .udp {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .tcp {
+            background-color: #2ecc71;
+            color: white;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejercicios de Protocolos de Red</h1>
+
+    <div class="ejercicio">
+        <span class="protocolo udp">UDP</span>
+        <h2>2. Sistema de Monitoreo de Sensores</h2>
+        <h3>Descripción:</h3>
+        <p>Implementar un sistema distribuido que simule el monitoreo de sensores de temperatura usando UDP.</p>
+        <h3>Requisitos:</h3>
+        <ul>
+            <li>Crear múltiples instancias de sensores (clientes) que:
+                <ul>
+                    <li>Generen lecturas aleatorias de temperatura entre -10°C y 40°C</li>
+                    <li>Envíen datos cada 5 segundos al servidor</li>
+                    <li>Incluyan un identificador único en cada mensaje</li>
+                </ul>
+            </li>
+            <li>El servidor debe:
+                <ul>
+                    <li>Mantener un registro de los últimos 10 valores por cada sensor</li>
+                    <li>Calcular y mostrar la temperatura promedio por sensor</li>
+                    <li>Detectar y notificar cuando un sensor deja de enviar datos</li>
+                    <li>Generar alertas si la temperatura sale de un rango establecido</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+</body>
+</html>

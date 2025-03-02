@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .ejercicio {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .protocolo {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .udp {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .tcp {
+            background-color: #2ecc71;
+            color: white;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejercicios de Protocolos de Red</h1>
+
+
+    <div class="ejercicio">
+        <span class="protocolo tcp">TCP</span>
+        <h2>4. Juego de Ahorcado Multijugador</h2>
+        <h3>Descripción:</h3>
+        <p>Desarrollar un juego de ahorcado en red que permita múltiples partidas simultáneas.</p>
+        <h3>Requisitos:</h3>
+        <ul>
+            <li>El servidor debe:
+                <ul>
+                    <li>Mantener una base de palabras clasificadas por categorías</li>
+                    <li>Gestionar múltiples partidas simultáneas</li>
+                    <li>Llevar un registro de puntuaciones de los jugadores</li>
+                    <li>Implementar un sistema de salas de juego</li>
+                </ul>
+            </li>
+            <li>Los jugadores deben poder:
+                <ul>
+                    <li>Registrarse con un nombre de usuario</li>
+                    <li>Crear o unirse a partidas existentes</li>
+                    <li>Ver su historial de partidas y puntuaciones</li>
+                    <li>Recibir actualizaciones en tiempo real del estado del juego</li>
+                </ul>
+            </li>
+            <li>Características del juego:
+                <ul>
+                    <li>Sistema de turnos para múltiples jugadores</li>
+                    <li>Límite de tiempo por turno</li>
+                    <li>Sistema de puntuación basado en tiempo y aciertos</li>
+                    <li>Chat entre jugadores de la misma partida</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
