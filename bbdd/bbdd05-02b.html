@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Acceso a los Datos en SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .warning {
+            background-color: #ffe5e5;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>5.2.1. Control de Acceso a los Datos</h1>
+
+        <div class="section">
+            <h2>1. Gestión de Usuarios</h2>
+
+            <h3>Crear Usuarios</h3>
+            <div class="code"><pre>
+-- Crear usuario con contraseña
+CREATE USER 'usuario1'@'localhost' 
+IDENTIFIED BY 'password123';
+
+-- Crear usuario que se puede conectar desde cualquier host
+CREATE USER 'usuario2'@'%' 
+IDENTIFIED BY 'password123';
+
+-- Crear usuario con autenticación por plugin
+CREATE USER 'usuario3'@'localhost' 
+IDENTIFIED WITH mysql_native_password BY 'password123';</pre></div>
+
+            <h3>Modificar Usuarios</h3>
+            <div class="code"><pre>
+-- Cambiar contraseña
+ALTER USER 'usuario1'@'localhost' 
+IDENTIFIED BY 'nueva_password';
+
+-- Cambiar método de autenticación
+ALTER USER 'usuario1'@'localhost' 
+IDENTIFIED WITH mysql_native_password BY 'password123';
+
+-- Bloquear/Desbloquear cuenta
+ALTER USER 'usuario1'@'localhost' ACCOUNT LOCK;
+ALTER USER 'usuario1'@'localhost' ACCOUNT UNLOCK;</pre></div>
+
+            <h3>Eliminar Usuarios</h3>
+            <div class="code">
+DROP USER 'usuario1'@'localhost';</div>
+        </div>
+
+        <div class="section">
+            <h2>2. Privilegios</h2>
+
+            <h3>Tipos de Privilegios</h3>
+            <table>
+                <tr>
+                    <th>Nivel</th>
+                    <th>Privilegios</th>
+                    <th>Descripción</th>
+                </tr>
+                <tr>
+                    <td>Global</td>
+                    <td>ALL PRIVILEGES</td>
+                    <td>Todos los privilegios en todas las bases de datos</td>
+                </tr>
+                <tr>
+                    <td>Base de datos</td>
+                    <td>CREATE, DROP</td>
+                    <td>Crear/eliminar objetos en una base de datos</td>
+                </tr>
+                <tr>
+                    <td>Tabla</td>
+                    <td>SELECT, INSERT, UPDATE, DELETE</td>
+                    <td>Operaciones sobre datos en tablas</td>
+                </tr>
+                <tr>
+                    <td>Columna</td>
+                    <td>SELECT, INSERT, UPDATE</td>
+                    <td>Operaciones sobre columnas específicas</td>
+                </tr>
+            </table>
+
+            <h3>Otorgar Privilegios</h3>
+            <div class="code"><pre>
+-- Privilegios globales
+GRANT ALL PRIVILEGES ON *.* 
+TO 'admin'@'localhost';
+
+-- Privilegios sobre base de datos
+GRANT CREATE, DROP ON empresa.* 
+TO 'dba'@'localhost';
+
+-- Privilegios sobre tabla
+GRANT SELECT, INSERT ON empresa.empleados 
+TO 'rrhh'@'localhost';
+
+-- Privilegios sobre columnas específicas
+GRANT SELECT (nombre, departamento), 
+UPDATE (salario) ON empresa.empleados 
+TO 'supervisor'@'localhost';
+
+-- Privilegios con condiciones
+GRANT SELECT ON empresa.empleados 
+TO 'analista'@'localhost'
+WHERE departamento = 'IT';</pre></div>
+
+            <h3>Revocar Privilegios</h3>
+            <div class="code"><pre>
+-- Revocar privilegios específicos
+REVOKE INSERT, UPDATE ON empresa.empleados 
+FROM 'usuario1'@'localhost';
+
+-- Revocar todos los privilegios
+REVOKE ALL PRIVILEGES ON *.* 
+FROM 'usuario1'@'localhost';</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>3. Roles</h2>
+
+            <h3>Crear y Gestionar Roles</h3>
+            <div class="code"><pre>
+-- Crear rol
+CREATE ROLE 'rol_rrhh';
+
+-- Asignar privilegios al rol
+GRANT SELECT, INSERT, UPDATE 
+ON empresa.empleados TO 'rol_rrhh';
+
+-- Asignar rol a usuario
+GRANT 'rol_rrhh' TO 'usuario1'@'localhost';
+
+-- Activar rol
+SET ROLE 'rol_rrhh';
+
+-- Revocar rol
+REVOKE 'rol_rrhh' FROM 'usuario1'@'localhost';</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>4. Vistas de Seguridad</h2>
+            <div class="code"><pre>
+-- Crear vista con acceso restringido
+CREATE VIEW empleados_vista AS
+SELECT id, nombre, departamento
+FROM empleados
+WHERE departamento = 'IT';
+
+-- Otorgar acceso a la vista
+GRANT SELECT ON empresa.empleados_vista 
+TO 'usuario1'@'localhost';</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>5. Auditoría</h2>
+            <div class="code"><pre>
+-- Habilitar registro de auditoría
+SET GLOBAL general_log = 'ON';
+SET GLOBAL general_log_file = '/var/log/mysql/mysql.log';
+
+-- Consultar actividad de usuarios
+SELECT * FROM mysql.general_log;
+
+-- Ver privilegios actuales
+SHOW GRANTS;
+
+-- Ver privilegios de un usuario específico
+SHOW GRANTS FOR 'usuario1'@'localhost';</pre></div>
+        </div>
+
+        <div class="warning">
+            <h2>Buenas Prácticas de Seguridad</h2>
+            <ul>
+                <li>Principio de mínimo privilegio: otorgar solo los permisos necesarios</li>
+                <li>Usar roles para gestionar grupos de privilegios</li>
+                <li>Cambiar contraseñas regularmente</li>
+                <li>Auditar accesos y cambios regularmente</li>
+                <li>Revocar privilegios innecesarios</li>
+                <li>Usar vistas para restringir acceso a datos sensibles</li>
+                <li>Mantener actualizados los sistemas de seguridad</li>
+            </ul>
+        </div>
+
+        <div class="example">
+            <h2>Ejemplo Completo de Configuración de Seguridad</h2>
+            <div class="code"><pre>
+-- Crear roles para diferentes departamentos
+CREATE ROLE 'rol_rrhh', 'rol_finanzas', 'rol_it';
+
+-- Configurar privilegios para RRHH
+GRANT SELECT, INSERT, UPDATE ON empresa.empleados TO 'rol_rrhh';
+GRANT SELECT ON empresa.departamentos TO 'rol_rrhh';
+
+-- Configurar privilegios para Finanzas
+GRANT SELECT, UPDATE (salario) ON empresa.empleados TO 'rol_finanzas';
+GRANT ALL PRIVILEGES ON empresa.contabilidad TO 'rol_finanzas';
+
+-- Configurar privilegios para IT
+GRANT ALL PRIVILEGES ON empresa.* TO 'rol_it';
+
+-- Crear usuarios y asignar roles
+CREATE USER 'ana_rrhh'@'localhost' IDENTIFIED BY 'password123';
+GRANT 'rol_rrhh' TO 'ana_rrhh'@'localhost';
+
+CREATE USER 'pedro_finanzas'@'localhost' IDENTIFIED BY 'password456';
+GRANT 'rol_finanzas' TO 'pedro_finanzas'@'localhost';
+
+-- Crear vista segura para RRHH
+CREATE VIEW vista_empleados_rrhh AS
+SELECT id, nombre, departamento, fecha_contrato
+FROM empleados
+WHERE activo = 1;
+
+GRANT SELECT ON empresa.vista_empleados_rrhh TO 'rol_rrhh';</pre></div>
+        </div>
+    </div>
+</body>
+</html>
