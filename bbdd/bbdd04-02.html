@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenguaje de Definición de Datos (DDL)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .note {
+            background-color: #ffe5e5;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>4.3. Lenguaje de Definición de Datos (DDL)</h1>
+
+        <div class="section">
+            <h2>4.3.1. Definición de Bases de Datos</h2>
+            
+            <h3>Crear Base de Datos</h3>
+            <div class="code"><pre>
+CREATE DATABASE nombre_bd
+    [CHARACTER SET charset]
+    [COLLATE collation];
+
+-- Ejemplo
+CREATE DATABASE empresa
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;</pre></div>
+
+            <h3>Modificar Base de Datos</h3>
+            <div class="code"><pre>
+ALTER DATABASE nombre_bd
+    [CHARACTER SET charset]
+    [COLLATE collation];</pre></div>
+
+            <h3>Eliminar Base de Datos</h3>
+            <div class="code"><pre>DROP DATABASE nombre_bd;</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>4.3.2. Definición de Tablas</h2>
+
+            <h3>Crear Tabla</h3>
+            <div class="code"><pre>
+CREATE TABLE nombre_tabla (
+    columna1 tipo1 [restricciones],
+    columna2 tipo2 [restricciones],
+    ...
+    [restricciones_tabla]
+);
+
+-- Ejemplo completo
+CREATE TABLE empleados (
+    id_empleado INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    fecha_contrato DATE DEFAULT CURRENT_DATE,
+    salario DECIMAL(10,2) CHECK (salario >= 0),
+    id_departamento INT,
+    FOREIGN KEY (id_departamento) 
+        REFERENCES departamentos(id_departamento)
+);</pre></div>
+
+            <h3>Modificar Tabla</h3>
+            <div class="code"><pre>
+-- Añadir columna
+ALTER TABLE nombre_tabla
+ADD columna tipo [restricciones];
+
+-- Modificar columna
+ALTER TABLE nombre_tabla
+MODIFY columna nuevo_tipo;
+
+-- Eliminar columna
+ALTER TABLE nombre_tabla
+DROP COLUMN columna;
+
+-- Añadir restricción
+ALTER TABLE nombre_tabla
+ADD CONSTRAINT nombre_restriccion tipo_restriccion;</pre></div>
+
+            <h3>Eliminar Tabla</h3>
+            <div class="code">DROP TABLE nombre_tabla;</div>
+        </div>
+
+        <div class="section">
+            <h2>4.3.3. Definición de Vistas</h2>
+
+            <h3>Crear Vista</h3>
+            <div class="code"><pre>
+CREATE VIEW nombre_vista AS
+SELECT columna1, columna2, ...
+FROM tabla
+WHERE condicion;
+
+-- Ejemplo
+CREATE VIEW empleados_IT AS
+SELECT nombre, apellido, salario
+FROM empleados
+WHERE departamento = 'IT';</pre></div>
+
+            <h3>Modificar Vista</h3>
+            <div class="code"><pre>
+ALTER VIEW nombre_vista AS
+SELECT nueva_consulta;</pre></div>
+
+            <h3>Eliminar Vista</h3>
+            <div class="code"><pre>DROP VIEW nombre_vista;</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>4.3.4. Definición de Índices</h2>
+
+            <h3>Crear Índice</h3>
+            <div class="code"><pre>
+-- Índice simple
+CREATE INDEX nombre_indice
+ON tabla(columna);
+
+-- Índice único
+CREATE UNIQUE INDEX nombre_indice
+ON tabla(columna);
+
+-- Índice compuesto
+CREATE INDEX nombre_indice
+ON tabla(columna1, columna2);
+
+-- Ejemplo
+CREATE INDEX idx_apellido
+ON empleados(apellido);</pre></div>
+
+            <h3>Eliminar Índice</h3>
+            <div class="code"><pre>DROP INDEX nombre_indice ON tabla;</pre></div>
+
+            <div class="note">
+                <h4>Consideraciones sobre Índices:</h4>
+                <ul>
+                    <li>Los índices mejoran la velocidad de búsqueda</li>
+                    <li>Pero ralentizan las operaciones de inserción y actualización</li>
+                    <li>Ocupan espacio adicional en disco</li>
+                    <li>Se deben crear en columnas frecuentemente consultadas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>4.3.5. Definición de Tipos de Datos</h2>
+
+            <h3>Crear Tipo de Dato (PostgreSQL)</h3>
+            <div class="code"><pre>
+CREATE TYPE estado_civil AS ENUM 
+    ('soltero', 'casado', 'divorciado', 'viudo');
+
+CREATE TYPE direccion AS (
+    calle VARCHAR(50),
+    numero INT,
+    ciudad VARCHAR(30),
+    cp VARCHAR(5)
+);</pre></div>
+
+            <h3>Usar Tipo Personalizado</h3>
+            <div class="code"><pre>
+CREATE TABLE personas (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(50),
+    estado estado_civil,
+    dir direccion
+);</pre></div>
+
+            <h3>Eliminar Tipo</h3>
+            <div class="code"><pre>DROP TYPE nombre_tipo;</pre></div>
+
+            <div class="note">
+                <p>La creación de tipos personalizados no está disponible en todos los SGBD. 
+                MySQL, por ejemplo, no soporta esta característica directamente.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Buenas Prácticas DDL</h3>
+            <ul>
+                <li>Usar nombres descriptivos y consistentes</li>
+                <li>Documentar la estructura de la base de datos</li>
+                <li>Establecer restricciones apropiadas</li>
+                <li>Mantener la integridad referencial</li>
+                <li>Optimizar el uso de índices</li>
+                <li>Considerar la escalabilidad</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

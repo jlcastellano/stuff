@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Modelo Relacional</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .code {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>3.1. El Modelo Relacional</h1>
+
+        <div class="section">
+            <h2>Conceptos Fundamentales</h2>
+            
+            <h3>1. Relación (Tabla)</h3>
+            <p>Una relación es una tabla compuesta por filas (tuplas) y columnas (atributos).</p>
+            
+            <div class="example">
+                <h4>Ejemplo de Relación: EMPLEADOS</h4>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Departamento</th>
+                        <th>Salario</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Pérez</td>
+                        <td>Ventas</td>
+                        <td>30000</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Ana López</td>
+                        <td>IT</td>
+                        <td>35000</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>2. Elementos del Modelo Relacional</h3>
+            
+            <ul>
+                <li><strong>Atributos:</strong> Columnas de la tabla</li>
+                <li><strong>Tuplas:</strong> Filas de la tabla</li>
+                <li><strong>Dominio:</strong> Conjunto de valores posibles para un atributo</li>
+                <li><strong>Clave Primaria:</strong> Identificador único de cada tupla</li>
+                <li><strong>Clave Foránea:</strong> Referencia a clave primaria de otra tabla</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>3. Propiedades de las Relaciones</h3>
+            
+            <ul>
+                <li><strong>No hay tuplas duplicadas</strong></li>
+                <li><strong>El orden de las tuplas no es relevante</strong></li>
+                <li><strong>El orden de los atributos no es relevante</strong></li>
+                <li><strong>Los valores de los atributos son atómicos</strong></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>4. Restricciones del Modelo Relacional</h3>
+            
+            <h4>Restricciones de Dominio</h4>
+            <ul>
+                <li>Tipo de dato</li>
+                <li>Rango de valores</li>
+                <li>Valores permitidos</li>
+            </ul>
+
+            <h4>Restricciones de Clave</h4>
+            <ul>
+                <li>Unicidad</li>
+                <li>No nulidad</li>
+            </ul>
+
+            <h4>Restricciones de Integridad Referencial</h4>
+            <div class="example">
+                <p>Si un departamento está referenciado en la tabla EMPLEADOS, debe existir en la tabla DEPARTAMENTOS.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>5. Operaciones Básicas</h3>
+            
+            <div class="code"><pre>
+                <!-- Selección -->
+                SELECT * FROM Empleados WHERE Departamento = 'IT';
+
+                <!-- Proyección -->
+                SELECT Nombre, Salario FROM Empleados;
+
+                <!-- Unión -->
+                SELECT * FROM Empleados1 UNION SELECT * FROM Empleados2;
+
+                <!-- Diferencia -->
+                SELECT * FROM Empleados1 EXCEPT SELECT * FROM Empleados2;
+
+                <!-- Producto Cartesiano -->
+                SELECT * FROM Empleados CROSS JOIN Departamentos;</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>6. Ventajas del Modelo Relacional</h3>
+            
+            <ul>
+                <li>Simplicidad y uniformidad</li>
+                <li>Independencia física de los datos</li>
+                <li>Independencia lógica de los datos</li>
+                <li>Facilidad de uso</li>
+                <li>Integridad de datos</li>
+                <li>Flexibilidad</li>
+            </ul>
+        </div>
+
+        <div class="example">
+            <h3>Ejemplo Práctico de Relaciones</h3>
+            
+            <h4>DEPARTAMENTOS</h4>
+            <table>
+                <tr>
+                    <th>ID_Dept</th>
+                    <th>Nombre</th>
+                    <th>Ubicación</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>IT</td>
+                    <td>Madrid</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Ventas</td>
+                    <td>Barcelona</td>
+                </tr>
+            </table>
+
+            <h4>EMPLEADOS</h4>
+            <table>
+                <tr>
+                    <th>ID_Emp</th>
+                    <th>Nombre</th>
+                    <th>ID_Dept</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Juan Pérez</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Ana López</td>
+                    <td>2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

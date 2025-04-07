@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficheros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .file-type {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .file-type h3 {
+            color: #2980b9;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 10px;
+            border-left: 4px solid #f1c40f;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1.2. Ficheros</h1>
+
+        <h2>Definición de Fichero</h2>
+        <p>Un fichero es una colección de datos relacionados que se almacenan con un nombre en un dispositivo de almacenamiento.</p>
+
+        <h2>1.2.1. Tipos de Ficheros según su Estructura</h2>
+
+        <div class="file-type">
+            <h3>Ficheros Secuenciales</h3>
+            <p>Los registros se almacenan uno tras otro en orden físico.</p>
+            <div class="example">
+                Ejemplo: Archivo de log, donde cada entrada se añade al final.
+            </div>
+            <ul>
+                <li>Ventaja: Eficiente para lectura completa</li>
+                <li>Desventaja: Ineficiente para búsquedas específicas</li>
+            </ul>
+        </div>
+
+        <div class="file-type">
+            <h3>Ficheros Relativos</h3>
+            <p>Los registros se almacenan en posiciones relativas calculadas.</p>
+            <div class="example">
+                Ejemplo: Directorio telefónico donde cada registro tiene una posición calculada.
+            </div>
+        </div>
+
+        <div class="file-type">
+            <h3>Ficheros Indexados</h3>
+            <p>Utilizan índices para acceder rápidamente a los registros.</p>
+            <div class="example">
+                Ejemplo: Índice de un libro con referencias a páginas.
+            </div>
+        </div>
+
+        <h2>1.2.2. Tipos de Soporte de Almacenamiento</h2>
+
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Características</th>
+                <th>Ejemplos</th>
+            </tr>
+            <tr>
+                <td>Magnético</td>
+                <td>
+                    - Alta capacidad<br>
+                    - Acceso relativamente rápido<br>
+                    - Duradero
+                </td>
+                <td>Discos duros (HDD)</td>
+            </tr>
+            <tr>
+                <td>Óptico</td>
+                <td>
+                    - Portátil<br>
+                    - Económico<br>
+                    - Más lento
+                </td>
+                <td>CD, DVD, Blu-ray</td>
+            </tr>
+            <tr>
+                <td>Estado Sólido</td>
+                <td>
+                    - Muy rápido<br>
+                    - Sin partes móviles<br>
+                    - Más caro
+                </td>
+                <td>SSD, Memorias Flash</td>
+            </tr>
+        </table>
+
+        <h2>Operaciones Básicas con Ficheros</h2>
+        <ul>
+            <li>Crear fichero</li>
+            <li>Abrir fichero</li>
+            <li>Leer registro</li>
+            <li>Escribir registro</li>
+            <li>Modificar registro</li>
+            <li>Borrar registro</li>
+            <li>Cerrar fichero</li>
+        </ul>
+
+        <div class="example">
+            <h3>Consideraciones Importantes</h3>
+            <ul>
+                <li>Seguridad y permisos de acceso</li>
+                <li>Copias de seguridad</li>
+                <li>Fragmentación</li>
+                <li>Optimización del espacio</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

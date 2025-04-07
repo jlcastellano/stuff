@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelización Conceptual del Software</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .concept-box {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>2.1. Modelización Conceptual del Software</h1>
+
+        <div class="concept-box">
+            <h2>2.1.1. Modelización de Datos</h2>
+            <p>La modelización de datos es el proceso de crear una representación abstracta de los datos y sus relaciones en un sistema.</p>
+            
+            <h3>Fases del Modelado</h3>
+            <ul>
+                <li>Análisis de requisitos</li>
+                <li>Diseño conceptual</li>
+                <li>Diseño lógico</li>
+                <li>Diseño físico</li>
+            </ul>
+
+            <div class="example">
+                <h4>Ejemplo de Proceso de Modelado:</h4>
+                <ol>
+                    <li>Identificar entidades principales</li>
+                    <li>Determinar atributos</li>
+                    <li>Establecer relaciones</li>
+                    <li>Definir restricciones</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="concept-box">
+            <h2>2.1.2. Diccionario de Datos</h2>
+            <p>El diccionario de datos es un repositorio centralizado de información sobre los datos almacenados en la base de datos.</p>
+            
+            <h3>Elementos del Diccionario</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Elemento</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td>Nombre del campo</td>
+                        <td>Identificador del campo</td>
+                        <td>id_cliente</td>
+                    </tr>
+                    <tr>
+                        <td>Tipo de dato</td>
+                        <td>Tipo de información</td>
+                        <td>INTEGER</td>
+                    </tr>
+                    <tr>
+                        <td>Longitud</td>
+                        <td>Tamaño del campo</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Restricciones</td>
+                        <td>Reglas del campo</td>
+                        <td>NOT NULL</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="concept-box">
+            <h2>2.1.3. Modelo Conceptual de Datos (MCD)</h2>
+            <p>El MCD es una representación de alto nivel de la estructura de datos de un sistema.</p>
+
+            <h3>Características del MCD</h3>
+            <ul>
+                <li>Independencia tecnológica</li>
+                <li>Visión global del sistema</li>
+                <li>Facilita la comunicación con usuarios</li>
+                <li>Base para el diseño lógico</li>
+            </ul>
+
+            <div class="example">
+                <h4>Componentes Principales:</h4>
+                <ul>
+                    <li>Entidades</li>
+                    <li>Atributos</li>
+                    <li>Relaciones</li>
+                    <li>Cardinalidad</li>
+                </ul>
+            </div>
+
+            <h3>Ventajas del MCD</h3>
+            <ul>
+                <li>Simplicidad y claridad</li>
+                <li>Facilita la validación del diseño</li>
+                <li>Independencia del SGBD</li>
+                <li>Base para la documentación</li>
+            </ul>
+        </div>
+
+        <div class="example">
+            <h3>Proceso de Desarrollo del MCD</h3>
+            <ol>
+                <li>Identificación de entidades y atributos</li>
+                <li>Establecimiento de relaciones</li>
+                <li>Definición de cardinalidades</li>
+                <li>Refinamiento del modelo</li>
+                <li>Validación con usuarios</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

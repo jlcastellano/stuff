@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas Gestores de Bases de Datos (SGBD)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .component-box {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .function-box {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #f1c40f;
+        }
+        .example {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .highlight {
+            background-color: #e8f8f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .code-example {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1.4. Sistemas Gestores de Bases de Datos (SGBD)</h1>
+
+        <div class="highlight">
+            <h2>¿Qué es un SGBD?</h2>
+            <p>Un Sistema Gestor de Bases de Datos es un software específico diseñado para servir de interfaz entre la base de datos, los usuarios y las aplicaciones. Permite administrar, controlar y gestionar todos los aspectos relacionados con los datos.</p>
+        </div>
+
+        <h2>1.4.1. Componentes del SGBD</h2>
+
+        <div class="component-box">
+            <h3>Diccionario de Datos</h3>
+            <p>Almacena metadatos sobre la estructura de la base de datos:</p>
+            <ul>
+                <li>Nombres y definiciones de tablas</li>
+                <li>Tipos de datos</li>
+                <li>Restricciones</li>
+                <li>Relaciones entre tablas</li>
+            </ul>
+        </div>
+
+        <div class="component-box">
+            <h3>Motor de Base de Datos</h3>
+            <p>Componente central que:</p>
+            <ul>
+                <li>Gestiona el almacenamiento físico</li>
+                <li>Maneja las transacciones</li>
+                <li>Controla la concurrencia</li>
+                <li>Gestiona los búferes de memoria</li>
+            </ul>
+        </div>
+
+        <div class="component-box">
+            <h3>Procesador de Consultas</h3>
+            <p>Se encarga de:</p>
+            <ul>
+                <li>Interpretar consultas SQL</li>
+                <li>Optimizar consultas</li>
+                <li>Generar planes de ejecución</li>
+            </ul>
+            <div class="code-example">
+                SELECT nombre, salario<br>
+                FROM empleados<br>
+                WHERE departamento = 'IT';
+            </div>
+        </div>
+
+        <div class="component-box">
+            <h3>Gestor de Seguridad</h3>
+            <ul>
+                <li>Control de acceso</li>
+                <li>Gestión de usuarios y roles</li>
+                <li>Encriptación de datos</li>
+                <li>Auditoría</li>
+            </ul>
+        </div>
+
+        <h2>1.4.2. Funciones del SGBD</h2>
+
+        <div class="function-box">
+            <h3>Definición de Datos (DDL)</h3>
+            <p>Permite crear y modificar la estructura de la base de datos</p>
+            <div class="example">
+                CREATE TABLE, ALTER TABLE, DROP TABLE
+            </div>
+        </div>
+
+        <div class="function-box">
+            <h3>Manipulación de Datos (DML)</h3>
+            <p>Operaciones CRUD (Create, Read, Update, Delete)</p>
+            <div class="example">
+                INSERT, SELECT, UPDATE, DELETE
+            </div>
+        </div>
+
+        <div class="function-box">
+            <h3>Control de Concurrencia</h3>
+            <ul>
+                <li>Gestión de transacciones</li>
+                <li>Bloqueos</li>
+                <li>Control de versiones</li>
+            </ul>
+        </div>
+
+        <div class="function-box">
+            <h3>Integridad de Datos</h3>
+            <ul>
+                <li>Restricciones de integridad</li>
+                <li>Validación de datos</li>
+                <li>Consistencia</li>
+            </ul>
+        </div>
+
+        <table>
+            <tr>
+                <th>SGBD Popular</th>
+                <th>Tipo</th>
+                <th>Características Principales</th>
+            </tr>
+            <tr>
+                <td>MySQL</td>
+                <td>Relacional</td>
+                <td>Open source, popular en web</td>
+            </tr>
+            <tr>
+                <td>Oracle</td>
+                <td>Relacional</td>
+                <td>Empresarial, alto rendimiento</td>
+            </tr>
+            <tr>
+                <td>PostgreSQL</td>
+                <td>Relacional</td>
+                <td>Open source, extensible</td>
+            </tr>
+            <tr>
+                <td>SQL Server</td>
+                <td>Relacional</td>
+                <td>Microsoft, integración Windows</td>
+            </tr>
+        </table>
+
+        <div class="highlight">
+            <h3>Ventajas del uso de SGBD</h3>
+            <ul>
+                <li>Independencia física y lógica de los datos</li>
+                <li>Integridad y consistencia garantizada</li>
+                <li>Control centralizado</li>
+                <li>Reducción de redundancia</li>
+                <li>Seguridad mejorada</li>
+                <li>Recuperación ante fallos</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

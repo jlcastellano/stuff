@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama Entidad/Relación (DER)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .diagram {
+            background-color: white;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        .notation {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .symbol {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .rectangle {
+            border-radius: 0;
+        }
+        .diamond {
+            transform: rotate(45deg);
+        }
+        .oval {
+            border-radius: 50%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>2.2. Diagrama Entidad/Relación (DER)</h1>
+
+        <div class="section">
+            <h2>2.2.1. Entidad</h2>
+            <p>Una entidad es un objeto o concepto del mundo real que se puede distinguir de otros objetos.</p>
+            
+            <h3>Tipos de Entidades:</h3>
+            <ul>
+                <li><strong>Entidades Fuertes:</strong> Existencia independiente</li>
+                <li><strong>Entidades Débiles:</strong> Dependen de otra entidad</li>
+            </ul>
+
+            <div class="notation">
+                <div class="symbol rectangle">E</div>
+                <p>Representación: Rectángulo</p>
+            </div>
+
+            <div class="example">
+                Ejemplos de entidades:
+                <ul>
+                    <li>CLIENTE (Fuerte)</li>
+                    <li>FACTURA (Débil)</li>
+                    <li>PRODUCTO (Fuerte)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2.2.2. Relación</h2>
+            <p>Asociación entre entidades que representa una dependencia o conexión entre ellas.</p>
+
+            <div class="notation">
+                <div class="symbol diamond">R</div>
+                <p>Representación: Rombo</p>
+            </div>
+
+            <h3>Tipos de Relaciones:</h3>
+            <ul>
+                <li>Binarias (entre dos entidades)</li>
+                <li>Ternarias (entre tres entidades)</li>
+                <li>Recursivas (entidad consigo misma)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2.2.3. Cardinalidad y Modalidad</h2>
+            
+            <h3>Cardinalidad:</h3>
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Significado</th>
+                    <th>Notación</th>
+                </tr>
+                <tr>
+                    <td>Uno a Uno (1:1)</td>
+                    <td>Un elemento se relaciona con exactamente otro</td>
+                    <td>1 — 1</td>
+                </tr>
+                <tr>
+                    <td>Uno a Muchos (1:N)</td>
+                    <td>Un elemento se relaciona con varios</td>
+                    <td>1 — N</td>
+                </tr>
+                <tr>
+                    <td>Muchos a Muchos (N:M)</td>
+                    <td>Varios elementos se relacionan con varios</td>
+                    <td>N — M</td>
+                </tr>
+            </table>
+
+            <h3>Modalidad:</h3>
+            <ul>
+                <li><strong>Obligatoria (|):</strong> Participación requerida</li>
+                <li><strong>Opcional (O):</strong> Participación no requerida</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2.2.4. Atributos de Relación</h2>
+            <div class="notation">
+                <div class="symbol oval">A</div>
+                <p>Representación: Óvalo</p>
+            </div>
+
+            <h3>Tipos de Atributos:</h3>
+            <ul>
+                <li><strong>Simples:</strong> Valor atómico</li>
+                <li><strong>Compuestos:</strong> Pueden dividirse</li>
+                <li><strong>Monovaluados:</strong> Un solo valor</li>
+                <li><strong>Multivaluados:</strong> Múltiples valores</li>
+                <li><strong>Derivados:</strong> Calculados de otros atributos</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2.2.5. Clave Primaria y Claves Candidatas</h2>
+            
+            <h3>Clave Primaria:</h3>
+            <ul>
+                <li>Identifica unívocamente cada instancia</li>
+                <li>No puede contener valores nulos</li>
+                <li>Debe ser mínima</li>
+            </ul>
+
+            <h3>Claves Candidatas:</h3>
+            <ul>
+                <li>Atributos que podrían ser clave primaria</li>
+                <li>Cumplen con unicidad</li>
+                <li>No redundantes</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2.2.6. Ejemplo de Diagrama Entidad/Relación</h2>
+            <div class="diagram"><pre>
+                [CLIENTE] ----<compra>---- [PRODUCTO]<br>
+                |  |  |                     |  |  |<br>
+                id  nombre  email           id  nombre  precio<br>
+                (1:N)                      (N:1)<br>
+            </pre></div>
+
+            <div class="example">
+                <h4>Explicación del ejemplo:</h4>
+                <ul>
+                    <li>Entidades: CLIENTE y PRODUCTO</li>
+                    <li>Relación: compra</li>
+                    <li>Cardinalidad: Un cliente puede comprar muchos productos (1:N)</li>
+                    <li>Atributos: id, nombre, email (CLIENTE) / id, nombre, precio (PRODUCTO)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

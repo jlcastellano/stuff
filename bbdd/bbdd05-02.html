@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL: DML y DCL (Continuación)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .warning {
+            background-color: #ffe5e5;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+        }
+        .diagram {
+            background-color: #fff;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h3>5.1.4. Consulta de Registros sobre Varias Tablas. Composiciones</h3>
+
+            <h4>Tipos de JOINS:</h4>
+            <div class="diagram">
+                <pre>
+INNER JOIN:     A ∩ B
+LEFT JOIN:      A ∪ (A ∩ B)
+RIGHT JOIN:     (A ∩ B) ∪ B
+FULL JOIN:      A ∪ B
+                </pre>
+            </div>
+
+            <div class="code"><pre>
+-- INNER JOIN
+SELECT e.nombre, d.nombre_dept
+FROM empleados e
+INNER JOIN departamentos d 
+    ON e.id_departamento = d.id;
+
+-- LEFT JOIN
+SELECT e.nombre, d.nombre_dept
+FROM empleados e
+LEFT JOIN departamentos d 
+    ON e.id_departamento = d.id;
+
+-- RIGHT JOIN
+SELECT e.nombre, d.nombre_dept
+FROM empleados e
+RIGHT JOIN departamentos d 
+    ON e.id_departamento = d.id;
+
+-- Múltiples JOINS
+SELECT e.nombre, d.nombre_dept, p.nombre_proyecto
+FROM empleados e
+INNER JOIN departamentos d 
+    ON e.id_departamento = d.id
+INNER JOIN proyectos p 
+    ON e.id_proyecto = p.id;</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.5. Combinación de Consultas</h3>
+
+            <h4>Operadores de Conjunto:</h4>
+            <ul>
+                <li>UNION: Combina y elimina duplicados</li>
+                <li>UNION ALL: Combina manteniendo duplicados</li>
+                <li>INTERSECT: Registros comunes</li>
+                <li>EXCEPT: Diferencia de conjuntos</li>
+            </ul>
+
+            <div class="code"><pre>
+-- UNION
+SELECT ciudad FROM empleados
+UNION
+SELECT ciudad FROM clientes;
+
+-- UNION ALL
+SELECT departamento, salario FROM empleados2020
+UNION ALL
+SELECT departamento, salario FROM empleados2021;
+
+-- INTERSECT
+SELECT id_cliente FROM pedidos2020
+INTERSECT
+SELECT id_cliente FROM pedidos2021;
+
+-- EXCEPT
+SELECT id_producto FROM productos
+EXCEPT
+SELECT id_producto FROM pedidos;</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.6. Subconsultas</h3>
+
+            <h4>Tipos de Subconsultas:</h4>
+            <ul>
+                <li>Escalares (retornan un valor)</li>
+                <li>De lista (retornan múltiples valores)</li>
+                <li>De tabla (retornan una tabla)</li>
+            </ul>
+
+            <div class="code"><pre>
+-- Subconsulta escalar
+SELECT nombre, salario
+FROM empleados
+WHERE salario > (
+    SELECT AVG(salario) 
+    FROM empleados
+);
+
+-- Subconsulta de lista
+SELECT nombre
+FROM empleados
+WHERE id_departamento IN (
+    SELECT id_departamento
+    FROM departamentos
+    WHERE ubicacion = 'Madrid'
+);
+
+-- Subconsulta correlacionada
+SELECT e.nombre, e.salario
+FROM empleados e
+WHERE salario > (
+    SELECT AVG(salario)
+    FROM empleados
+    WHERE departamento = e.departamento
+);</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.7. Alias</h3>
+
+            <div class="code"><pre>
+-- Alias de tabla
+SELECT e.nombre, e.apellido, d.nombre AS departamento
+FROM empleados AS e
+JOIN departamentos AS d 
+    ON e.id_departamento = d.id;
+
+-- Alias de columna
+SELECT 
+    COUNT(*) AS total_empleados,
+    AVG(salario) AS salario_promedio
+FROM empleados;</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.8. Funciones Integradas</h3>
+
+            <h4>Funciones de Texto:</h4>
+            <div class="code"><pre>
+CONCAT(str1, str2)
+SUBSTRING(str, start, length)
+UPPER(str)
+LOWER(str)
+TRIM(str)
+LENGTH(str)</pre></div>
+
+            <h4>Funciones de Fecha:</h4>
+            <div class="code"><pre>
+NOW()
+CURRENT_DATE()
+DATE_ADD(date, INTERVAL value unit)
+DATEDIFF(date1, date2)
+YEAR(date)
+MONTH(date)</pre></div>
+
+            <h4>Funciones Numéricas:</h4>
+            <div class="code"><pre>
+ROUND(number, decimals)
+CEIL(number)
+FLOOR(number)
+ABS(number)
+POWER(number, power)</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.9. Inserción de Registros</h3>
+
+            <div class="code"><pre>
+-- Inserción simple
+INSERT INTO empleados (nombre, apellido, salario)
+VALUES ('Juan', 'Pérez', 30000);
+
+-- Inserción múltiple
+INSERT INTO empleados (nombre, apellido, salario)
+VALUES 
+    ('Ana', 'López', 35000),
+    ('Carlos', 'García', 32000);
+
+-- Inserción desde otra tabla
+INSERT INTO empleados_backup
+SELECT * FROM empleados
+WHERE fecha_contrato < '2020-01-01';</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.10. Modificación de Registros</h3>
+
+            <div class="code"><pre>
+-- Actualización simple
+UPDATE empleados
+SET salario = salario * 1.1
+WHERE departamento = 'IT';
+
+-- Actualización con JOIN
+UPDATE empleados e
+JOIN departamentos d ON e.id_departamento = d.id
+SET e.salario = e.salario * 1.15
+WHERE d.nombre = 'Ventas';
+
+-- Actualización con subconsulta
+UPDATE empleados
+SET nivel = 'Senior'
+WHERE id IN (
+    SELECT id 
+    FROM evaluaciones 
+    WHERE puntuacion > 90
+);</pre></div>
+        </div>
+
+        <div class="section">
+            <h3>5.1.11. Eliminación de Registros</h3>
+
+            <div class="code"><pre>
+-- Eliminación simple
+DELETE FROM empleados
+WHERE fecha_contrato < '2010-01-01';
+
+-- Eliminación con JOIN
+DELETE e
+FROM empleados e
+JOIN departamentos d ON e.id_departamento = d.id
+WHERE d.activo = 0;
+
+-- Truncar tabla
+TRUNCATE TABLE empleados_temp;</pre></div>
+
+            <div class="warning">
+                <h4>¡Precauciones!</h4>
+                <ul>
+                    <li>Siempre hacer backup antes de DELETE masivos</li>
+                    <li>Usar WHERE para evitar eliminaciones no deseadas</li>
+                    <li>Verificar con SELECT antes de DELETE</li>
+                    <li>TRUNCATE no se puede deshacer</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5.2. Lenguaje de Control de Datos (DCL)</h2>
+
+            <h3>5.2.1. Control de Acceso a los Datos</h3>
+            
+            <div class="code"><pre>
+-- Crear usuario
+CREATE USER 'usuario1'@'localhost' 
+IDENTIFIED BY 'password';
+
+-- Otorgar privilegios
+GRANT SELECT, INSERT ON empresa.empleados 
+TO 'usuario1'@'localhost';
+
+-- Revocar privilegios
+REVOKE INSERT ON empresa.empleados 
+FROM 'usuario1'@'localhost';
+
+-- Ver privilegios
+SHOW GRANTS FOR 'usuario1'@'localhost';</pre></div>
+
+            <h3>5.2.2. Transacciones</h3>
+
+            <div class="code"><pre>
+-- Iniciar transacción
+START TRANSACTION;
+
+-- Operaciones
+INSERT INTO pedidos VALUES (1, 'P001', NOW());
+UPDATE inventario SET stock = stock - 1 
+WHERE id_producto = 'P001';
+
+-- Confirmar cambios
+COMMIT;
+
+-- O deshacer cambios
+ROLLBACK;
+
+-- Puntos de guardado
+SAVEPOINT punto1;
+-- ... operaciones ...
+ROLLBACK TO punto1;</pre></div>
+
+            <div class="example">
+                <h4>Niveles de Aislamiento:</h4>
+                <ul>
+                    <li>READ UNCOMMITTED</li>
+                    <li>READ COMMITTED</li>
+                    <li>REPEATABLE READ</li>
+                    <li>SERIALIZABLE</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

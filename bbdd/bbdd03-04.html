@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otras Consideraciones sobre el Modelo Relacional</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .important {
+            background-color: #ffe5e5;
+            border-left: 4px solid #ff4444;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>3.4. Otras Consideraciones sobre el Modelo Relacional</h1>
+
+        <div class="section">
+            <h2>3.4.1. Índices</h2>
+            <p>Estructuras que mejoran el rendimiento de las consultas.</p>
+
+            <h3>Tipos de Índices:</h3>
+            <ul>
+                <li><strong>Índice Clúster:</strong> Define el orden físico de los datos</li>
+                <li><strong>Índice No Clúster:</strong> Mantiene punteros a los datos</li>
+                <li><strong>Índice Único:</strong> No permite valores duplicados</li>
+                <li><strong>Índice Compuesto:</strong> Sobre múltiples columnas</li>
+            </ul>
+
+            <div class="code"><pre>
+CREATE INDEX idx_apellido ON EMPLEADOS(apellido);
+CREATE UNIQUE INDEX idx_email ON EMPLEADOS(email);</pre>
+            </div>
+
+            <div class="important">
+                <h4>Consideraciones de Rendimiento:</h4>
+                <ul>
+                    <li>Los índices mejoran las búsquedas pero ralentizan las inserciones</li>
+                    <li>No crear índices innecesarios</li>
+                    <li>Mantener los índices regularmente</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.4.2. Vistas</h2>
+            <p>Tablas virtuales basadas en el resultado de una consulta SQL.</p>
+
+            <h3>Tipos de Vistas:</h3>
+            <ul>
+                <li><strong>Vistas Simples:</strong> Basadas en una tabla</li>
+                <li><strong>Vistas Complejas:</strong> Involucran múltiples tablas</li>
+                <li><strong>Vistas Materializadas:</strong> Almacenan datos físicamente</li>
+            </ul>
+
+            <div class="code"><pre>
+CREATE VIEW empleados_dept AS
+SELECT e.nombre, d.nombre_dept
+FROM EMPLEADOS e
+JOIN DEPARTAMENTOS d ON e.id_dept = d.id;</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.4.3. Restricciones sobre Campos</h2>
+            
+            <h3>Tipos de Restricciones:</h3>
+            <ul>
+                <li><strong>NOT NULL:</strong> No permite valores nulos</li>
+                <li><strong>UNIQUE:</strong> Valores únicos</li>
+                <li><strong>CHECK:</strong> Condiciones personalizadas</li>
+                <li><strong>DEFAULT:</strong> Valor por defecto</li>
+            </ul>
+
+            <div class="code"><pre>
+ALTER TABLE EMPLEADOS
+ADD CONSTRAINT chk_salario 
+CHECK (salario >= 0);
+
+ALTER TABLE EMPLEADOS
+ADD CONSTRAINT chk_edad 
+CHECK (edad >= 18);</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.4.4. Integridad Referencial</h2>
+            
+            <h3>Acciones Referenciales:</h3>
+            <ul>
+                <li><strong>CASCADE:</strong> Propaga los cambios</li>
+                <li><strong>SET NULL:</strong> Establece valores nulos</li>
+                <li><strong>SET DEFAULT:</strong> Establece valores por defecto</li>
+                <li><strong>NO ACTION:</strong> Previene cambios que violan la integridad</li>
+            </ul>
+
+            <div class="code"><pre>
+FOREIGN KEY (id_dept) REFERENCES DEPARTAMENTOS(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.4.5. Usuarios y Privilegios</h2>
+            
+            <h3>Niveles de Privilegios:</h3>
+            <ul>
+                <li><strong>SELECT:</strong> Consultar datos</li>
+                <li><strong>INSERT:</strong> Insertar registros</li>
+                <li><strong>UPDATE:</strong> Modificar datos</li>
+                <li><strong>DELETE:</strong> Eliminar registros</li>
+                <li><strong>EXECUTE:</strong> Ejecutar procedimientos</li>
+            </ul>
+
+            <div class="code"><pre>
+GRANT SELECT, INSERT ON empleados TO usuario1;
+REVOKE DELETE ON empleados FROM usuario2;</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.4.6. Accesos Concurrentes</h2>
+            
+            <h3>Problemas de Concurrencia:</h3>
+            <ul>
+                <li><strong>Pérdida de actualización</strong></li>
+                <li><strong>Lecturas sucias</strong></li>
+                <li><strong>Lecturas no repetibles</strong></li>
+                <li><strong>Lecturas fantasma</strong></li>
+            </ul>
+
+            <h3>Niveles de Aislamiento:</h3>
+            <ul>
+                <li><strong>READ UNCOMMITTED</strong></li>
+                <li><strong>READ COMMITTED</strong></li>
+                <li><strong>REPEATABLE READ</strong></li>
+                <li><strong>SERIALIZABLE</strong></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>3.4.7. Políticas de Bloqueo</h2>
+            
+            <h3>Tipos de Bloqueos:</h3>
+            <ul>
+                <li><strong>Bloqueo Compartido (S):</strong> Para lecturas</li>
+                <li><strong>Bloqueo Exclusivo (X):</strong> Para escrituras</li>
+                <li><strong>Bloqueo de Actualización (U):</strong> Para actualizaciones</li>
+                <li><strong>Bloqueo de Intención (I):</strong> Para jerarquías</li>
+            </ul>
+
+            <div class="example">
+                <h4>Matriz de Compatibilidad de Bloqueos:</h4>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>S</th>
+                        <th>X</th>
+                    </tr>
+                    <tr>
+                        <td><strong>S</strong></td>
+                        <td>Sí</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><strong>X</strong></td>
+                        <td>No</td>
+                        <td>No</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="important">
+                <h4>Consideraciones sobre Bloqueos:</h4>
+                <ul>
+                    <li>Evitar bloqueos prolongados</li>
+                    <li>Gestionar deadlocks</li>
+                    <li>Optimizar transacciones</li>
+                    <li>Monitorear bloqueos</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

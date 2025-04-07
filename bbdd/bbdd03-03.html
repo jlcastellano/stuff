@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paso del DER al Modelo Físico de Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .rule {
+            background-color: #e8f6e8;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>3.3. Paso del DER al Modelo Físico de Datos</h1>
+
+        <div class="section">
+            <h2>3.3.1. Nomenclatura</h2>
+            
+            <h3>Convenciones de Nombres</h3>
+            <ul>
+                <li><strong>Tablas:</strong> 
+                    <ul>
+                        <li>Nombre en plural</li>
+                        <li>Sin espacios ni caracteres especiales</li>
+                        <li>Preferiblemente mayúsculas</li>
+                    </ul>
+                </li>
+                <li><strong>Campos:</strong>
+                    <ul>
+                        <li>Nombre descriptivo</li>
+                        <li>Prefijo de la tabla para claves foráneas</li>
+                        <li>ID_ para claves primarias</li>
+                    </ul>
+                </li>
+                <li><strong>Restricciones:</strong>
+                    <ul>
+                        <li>PK_: Para claves primarias</li>
+                        <li>FK_: Para claves foráneas</li>
+                        <li>UQ_: Para restricciones únicas</li>
+                        <li>CK_: Para checks</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="example">
+                <h4>Ejemplos de Nomenclatura:</h4>
+                <ul>
+                    <li>Tabla: EMPLEADOS</li>
+                    <li>Clave Primaria: ID_EMPLEADO</li>
+                    <li>Clave Foránea: ID_DEPARTAMENTO</li>
+                    <li>Restricción: PK_EMPLEADOS</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.3.2. Reglas de Transformación</h2>
+
+            <div class="rule">
+                <h3>1. Transformación de Entidades</h3>
+                <p>Cada entidad se convierte en una tabla</p>
+                <div class="code"><pre>
+                    CREATE TABLE EMPLEADOS (
+                        ID_EMPLEADO INT PRIMARY KEY,
+                        NOMBRE VARCHAR(50),
+                        APELLIDO VARCHAR(50)
+                    );</pre>
+                </div>
+            </div>
+
+            <div class="rule">
+                <h3>2. Transformación de Atributos</h3>
+                <ul>
+                    <li>Atributos simples → Columnas</li>
+                    <li>Atributos compuestos → Múltiples columnas o nueva tabla</li>
+                    <li>Atributos multivaluados → Nueva tabla</li>
+                </ul>
+            </div>
+
+            <div class="rule">
+                <h3>3. Transformación de Relaciones</h3>
+                <p>Según la cardinalidad:</p>
+                <ul>
+                    <li><strong>1:1:</strong> Clave foránea en cualquiera de las tablas</li>
+                    <li><strong>1:N:</strong> Clave foránea en la tabla del lado N</li>
+                    <li><strong>N:M:</strong> Nueva tabla con ambas claves foráneas</li>
+                </ul>
+            </div>
+
+            <div class="rule">
+                <h3>4. Transformación de Herencia</h3>
+                <ul>
+                    <li>Tabla única con todos los atributos</li>
+                    <li>Una tabla por cada subclase</li>
+                    <li>Tabla para superclase y subclases</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3.3.3. Ejemplo de Transformación de DER a Modelo Físico</h2>
+
+            <div class="example">
+                <h3>DER Original:</h3>
+                <pre>
+EMPLEADO (1:N) trabaja_en DEPARTAMENTO
+Atributos Empleado: ID, Nombre, Dirección
+Atributos Departamento: ID, Nombre, Ubicación
+                </pre>
+
+                <h3>Transformación a Modelo Físico:</h3>
+                <div class="code"><pre>
+CREATE TABLE DEPARTAMENTOS (
+    ID_DEPARTAMENTO INT PRIMARY KEY,
+    NOMBRE VARCHAR(50),
+    UBICACION VARCHAR(100)
+);
+
+CREATE TABLE EMPLEADOS (
+    ID_EMPLEADO INT PRIMARY KEY,
+    NOMBRE VARCHAR(50),
+    DIRECCION VARCHAR(100),
+    ID_DEPARTAMENTO INT,
+    FOREIGN KEY (ID_DEPARTAMENTO) 
+    REFERENCES DEPARTAMENTOS(ID_DEPARTAMENTO)
+);</pre>
+                </div>
+            </div>
+
+            <div class="example">
+                <h3>Ejemplo de Relación N:M</h3>
+                <pre>
+ESTUDIANTE (N:M) matricula CURSO
+                </pre>
+
+                <div class="code"><pre>
+CREATE TABLE ESTUDIANTES (
+    ID_ESTUDIANTE INT PRIMARY KEY,
+    NOMBRE VARCHAR(50)
+);
+
+CREATE TABLE CURSOS (
+    ID_CURSO INT PRIMARY KEY,
+    NOMBRE VARCHAR(50)
+);
+
+CREATE TABLE MATRICULAS (
+    ID_ESTUDIANTE INT,
+    ID_CURSO INT,
+    FECHA_MATRICULA DATE,
+    PRIMARY KEY (ID_ESTUDIANTE, ID_CURSO),
+    FOREIGN KEY (ID_ESTUDIANTE) 
+    REFERENCES ESTUDIANTES(ID_ESTUDIANTE),
+    FOREIGN KEY (ID_CURSO) 
+    REFERENCES CURSOS(ID_CURSO)
+);</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Consideraciones Adicionales</h3>
+            <ul>
+                <li>Optimización de consultas frecuentes</li>
+                <li>Índices necesarios</li>
+                <li>Restricciones de integridad</li>
+                <li>Normalización adecuada</li>
+                <li>Tipos de datos eficientes</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

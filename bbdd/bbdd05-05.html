@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niveles de Aislamiento en Transacciones SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .warning {
+            background-color: #ffe5e5;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .problem {
+            background-color: #fff3cd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Niveles de Aislamiento en Transacciones SQL</h1>
+
+        <div class="section">
+            <h2>Problemas de Concurrencia</h2>
+            
+            <div class="problem">
+                <h3>1. Lecturas Sucias (Dirty Reads)</h3>
+                <p>Ocurre cuando una transacción lee datos que no han sido confirmados por otra transacción.</p>
+                <div class="example">
+                    <strong>Ejemplo:</strong>
+                    <ol>
+                        <li>Transacción A actualiza el saldo de una cuenta</li>
+                        <li>Transacción B lee el nuevo saldo antes del COMMIT</li>
+                        <li>Transacción A hace ROLLBACK</li>
+                        <li>Transacción B tiene datos incorrectos</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="problem">
+                <h3>2. Lecturas No Repetibles (Non-repeatable Reads)</h3>
+                <p>Ocurre cuando una transacción lee el mismo dato dos veces y obtiene valores diferentes.</p>
+                <div class="example">
+                    <strong>Ejemplo:</strong>
+                    <ol>
+                        <li>Transacción A lee un saldo</li>
+                        <li>Transacción B modifica y confirma ese saldo</li>
+                        <li>Transacción A lee el mismo saldo de nuevo y obtiene un valor diferente</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="problem">
+                <h3>3. Lecturas Fantasma (Phantom Reads)</h3>
+                <p>Ocurre cuando una transacción obtiene un conjunto diferente de filas en lecturas repetidas.</p>
+                <div class="example">
+                    <strong>Ejemplo:</strong>
+                    <ol>
+                        <li>Transacción A lee registros que cumplen una condición</li>
+                        <li>Transacción B inserta nuevos registros que cumplen esa condición</li>
+                        <li>Transacción A lee de nuevo y encuentra registros adicionales</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Niveles de Aislamiento</h2>
+
+            <table>
+                <tr>
+                    <th>Nivel</th>
+                    <th>Dirty Read</th>
+                    <th>Non-repeatable Read</th>
+                    <th>Phantom Read</th>
+                    <th>Uso Típico</th>
+                </tr>
+                <tr>
+                    <td>READ UNCOMMITTED</td>
+                    <td>Posible</td>
+                    <td>Posible</td>
+                    <td>Posible</td>
+                    <td>Reportes no críticos, análisis aproximados</td>
+                </tr>
+                <tr>
+                    <td>READ COMMITTED</td>
+                    <td>Prevenido</td>
+                    <td>Posible</td>
+                    <td>Posible</td>
+                    <td>Operaciones generales de lectura</td>
+                </tr>
+                <tr>
+                    <td>REPEATABLE READ</td>
+                    <td>Prevenido</td>
+                    <td>Prevenido</td>
+                    <td>Posible</td>
+                    <td>Operaciones financieras, balances</td>
+                </tr>
+                <tr>
+                    <td>SERIALIZABLE</td>
+                    <td>Prevenido</td>
+                    <td>Prevenido</td>
+                    <td>Prevenido</td>
+                    <td>Transacciones críticas, datos sensibles</td>
+                </tr>
+            </table>
+
+            <h3>Implementación en SQL</h3>
+            <div class="code"><pre>
+-- Establecer nivel de aislamiento
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+-- Ejemplo de transacción con nivel específico
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+START TRANSACTION;
+    SELECT * FROM cuentas WHERE id_cliente = 100;
+    -- ... otras operaciones ...
+COMMIT;</pre></div>
+
+            <div class="section">
+                <h3>1. READ UNCOMMITTED</h3>
+                <p>El nivel más bajo de aislamiento. No impide ningún problema de concurrencia.</p>
+                <div class="code"><pre>
+-- Ejemplo READ UNCOMMITTED
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+START TRANSACTION;
+    SELECT balance FROM cuentas WHERE id = 1;
+    -- Puede leer datos no confirmados de otras transacciones
+COMMIT;</pre></div>
+            </div>
+
+            <div class="section">
+                <h3>2. READ COMMITTED</h3>
+                <p>Garantiza que solo se lean datos confirmados.</p>
+                <div class="code"><pre>
+-- Ejemplo READ COMMITTED
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+START TRANSACTION;
+    SELECT balance FROM cuentas WHERE id = 1;
+    -- Esperar un momento
+    SELECT balance FROM cuentas WHERE id = 1; -- Podría ser diferente
+COMMIT;</pre></div>
+            </div>
+
+            <div class="section">
+                <h3>3. REPEATABLE READ</h3>
+                <p>Garantiza lecturas consistentes durante toda la transacción.</p>
+                <div class="code"><pre>
+-- Ejemplo REPEATABLE READ
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+START TRANSACTION;
+    SELECT COUNT(*) FROM cuentas WHERE balance > 1000;
+    -- Otras transacciones pueden insertar nuevos registros
+    SELECT COUNT(*) FROM cuentas WHERE balance > 1000;
+COMMIT;</pre></div>
+            </div>
+
+            <div class="section">
+                <h3>4. SERIALIZABLE</h3>
+                <p>El nivel más alto de aislamiento. Previene todos los problemas de concurrencia.</p>
+                <div class="code"><pre>
+-- Ejemplo SERIALIZABLE
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+START TRANSACTION;
+    SELECT * FROM cuentas WHERE balance > 1000;
+    -- Bloquea el rango completo
+    -- Otras transacciones no pueden insertar en este rango
+COMMIT;</pre></div>
+            </div>
+
+            <div class="warning">
+                <h3>Consideraciones Importantes</h3>
+                <ul>
+                    <li>Mayor nivel de aislamiento = Mayor consistencia pero menor concurrencia</li>
+                    <li>Menor nivel de aislamiento = Mayor concurrencia pero posibles inconsistencias</li>
+                    <li>Elegir el nivel adecuado según los requerimientos de la aplicación</li>
+                    <li>Considerar el impacto en el rendimiento</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

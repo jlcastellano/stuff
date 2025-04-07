@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL: DML y DCL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .tip {
+            background-color: #e8f8e8;
+            padding: 10px;
+            border-left: 4px solid #2ecc71;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>5. El Lenguaje SQL: DML y DCL</h1>
+
+        <div class="section">
+            <h2>5.1. Lenguaje de Manipulación de Datos (DML)</h2>
+
+            <div class="section">
+                <h3>5.1.1. La Sentencia SELECT</h3>
+                
+                <h4>Estructura Básica:</h4>
+                <div class="code"><pre>
+SELECT [DISTINCT] columna1, columna2, ...
+FROM tabla
+[WHERE condición]
+[GROUP BY columnas]
+[HAVING condición_grupo]
+[ORDER BY columnas [ASC|DESC]]
+[LIMIT n];</pre></div>
+
+                <h4>Cláusulas Principales:</h4>
+                <table>
+                    <tr>
+                        <th>Cláusula</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td>SELECT</td>
+                        <td>Especifica las columnas a recuperar</td>
+                        <td>SELECT nombre, edad</td>
+                    </tr>
+                    <tr>
+                        <td>DISTINCT</td>
+                        <td>Elimina duplicados</td>
+                        <td>SELECT DISTINCT departamento</td>
+                    </tr>
+                    <tr>
+                        <td>FROM</td>
+                        <td>Especifica la tabla origen</td>
+                        <td>FROM empleados</td>
+                    </tr>
+                    <tr>
+                        <td>WHERE</td>
+                        <td>Filtra registros</td>
+                        <td>WHERE edad > 25</td>
+                    </tr>
+                    <tr>
+                        <td>ORDER BY</td>
+                        <td>Ordena resultados</td>
+                        <td>ORDER BY apellido DESC</td>
+                    </tr>
+                </table>
+
+                <div class="example">
+                    <h4>Ejemplos Prácticos:</h4>
+                    <div class="code"><pre>
+-- Selección básica
+SELECT nombre, apellido, salario 
+FROM empleados 
+WHERE salario > 30000;
+
+-- Uso de DISTINCT
+SELECT DISTINCT departamento 
+FROM empleados;
+
+-- Ordenación múltiple
+SELECT nombre, salario, departamento 
+FROM empleados 
+ORDER BY salario DESC, nombre ASC;
+
+-- Uso de LIMIT
+SELECT nombre, salario 
+FROM empleados 
+ORDER BY salario DESC 
+LIMIT 5;</pre></div>
+                </div>
+
+                <div class="tip">
+                    <h4>Consejos de Optimización:</h4>
+                    <ul>
+                        <li>Evitar SELECT * cuando no se necesiten todas las columnas</li>
+                        <li>Usar índices en columnas frecuentemente consultadas</li>
+                        <li>Limitar resultados con LIMIT cuando sea posible</li>
+                        <li>Usar DISTINCT solo cuando sea necesario</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>5.1.2. Consulta de Registros sobre una Tabla</h3>
+
+                <h4>Operadores de Comparación:</h4>
+                <table>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td>=, !=, >, <, >=, <=</td>
+                        <td>Comparaciones básicas</td>
+                        <td>WHERE edad >= 18</td>
+                    </tr>
+                    <tr>
+                        <td>BETWEEN</td>
+                        <td>Rango inclusivo</td>
+                        <td>WHERE salario BETWEEN 30000 AND 50000</td>
+                    </tr>
+                    <tr>
+                        <td>IN</td>
+                        <td>Lista de valores</td>
+                        <td>WHERE departamento IN ('IT', 'RRHH')</td>
+                    </tr>
+                    <tr>
+                        <td>LIKE</td>
+                        <td>Patrón de texto</td>
+                        <td>WHERE nombre LIKE 'A%'</td>
+                    </tr>
+                    <tr>
+                        <td>IS NULL</td>
+                        <td>Valores nulos</td>
+                        <td>WHERE telefono IS NULL</td>
+                    </tr>
+                </table>
+
+                <h4>Operadores Lógicos:</h4>
+                <div class="code"><pre>
+-- AND
+SELECT * FROM empleados 
+WHERE salario > 30000 AND departamento = 'IT';
+
+-- OR
+SELECT * FROM empleados 
+WHERE ciudad = 'Madrid' OR ciudad = 'Barcelona';
+
+-- NOT
+SELECT * FROM empleados 
+WHERE NOT departamento = 'Ventas';
+
+-- Combinación de operadores
+SELECT * FROM empleados 
+WHERE (departamento = 'IT' OR departamento = 'RRHH') 
+AND salario > 25000;</pre></div>
+
+                <div class="example">
+                    <h4>Ejemplos Avanzados:</h4>
+                    <div class="code"><pre>
+-- Búsqueda con patrones
+SELECT nombre, email 
+FROM empleados 
+WHERE email LIKE '%.com' 
+AND nombre LIKE 'J%';
+
+-- Rangos de fechas
+SELECT nombre, fecha_contrato 
+FROM empleados 
+WHERE fecha_contrato BETWEEN '2020-01-01' AND '2020-12-31';
+
+-- Múltiples condiciones
+SELECT nombre, salario, departamento 
+FROM empleados 
+WHERE salario > 40000 
+AND (departamento = 'IT' OR departamento = 'Finanzas') 
+AND fecha_contrato >= '2019-01-01';</pre></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>5.1.3. Funciones de Agregación</h3>
+
+                <h4>Funciones Principales:</h4>
+                <table>
+                    <tr>
+                        <th>Función</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td>COUNT()</td>
+                        <td>Cuenta registros</td>
+                        <td>COUNT(*) o COUNT(columna)</td>
+                    </tr>
+                    <tr>
+                        <td>SUM()</td>
+                        <td>Suma valores</td>
+                        <td>SUM(salario)</td>
+                    </tr>
+                    <tr>
+                        <td>AVG()</td>
+                        <td>Promedio</td>
+                        <td>AVG(salario)</td>
+                    </tr>
+                    <tr>
+                        <td>MAX()</td>
+                        <td>Valor máximo</td>
+                        <td>MAX(salario)</td>
+                    </tr>
+                    <tr>
+                        <td>MIN()</td>
+                        <td>Valor mínimo</td>
+                        <td>MIN(fecha_contrato)</td>
+                    </tr>
+                </table>
+
+                <div class="code"><pre>
+-- Ejemplos de agregación
+SELECT 
+    COUNT(*) as total_empleados,
+    AVG(salario) as salario_promedio,
+    MAX(salario) as salario_maximo,
+    MIN(salario) as salario_minimo
+FROM empleados;
+
+-- Agregación con GROUP BY
+SELECT 
+    departamento,
+    COUNT(*) as num_empleados,
+    AVG(salario) as salario_promedio
+FROM empleados
+GROUP BY departamento
+HAVING COUNT(*) > 5;</pre></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

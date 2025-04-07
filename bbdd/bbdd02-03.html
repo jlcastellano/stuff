@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama Entidad/Relación Extendido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .diagram {
+            background-color: white;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        .important {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .note {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-left: 4px solid #95a5a6;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>2.3. Diagrama Entidad/Relación Extendido</h1>
+
+        <div class="section">
+            <h2>Características Adicionales del Modelo Extendido</h2>
+            
+            <h3>1. Especialización/Generalización</h3>
+            <p>Permite representar jerarquías entre entidades.</p>
+            
+            <div class="example">
+                <h4>Tipos de Especialización:</h4>
+                <ul>
+                    <li><strong>Total:</strong> Toda entidad padre debe pertenecer a alguna subclase</li>
+                    <li><strong>Parcial:</strong> Puede haber entidades padre sin subclase</li>
+                    <li><strong>Exclusiva:</strong> Una entidad solo puede pertenecer a una subclase</li>
+                    <li><strong>Solapada:</strong> Una entidad puede pertenecer a varias subclases</li>
+                </ul>
+            </div>
+
+            <div class="diagram"><pre>
+                [EMPLEADO]<br>
+                    ↓<br>
+                [TÉCNICO] [ADMINISTRATIVO] [DIRECTIVO]</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>2. Agregación</h3>
+            <p>Representa una relación "es parte de" entre entidades.</p>
+            
+            <div class="example">
+                Ejemplo: Un departamento tiene empleados y proyectos
+                <div class="diagram"><pre>
+                    [DEPARTAMENTO]◇━━━[EMPLEADO]<br>
+                          ◇<br>
+                    [PROYECTO]</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>3. Atributos Compuestos</h3>
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Ejemplo</th>
+                </tr>
+                <tr>
+                    <td>Dirección</td>
+                    <td>
+                        - Calle<br>
+                        - Número<br>
+                        - Ciudad<br>
+                        - Código Postal
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nombre Completo</td>
+                    <td>
+                        - Nombre<br>
+                        - Apellido1<br>
+                        - Apellido2
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>4. Restricciones de Integridad Avanzadas</h3>
+            <ul>
+                <li><strong>Restricciones de Participación</strong></li>
+                <li><strong>Restricciones de Cobertura</strong></li>
+                <li><strong>Dependencias de Existencia</strong></li>
+                <li><strong>Restricciones de Rol</strong></li>
+            </ul>
+
+            <div class="note">
+                Las restricciones ayudan a mantener la integridad y consistencia de los datos.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>5. Entidades Asociativas</h3>
+            <p>Permiten tratar una relación como si fuera una entidad.</p>
+            
+            <div class="example">
+                <h4>Ejemplo: Matrícula de Estudiantes en Cursos</h4>
+                <div class="diagram"><pre>
+                    [ESTUDIANTE]──[MATRÍCULA]──[CURSO]<br>
+                                    │<br>
+                                [Fecha]<br>
+                                [Calificación]</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>6. Ejemplo Completo de DER Extendido</h3>
+            <div class="diagram"><pre>
+                [PERSONA]<br>
+                    ↓ (T,E)<br>
+                [CLIENTE]────[PEDIDO]────[PRODUCTO]<br>
+                    │          │            │<br>
+                [Dirección]  [Fecha]     [Stock]<br>
+                [Teléfono]   [Total]     [Precio]</pre>
+            </div>
+
+            <div class="example">
+                <h4>Elementos del ejemplo:</h4>
+                <ul>
+                    <li>Especialización total y exclusiva de PERSONA en CLIENTE</li>
+                    <li>Relaciones N:M entre CLIENTE-PEDIDO y PEDIDO-PRODUCTO</li>
+                    <li>Atributos simples y compuestos</li>
+                    <li>Cardinalidades especificadas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Ventajas del Modelo Extendido</h3>
+            <ul>
+                <li>Mayor capacidad de representación</li>
+                <li>Mejor expresión de restricciones</li>
+                <li>Modelado más preciso</li>
+                <li>Facilita la transición al modelo relacional</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <h4>Consideraciones Importantes</h4>
+            <ul>
+                <li>No abusar de las características extendidas si no son necesarias</li>
+                <li>Mantener la claridad del diagrama</li>
+                <li>Documentar las restricciones complejas</li>
+                <li>Validar el modelo con los usuarios</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

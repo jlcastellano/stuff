@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transacciones en SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .important {
+            background-color: #ffe5e5;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+        }
+        .diagram {
+            background-color: #fff;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Transacciones en SQL</h1>
+
+        <div class="section">
+            <h2>Definición de Transacción</h2>
+            <p>Una transacción es una unidad de trabajo que agrupa una secuencia de una o más operaciones SQL que se ejecutan como una única unidad atómica e indivisible. Esto significa que o todas las operaciones se completan con éxito, o ninguna de ellas tiene efecto sobre la base de datos.</p>
+        </div>
+
+        <div class="section">
+            <h2>Propiedades ACID</h2>
+            
+            <h3>1. Atomicidad (Atomicity)</h3>
+            <p>Una transacción se ejecuta completamente o no se ejecuta en absoluto. No hay ejecuciones parciales.</p>
+            <div class="example">
+                <strong>Ejemplo:</strong> En una transferencia bancaria, o se debita una cuenta y se acredita la otra, o no se realiza ningún cambio.
+            </div>
+
+            <h3>2. Consistencia (Consistency)</h3>
+            <p>La base de datos debe pasar de un estado válido a otro estado válido. Se mantienen todas las reglas y restricciones.</p>
+            <div class="example">
+                <strong>Ejemplo:</strong> El total de débitos debe igualar al total de créditos después de una transferencia.
+            </div>
+
+            <h3>3. Aislamiento (Isolation)</h3>
+            <p>Las transacciones se ejecutan de manera aislada unas de otras, sin interferencias entre ellas.</p>
+            <div class="example">
+                <strong>Ejemplo:</strong> Dos transferencias simultáneas no deben interferir entre sí.
+            </div>
+
+            <h3>4. Durabilidad (Durability)</h3>
+            <p>Una vez que una transacción se confirma (commit), los cambios son permanentes y sobreviven a fallos del sistema.</p>
+            <div class="example">
+                <strong>Ejemplo:</strong> Una transferencia confirmada persiste incluso si hay un corte de energía.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Estructura de una Transacción</h2>
+
+            <div class="code"><pre>
+-- Inicio de la transacción
+START TRANSACTION;
+
+    -- Operaciones de la transacción
+    UPDATE cuenta SET saldo = saldo - 1000 
+    WHERE id = 1;
+    
+    UPDATE cuenta SET saldo = saldo + 1000 
+    WHERE id = 2;
+
+-- Si todo está bien
+COMMIT;
+
+-- Si hay error
+ROLLBACK;</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>Estados de una Transacción</h2>
+            
+            <div class="diagram">
+                <pre>
+Activa → [Parcialmente Confirmada] → Confirmada (Committed)
+   ↓                                    ↑
+   └→ [Fallida] → Abortada → Terminada →┘
+                </pre>
+            </div>
+
+            <ul>
+                <li><strong>Activa:</strong> Durante la ejecución de operaciones</li>
+                <li><strong>Parcialmente Confirmada:</strong> Después de la última operación</li>
+                <li><strong>Fallida:</strong> Cuando se detecta que no puede continuar</li>
+                <li><strong>Abortada:</strong> Después de deshacer cambios (rollback)</li>
+                <li><strong>Confirmada:</strong> Después de asegurar durabilidad (commit)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Ejemplos Prácticos</h2>
+
+            <h3>1. Transferencia Bancaria</h3>
+            <div class="code"><pre>
+START TRANSACTION;
+
+    -- Verificar saldo suficiente
+    SELECT @saldo := saldo FROM cuentas 
+    WHERE id = 1 FOR UPDATE;
+    
+    IF @saldo >= 1000 THEN
+        -- Debitar cuenta origen
+        UPDATE cuentas 
+        SET saldo = saldo - 1000 
+        WHERE id = 1;
+        
+        -- Acreditar cuenta destino
+        UPDATE cuentas 
+        SET saldo = saldo + 1000 
+        WHERE id = 2;
+        
+        COMMIT;
+    ELSE
+        ROLLBACK;
+    END IF;</pre></div>
+
+            <h3>2. Proceso de Compra</h3>
+            <div class="code"><pre>
+START TRANSACTION;
+
+    -- Insertar pedido
+    INSERT INTO pedidos (cliente_id, fecha)
+    VALUES (1, NOW());
+    
+    -- Obtener ID del pedido
+    SET @pedido_id = LAST_INSERT_ID();
+    
+    -- Insertar detalles
+    INSERT INTO detalles_pedido 
+        (pedido_id, producto_id, cantidad)
+    VALUES 
+        (@pedido_id, 101, 2),
+        (@pedido_id, 102, 1);
+    
+    -- Actualizar inventario
+    UPDATE productos 
+    SET stock = stock - 2 
+    WHERE id = 101;
+    
+    UPDATE productos 
+    SET stock = stock - 1 
+    WHERE id = 102;
+
+COMMIT;</pre></div>
+        </div>
+
+        <div class="section">
+            <h2>Puntos de Guardado (Savepoints)</h2>
+            <p>Permiten crear puntos de control dentro de una transacción.</p>
+
+            <div class="code"><pre>
+START TRANSACTION;
+
+    INSERT INTO tabla1 VALUES (1);
+    SAVEPOINT punto1;
+
+    INSERT INTO tabla2 VALUES (2);
+    SAVEPOINT punto2;
+
+    -- Si hay error después de punto2
+    ROLLBACK TO punto2;
+
+    -- O volver más atrás
+    ROLLBACK TO punto1;
+
+COMMIT;</pre></div>
+        </div>
+
+        <div class="important">
+            <h2>Buenas Prácticas</h2>
+            <ul>
+                <li>Mantener las transacciones lo más cortas posible</li>
+                <li>Evitar interacción con el usuario durante una transacción</li>
+                <li>Manejar adecuadamente los errores y excepciones</li>
+                <li>Considerar el nivel de aislamiento apropiado</li>
+                <li>Usar savepoints para transacciones complejas</li>
+                <li>Probar el comportamiento con concurrencia</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normalización de Bases de Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .form-normal {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .warning {
+            background-color: #ffe5e5;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .step {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>3.2. Normalización</h1>
+
+        <div class="form-normal">
+            <h2>3.2.1. Primera Forma Normal (1FN)</h2>
+            <p>Una relación está en 1FN si todos sus atributos son atómicos (indivisibles).</p>
+
+            <div class="example">
+                <h4>Tabla NO normalizada:</h4>
+                <table>
+                    <tr>
+                        <th>ID_Cliente</th>
+                        <th>Nombre</th>
+                        <th>Teléfonos</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Pérez</td>
+                        <td>555-1234, 555-5678</td>
+                    </tr>
+                </table>
+
+                <h4>Tabla en 1FN:</h4>
+                <table>
+                    <tr>
+                        <th>ID_Cliente</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Pérez</td>
+                        <td>555-1234</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Pérez</td>
+                        <td>555-5678</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="step">
+                <h4>Pasos para 1FN:</h4>
+                <ol>
+                    <li>Eliminar grupos repetitivos</li>
+                    <li>Crear registros separados para cada valor</li>
+                    <li>Identificar la clave primaria</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="form-normal">
+            <h2>3.2.2. Segunda Forma Normal (2FN)</h2>
+            <p>Una relación está en 2FN si está en 1FN y todos los atributos no clave dependen por completo de la clave primaria.</p>
+
+            <div class="example">
+                <h4>Tabla en 1FN pero NO en 2FN:</h4>
+                <table>
+                    <tr>
+                        <th>ID_Pedido</th>
+                        <th>ID_Producto</th>
+                        <th>Producto_Nombre</th>
+                        <th>Cantidad</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>100</td>
+                        <td>Laptop</td>
+                        <td>2</td>
+                    </tr>
+                </table>
+
+                <h4>Tablas en 2FN:</h4>
+                <table>
+                    <tr>
+                        <th>ID_Pedido</th>
+                        <th>ID_Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>100</td>
+                        <td>2</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>ID_Producto</th>
+                        <th>Producto_Nombre</th>
+                    </tr>
+                    <tr>
+                        <td>100</td>
+                        <td>Laptop</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-normal">
+            <h2>3.2.3. Tercera Forma Normal (3FN)</h2>
+            <p>Una relación está en 3FN si está en 2FN y no existe dependencia transitiva entre atributos no clave.</p>
+
+            <div class="example">
+                <h4>Tabla en 2FN pero NO en 3FN:</h4>
+                <table>
+                    <tr>
+                        <th>ID_Empleado</th>
+                        <th>Departamento</th>
+                        <th>Ubicacion_Dept</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>IT</td>
+                        <td>Madrid</td>
+                    </tr>
+                </table>
+
+                <h4>Tablas en 3FN:</h4>
+                <table>
+                    <tr>
+                        <th>ID_Empleado</th>
+                        <th>Departamento</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>IT</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>Departamento</th>
+                        <th>Ubicacion_Dept</th>
+                    </tr>
+                    <tr>
+                        <td>IT</td>
+                        <td>Madrid</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-normal">
+            <h2>3.2.4. Otras Formas Normales</h2>
+
+            <h3>Forma Normal de Boyce-Codd (FNBC)</h3>
+            <p>Una versión más estricta de 3FN donde todo determinante debe ser clave candidata.</p>
+
+            <h3>Cuarta Forma Normal (4FN)</h3>
+            <p>Trata con dependencias multivaluadas.</p>
+
+            <h3>Quinta Forma Normal (5FN)</h3>
+            <p>Trata con dependencias de join.</p>
+
+            <div class="warning">
+                <h4>Consideraciones importantes:</h4>
+                <ul>
+                    <li>No siempre es necesario llegar a las formas normales más altas</li>
+                    <li>A veces se puede desnormalizar por razones de rendimiento</li>
+                    <li>El objetivo es encontrar un balance entre integridad y eficiencia</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-normal">
+            <h3>Ventajas de la Normalización</h3>
+            <ul>
+                <li>Elimina la redundancia de datos</li>
+                <li>Asegura la consistencia de datos</li>
+                <li>Facilita el mantenimiento</li>
+                <li>Reduce anomalías en operaciones de modificación</li>
+            </ul>
+        </div>
+
+        <div class="form-normal">
+            <h3>Desventajas de la Normalización</h3>
+            <ul>
+                <li>Puede aumentar la complejidad de las consultas</li>
+                <li>Puede afectar el rendimiento en lecturas</li>
+                <li>Mayor número de joins necesarios</li>
+                <li>Mayor número de tablas para administrar</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
