@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Seguridad - IPTables y UFW</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .menu {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .menu a:hover {
+            color: #3498db;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <a href="index.html">Inicio</a>
+            <a href="iptables.html">IPTables</a>
+            <a href="ufw.html">UFW</a>
+            <a href="ejemplos.html">Ejemplos Prácticos</a>
+        </div>
+
+        <h1>Manual de Seguridad - IPTables y UFW en Ubuntu</h1>
+        
+        <p></p>
+
+        <h2>Contenido del Manual</h2>
+        <ul>
+            <li><strong>IPTables</strong>: Configuración básica y avanzada del firewall nativo de Linux</li>
+            <li><strong>UFW (Uncomplicated Firewall)</strong>: Interfaz simplificada para la gestión de IPTables</li>
+            <li><strong>Ejemplos Prácticos</strong>: Casos de uso comunes y soluciones</li>
+        </ul>
+
+        <div class="warning">
+            <h3>⚠️ Advertencia</h3>
+            <p>Antes de realizar cambios en la configuración del firewall, asegúrese de:</p>
+            <ul>
+                <li>Tener acceso físico o por consola al servidor</li>
+                <li>Hacer una copia de seguridad de las reglas actuales</li>
+                <li>Documentar todos los cambios realizados</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

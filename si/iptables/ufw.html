@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFW (Uncomplicated Firewall) - Manual Detallado</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .menu {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .menu a:hover {
+            color: #3498db;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #2ecc71;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .info {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .command-table th, .command-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .command-table th {
+            background-color: #f8f9fa;
+        }
+        .tip {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <a href="index.html">Inicio</a>
+            <a href="iptables.html">IPTables</a>
+            <a href="ufw.html">UFW</a>
+            <a href="ejemplos.html">Ejemplos Prácticos</a>
+        </div>
+
+        <h1>UFW (Uncomplicated Firewall)</h1>
+
+        <div class="info">
+            <h3>🎯 Objetivos de Aprendizaje</h3>
+            <ul>
+                <li>Comprender qué es UFW y sus ventajas</li>
+                <li>Aprender a instalar y configurar UFW</li>
+                <li>Dominar la gestión de reglas de firewall</li>
+                <li>Implementar configuraciones de seguridad efectivas</li>
+            </ul>
+        </div>
+
+        <h2>1. Introducción a UFW</h2>
+        <p>UFW (Uncomplicated Firewall) es una interfaz simplificada para IPTables que facilita la configuración del firewall en sistemas Ubuntu y derivados. Está diseñado para ser fácil de usar mientras mantiene la potencia de IPTables.</p>
+
+        <h3>1.1 Ventajas de UFW</h3>
+        <ul>
+            <li>Sintaxis simplificada</li>
+            <li>Configuración rápida</li>
+            <li>Integración con sistemas Ubuntu</li>
+            <li>Soporte para IPv6</li>
+            <li>Interfaz de línea de comandos intuitiva</li>
+        </ul>
+
+        <h2>2. Instalación y Configuración Inicial</h2>
+        
+        <h3>2.1 Instalación</h3>
+        <pre>
+# Instalar UFW
+sudo apt update
+sudo apt install ufw
+
+# Verificar instalación
+sudo ufw version
+        </pre>
+
+        <h3>2.2 Configuración Básica</h3>
+        <pre>
+# Verificar estado actual
+sudo ufw status verbose
+
+# Habilitar IPv6 (editar /etc/default/ufw)
+sudo nano /etc/default/ufw
+IPV6=yes
+
+# Restablecer configuración
+sudo ufw reset
+        </pre>
+
+        <h2>3. Gestión de Reglas Básicas</h2>
+
+        <table class="command-table">
+            <tr>
+                <th>Comando</th>
+                <th>Descripción</th>
+                <th>Ejemplo</th>
+            </tr>
+            <tr>
+                <td>allow</td>
+                <td>Permitir tráfico</td>
+                <td>sudo ufw allow 80</td>
+            </tr>
+            <tr>
+                <td>deny</td>
+                <td>Denegar tráfico</td>
+                <td>sudo ufw deny 23</td>
+            </tr>
+            <tr>
+                <td>reject</td>
+                <td>Rechazar tráfico con respuesta</td>
+                <td>sudo ufw reject 80</td>
+            </tr>
+            <tr>
+                <td>delete</td>
+                <td>Eliminar regla</td>
+                <td>sudo ufw delete allow 80</td>
+            </tr>
+        </table>
+
+        <h3>3.1 Reglas por Servicio</h3>
+        <pre>
+# Permitir servicios comunes
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw allow ftp
+
+# Permitir servicios por número de puerto
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+        </pre>
+
+        <h3>3.2 Reglas por Dirección IP</h3>
+        <pre>
+# Permitir acceso desde IP específica
+sudo ufw allow from 192.168.1.100
+
+# Permitir acceso a puerto específico desde IP
+sudo ufw allow from 192.168.1.100 to any port 22
+
+# Permitir rango de IPs
+sudo ufw allow from 192.168.1.0/24
+        </pre>
+
+        <h2>4. Configuraciones Avanzadas</h2>
+
+        <h3>4.1 Rangos de Puertos</h3>
+        <pre>
+# Permitir rango de puertos
+sudo ufw allow 6000:6007/tcp
+sudo ufw allow 6000:6007/udp
+
+# Permitir múltiples puertos
+sudo ufw allow 80,443/tcp
+        </pre>
+
+        <h3>4.2 Reglas con Interfaces</h3>
+        <pre>
+# Permitir tráfico en interfaz específica
+sudo ufw allow in on eth0 to any port 80
+sudo ufw allow out on eth0 from any to any port 80
+
+# Denegar tráfico en interfaz
+sudo ufw deny in on eth1
+        </pre>
+
+        <h3>4.3 Configuración de Logging</h3>
+        <pre>
+# Habilitar logging
+sudo ufw logging on
+
+# Configurar nivel de logging
+sudo ufw logging low|medium|high
+
+# Ver logs
+sudo tail -f /var/log/ufw.log
+        </pre>
+
+        <h2>5. Perfiles de Aplicación</h2>
+        <pre>
+# Listar aplicaciones disponibles
+sudo ufw app list
+
+# Mostrar información de perfil
+sudo ufw app info 'Apache'
+
+# Permitir perfil completo
+sudo ufw allow 'Apache Full'
+        </pre>
+
+        <div class="tip">
+            <h3>💡 Perfiles Comunes</h3>
+            <ul>
+                <li>Apache Full: Puertos 80 y 443</li>
+                <li>Apache: Solo puerto 80</li>
+                <li>Apache Secure: Solo puerto 443</li>
+                <li>OpenSSH: Puerto 22</li>
+            </ul>
+        </div>
+
+        <h2>6. Configuraciones de Seguridad Recomendadas</h2>
+
+        <h3>6.1 Configuración Básica de Servidor</h3>
+        <pre>
+# Configuración inicial segura
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw enable
+        </pre>
+
+        <h3>6.2 Configuración para Servidor Web</h3>
+        <pre>
+# Configuración Apache/Nginx
+sudo ufw allow 'Apache Full'
+sudo ufw allow from 192.168.1.0/24 to any port 22
+sudo ufw limit ssh
+        </pre>
+
+        <h3>6.3 Rate Limiting</h3>
+        <pre>
+# Limitar intentos de conexión SSH
+sudo ufw limit ssh
+
+# Limitar conexiones a puerto específico
+sudo ufw limit 3306/tcp
+        </pre>
+
+        <h2>7. Administración y Mantenimiento</h2>
+
+        <h3>7.1 Gestión de Estado</h3>
+        <pre>
+# Activar/Desactivar UFW
+sudo ufw enable
+sudo ufw disable
+
+# Recargar reglas
+sudo ufw reload
+
+# Restablecer configuración
+sudo ufw reset
+        </pre>
+
+        <h3>7.2 Backup y Restauración</h3>
+        <pre>
+# Backup de reglas
+sudo cp /etc/ufw/user.rules /etc/ufw/user.rules.backup
+sudo cp /etc/ufw/before.rules /etc/ufw/before.rules.backup
+
+# Restaurar reglas
+sudo cp /etc/ufw/user.rules.backup /etc/ufw/user.rules
+sudo ufw reload
+        </pre>
+
+        <h2>8. Troubleshooting</h2>
+        
+        <div class="info">
+            <h3>Comandos de Diagnóstico</h3>
+            <pre>
+# Ver estado detallado
+sudo ufw status verbose
+
+# Ver reglas numeradas
+sudo ufw status numbered
+
+# Ver reglas raw
+sudo ufw show raw
+
+# Verificar logs
+sudo tail -f /var/log/ufw.log
+            </pre>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Solución de Problemas Comunes</h3>
+            <ul>
+                <li>Si pierdes acceso SSH: Accede físicamente al servidor y deshabilita UFW</li>
+                <li>Conflictos con Docker: Ajusta las reglas de forward</li>
+                <li>Problemas con servicios: Verifica los logs y las reglas aplicadas</li>
+                <li>Rendimiento: Minimiza el número de reglas</li>
+            </ul>
+        </div>
+
+        <h2>9. Ejemplos de Scripts de Automatización</h2>
+        <pre>
+#!/bin/bash
+# Script de configuración básica de UFW
+
+# Resetear configuración
+sudo ufw reset
+
+# Configurar políticas por defecto
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Permitir servicios básicos
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+
+# Configurar límites
+sudo ufw limit ssh
+
+# Permitir red local
+sudo ufw allow from 192.168.1.0/24
+
+# Activar UFW
+sudo ufw --force enable
+
+# Verificar estado
+sudo ufw status verbose
+        </pre>
+
+        <div class="tip">
+            <h3>📚 Recursos Adicionales</h3>
+            <ul>
+                <li>Manual de UFW: <code>man ufw</code></li>
+                <li>Documentación oficial de Ubuntu</li>
+                <li>Guías de seguridad de la comunidad</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
