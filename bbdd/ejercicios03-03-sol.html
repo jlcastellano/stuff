@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paso del DER al Modelo Físico de Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+        .section {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .rule {
+            background-color: #e8f6e8;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h2>Ejercicios de Transformación DER a Modelo Físico</h2>
+    
+        <div class="example">
+            <h3>Ejercicio 1: Sistema de Biblioteca</h3>
+            
+            <h4>DER Original:</h4>
+            <pre>
+    LIBRO (1:N) escrito_por AUTOR
+    LIBRO (N:M) prestado_a USUARIO
+    USUARIO (1:N) tiene MULTA
+    
+    Atributos Libro: ID, Título, ISBN, Año_Publicación
+    Atributos Autor: ID, Nombre, Nacionalidad
+    Atributos Usuario: ID, Nombre, Email, Teléfono
+    Atributos Multa: ID, Fecha, Monto
+    Atributos Préstamo: Fecha_Préstamo, Fecha_Devolución
+            </pre>
+    <img src="diag-ej-1.png" />
+            <h4>Transformación a Modelo Físico:</h4>
+            <div class="code">
+    <pre>
+    CREATE TABLE AUTORES (
+        ID_AUTOR INT PRIMARY KEY,
+        NOMBRE VARCHAR(100),
+        NACIONALIDAD VARCHAR(50)
+    );
+    
+    CREATE TABLE LIBROS (
+        ID_LIBRO INT PRIMARY KEY,
+        TITULO VARCHAR(200),
+        ISBN VARCHAR(13),
+        ANIO_PUBLICACION INT,
+        ID_AUTOR INT,
+        FOREIGN KEY (ID_AUTOR) REFERENCES AUTORES(ID_AUTOR)
+    );
+    
+    CREATE TABLE USUARIOS (
+        ID_USUARIO INT PRIMARY KEY,
+        NOMBRE VARCHAR(100),
+        EMAIL VARCHAR(100),
+        TELEFONO VARCHAR(15)
+    );
+    
+    CREATE TABLE MULTAS (
+        ID_MULTA INT PRIMARY KEY,
+        ID_USUARIO INT,
+        FECHA DATE,
+        MONTO DECIMAL(10,2),
+        FOREIGN KEY (ID_USUARIO) REFERENCES USUARIOS(ID_USUARIO)
+    );
+    
+    CREATE TABLE PRESTAMOS (
+        ID_LIBRO INT,
+        ID_USUARIO INT,
+        FECHA_PRESTAMO DATE,
+        FECHA_DEVOLUCION DATE,
+        PRIMARY KEY (ID_LIBRO, ID_USUARIO, FECHA_PRESTAMO),
+        FOREIGN KEY (ID_LIBRO) REFERENCES LIBROS(ID_LIBRO),
+        FOREIGN KEY (ID_USUARIO) REFERENCES USUARIOS(ID_USUARIO)
+    );</pre>
+            </div>
+        </div>
+    
+        <div class="example">
+            <h3>Ejercicio 2: Sistema de Gestión de Hospital</h3>
+            
+            <h4>DER Original:</h4>
+            <pre>
+    MEDICO (N:M) atiende PACIENTE
+    PACIENTE (1:N) tiene HISTORIAL_MEDICO
+    MEDICO (N:1) pertenece_a DEPARTAMENTO
+    PACIENTE (N:M) toma MEDICAMENTO
+    
+    Atributos Médico: ID, Nombre, Especialidad, Número_Colegiado
+    Atributos Paciente: ID, Nombre, Fecha_Nacimiento, DNI
+    Atributos Departamento: ID, Nombre, Planta
+    Atributos Historial_Médico: ID, Fecha, Diagnóstico
+    Atributos Medicamento: ID, Nombre, Dosis, Descripción
+    Atributos Consulta: Fecha, Hora, Motivo
+            </pre>
+    <img src="diag-ej-2.png" />
+            <h4>Transformación a Modelo Físico:</h4>
+            <div class="code">
+    <pre>
+    CREATE TABLE DEPARTAMENTOS (
+        ID_DEPARTAMENTO INT PRIMARY KEY,
+        NOMBRE VARCHAR(100),
+        PLANTA INT
+    );
+    
+    CREATE TABLE MEDICOS (
+        ID_MEDICO INT PRIMARY KEY,
+        NOMBRE VARCHAR(100),
+        ESPECIALIDAD VARCHAR(50),
+        NUMERO_COLEGIADO VARCHAR(20),
+        ID_DEPARTAMENTO INT,
+        FOREIGN KEY (ID_DEPARTAMENTO) REFERENCES DEPARTAMENTOS(ID_DEPARTAMENTO)
+    );
+    
+    CREATE TABLE PACIENTES (
+        ID_PACIENTE INT PRIMARY KEY,
+        NOMBRE VARCHAR(100),
+        FECHA_NACIMIENTO DATE,
+        DNI VARCHAR(10)
+    );
+    
+    CREATE TABLE HISTORIALES_MEDICOS (
+        ID_HISTORIAL INT PRIMARY KEY,
+        ID_PACIENTE INT,
+        FECHA DATE,
+        DIAGNOSTICO TEXT,
+        FOREIGN KEY (ID_PACIENTE) REFERENCES PACIENTES(ID_PACIENTE)
+    );
+    
+    CREATE TABLE MEDICAMENTOS (
+        ID_MEDICAMENTO INT PRIMARY KEY,
+        NOMBRE VARCHAR(100),
+        DOSIS VARCHAR(50),
+        DESCRIPCION TEXT
+    );
+    
+    CREATE TABLE CONSULTAS (
+        ID_MEDICO INT,
+        ID_PACIENTE INT,
+        FECHA DATE,
+        HORA TIME,
+        MOTIVO TEXT,
+        PRIMARY KEY (ID_MEDICO, ID_PACIENTE, FECHA, HORA),
+        FOREIGN KEY (ID_MEDICO) REFERENCES MEDICOS(ID_MEDICO),
+        FOREIGN KEY (ID_PACIENTE) REFERENCES PACIENTES(ID_PACIENTE)
+    );
+    
+    CREATE TABLE PRESCRIPCIONES (
+        ID_PACIENTE INT,
+        ID_MEDICAMENTO INT,
+        FECHA_INICIO DATE,
+        FECHA_FIN DATE,
+        PRIMARY KEY (ID_PACIENTE, ID_MEDICAMENTO, FECHA_INICIO),
+        FOREIGN KEY (ID_PACIENTE) REFERENCES PACIENTES(ID_PACIENTE),
+        FOREIGN KEY (ID_MEDICAMENTO) REFERENCES MEDICAMENTOS(ID_MEDICAMENTO)
+    );</pre>
+            </div>
+        </div>
+    
+        <div class="section">
+            <h3>Notas sobre la Transformación:</h3>
+            <ul>
+                <li>Las relaciones 1:N se implementan mediante claves foráneas en la tabla del lado N</li>
+                <li>Las relaciones N:M requieren una tabla intermedia con las claves de ambas entidades</li>
+                <li>Se han seguido las convenciones de nombres (PK_, FK_, etc.)</li>
+                <li>Se han elegido tipos de datos apropiados para cada atributo</li>
+                <li>Se han incluido las restricciones de clave primaria y foránea necesarias</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
