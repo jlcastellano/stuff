@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios SQL: DML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .ejercicio {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .solucion {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .btn-solucion {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: #2980b9;
+        }
+        .context {
+            background-color: #e8f8e8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios Prácticos SQL: DML</h1>
+
+        <div class="context">
+            <h3>Contexto:</h3>
+            <p>Considera una base de datos de una biblioteca con la siguiente tabla:</p>
+            <div class="code">
+CREATE TABLE libros (
+    id INT PRIMARY KEY,
+    titulo VARCHAR(100),
+    autor VARCHAR(100),
+    genero VARCHAR(50),
+    año_publicacion INT,
+    precio DECIMAL(10,2),
+    copias_disponibles INT,
+    editorial VARCHAR(100)
+);</div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 1: Consulta Básica con Filtros y Ordenamiento</h3>
+            <p>Escribe una consulta SQL que muestre el título, autor y precio de todos los libros de "Ciencia Ficción" publicados después del año 2000, ordenados por precio de mayor a menor. Incluye solo los libros que tengan un precio superior a 20€.</p>
+            <button class="btn-solucion" onclick="toggleSolucion('solucion1')">Ver Solución</button>
+            <div id="solucion1" class="solucion">
+                <div class="code">
+SELECT titulo, autor, precio
+FROM libros
+WHERE genero = 'Ciencia Ficción'
+AND año_publicacion > 2000
+AND precio > 20
+ORDER BY precio DESC;</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 2: Uso de Funciones de Agregación y GROUP BY</h3>
+            <p>Genera una consulta que muestre, para cada editorial, el número total de libros, el precio promedio y el número de copias disponibles. Incluye solo las editoriales que tengan más de 5 libros en total y un precio promedio superior a 30€.</p>
+            <button class="btn-solucion" onclick="toggleSolucion('solucion2')">Ver Solución</button>
+            <div id="solucion2" class="solucion">
+                <div class="code">
+SELECT 
+    editorial,
+    COUNT(*) as total_libros,
+    AVG(precio) as precio_promedio,
+    SUM(copias_disponibles) as total_copias
+FROM libros
+GROUP BY editorial
+HAVING COUNT(*) > 5 AND AVG(precio) > 30;</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 3: Consulta con Operadores Múltiples</h3>
+            <p>Escribe una consulta que encuentre todos los libros que cumplan con las siguientes condiciones:
+                <ul>
+                    <li>Pertenezcan al género "Fantasía" o "Aventura"</li>
+                    <li>Tengan un precio entre 15€ y 50€</li>
+                    <li>El título comience con la letra 'E'</li>
+                    <li>Tengan al menos 3 copias disponibles</li>
+                </ul>
+                Muestra el título, género, precio y copias disponibles.
+            </p>
+            <button class="btn-solucion" onclick="toggleSolucion('solucion3')">Ver Solución</button>
+            <div id="solucion3" class="solucion">
+                <div class="code">
+SELECT titulo, genero, precio, copias_disponibles
+FROM libros
+WHERE (genero = 'Fantasía' OR genero = 'Aventura')
+AND precio BETWEEN 15 AND 50
+AND titulo LIKE 'E%'
+AND copias_disponibles >= 3;</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSolucion(id) {
+            const solucion = document.getElementById(id);
+            if (solucion.style.display === 'none' || !solucion.style.display) {
+                solucion.style.display = 'block';
+            } else {
+                solucion.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
