@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 5: Derechos de los Interesados</title>
+    <style>
+      
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        .right-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-top: 5px solid #3498db;
+        }
+
+        .procedure-steps {
+            counter-reset: step;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .procedure-steps li {
+            position: relative;
+            padding: 15px 0 15px 50px;
+            margin: 10px 0;
+        }
+
+        .procedure-steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+        }
+
+        .time-limit {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .model-form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .flowchart {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .flowchart-step {
+            padding: 10px;
+            margin: 10px 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .flowchart-step::after {
+            content: "↓";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #6c757d;
+        }
+
+        .flowchart-step:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div id="cap5" class="chapter">
+            <h1>Capítulo 5: Derechos de los Interesados</h1>
+
+            <div class="highlight-box">
+                <p>Los derechos ARCO-POL (Acceso, Rectificación, Cancelación, Oposición, Portabilidad, Olvido y Limitación) son el conjunto de derechos que permiten a las personas controlar sus datos personales.</p>
+            </div>
+
+            <section id="5-1">
+                <h2>5.1 Derechos ARCO-POL</h2>
+
+                <div class="right-card">
+                    <h3>Derecho de Acceso</h3>
+                    <p>Permite al interesado obtener:</p>
+                    <ul>
+                        <li>Confirmación del tratamiento de sus datos</li>
+                        <li>Acceso a los datos personales</li>
+                        <li>Información sobre el tratamiento</li>
+                    </ul>
+                    <div class="time-limit">Plazo de respuesta: 1 mes</div>
+                </div>
+
+                <div class="right-card">
+                    <h3>Derecho de Rectificación</h3>
+                    <p>Permite corregir datos:</p>
+                    <ul>
+                        <li>Inexactos</li>
+                        <li>Incompletos</li>
+                    </ul>
+                    <div class="practice-example">
+                        <p>Ejemplo: Corrección de dirección o teléfono desactualizado</p>
+                    </div>
+                </div>
+
+                <div class="right-card">
+                    <h3>Derecho de Cancelación (Supresión)</h3>
+                    <p>Permite solicitar la eliminación de datos cuando:</p>
+                    <ul>
+                        <li>Ya no son necesarios</li>
+                        <li>Se retira el consentimiento</li>
+                        <li>Se opone al tratamiento</li>
+                        <li>Tratamiento ilícito</li>
+                    </ul>
+                </div>
+
+                <div class="right-card">
+                    <h3>Derecho de Oposición</h3>
+                    <p>Permite oponerse al tratamiento:</p>
+                    <ul>
+                        <li>Marketing directo</li>
+                        <li>Decisiones automatizadas</li>
+                        <li>Fines de investigación</li>
+                    </ul>
+                </div>
+
+                <div class="right-card">
+                    <h3>Derecho de Portabilidad</h3>
+                    <p>Permite:</p>
+                    <ul>
+                        <li>Recibir datos en formato estructurado</li>
+                        <li>Transmitir datos a otro responsable</li>
+                    </ul>
+                    <div class="practice-example">
+                        <p>Ejemplo: Transferir historial médico entre centros sanitarios</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="5-2">
+                <h2>5.2 Procedimientos de ejercicio</h2>
+
+                <div class="flowchart">
+                    <h3>Proceso de ejercicio de derechos</h3>
+                    
+                    <div class="flowchart-step">
+                        <h4>1. Solicitud del interesado</h4>
+                        <p>Por cualquier medio que permita acreditar el envío y recepción</p>
+                    </div>
+
+                    <div class="flowchart-step">
+                        <h4>2. Verificación de identidad</h4>
+                        <p>DNI o documento equivalente</p>
+                    </div>
+
+                    <div class="flowchart-step">
+                        <h4>3. Análisis de la solicitud</h4>
+                        <p>Evaluación de procedencia y viabilidad</p>
+                    </div>
+
+                    <div class="flowchart-step">
+                        <h4>4. Respuesta</h4>
+                        <p>En el plazo máximo establecido</p>
+                    </div>
+                </div>
+
+                <div class="model-form">
+                    <h3>Elementos esenciales de la solicitud</h3>
+                    <ul>
+                        <li>Nombre y apellidos del interesado</li>
+                        <li>Fotocopia del DNI</li>
+                        <li>Petición concreta</li>
+                        <li>Dirección para notificaciones</li>
+                        <li>Fecha y firma</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="5-3">
+                <h2>5.3 Limitaciones</h2>
+
+                <div class="warning-box">
+                    <h3>Causas de denegación</h3>
+                    <ul>
+                        <li>Solicitud manifiestamente infundada</li>
+                        <li>Solicitudes repetitivas</li>
+                        <li>Obligación legal de conservación</li>
+                        <li>Interés público</li>
+                        <li>Ejercicio de poderes públicos</li>
+                    </ul>
+                </div>
+
+                <div class="nota">
+                    <p><strong>Ejercicio práctico:</strong></p>
+                    <ol>
+                        <li>Elabora un procedimiento de atención de derechos ARCO-POL</li>
+                        <li>Prepara modelos de formularios para cada derecho</li>
+                        <li>Establece un registro de solicitudes</li>
+                        <li>Define plazos internos de respuesta</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

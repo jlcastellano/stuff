@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 8: Transferencias Internacionales</title>
+    <style>
+      
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        .country-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        .status-adequate {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .status-pending {
+            background: #f1c40f;
+            color: white;
+        }
+
+        .status-inadequate {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .transfer-mechanism {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+        }
+
+        .decision-tree {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .decision-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            position: relative;
+        }
+
+        .decision-step::before {
+            content: "→";
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .document-template {
+            background: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px dashed #ffa000;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div id="cap8" class="chapter">
+            <h1>Capítulo 8: Transferencias Internacionales</h1>
+
+            <div class="highlight-box">
+                <p>Las transferencias internacionales de datos requieren garantías específicas para asegurar que el nivel de protección de las personas físicas no se vea menoscabado cuando sus datos personales salgan de la Unión Europea.</p>
+            </div>
+
+            <section id="8-1">
+                <h2>8.1 Marco Legal</h2>
+
+                <div class="measure-category">
+                    <h3>Países con nivel adecuado de protección</h3>
+                    <div class="country-grid">
+                        <span class="country-status status-adequate">Andorra</span>
+                        <span class="country-status status-adequate">Argentina</span>
+                        <span class="country-status status-adequate">Canadá</span>
+                        <span class="country-status status-adequate">Suiza</span>
+                        <span class="country-status status-adequate">Israel</span>
+                        <span class="country-status status-adequate">Nueva Zelanda</span>
+                        <span class="country-status status-pending">Reino Unido</span>
+                        <span class="country-status status-inadequate">Estados Unidos</span>
+                    </div>
+                </div>
+
+                <div class="transfer-mechanism">
+                    <h3>Decisiones de adecuación</h3>
+                    <ul>
+                        <li>Evaluación del marco jurídico del tercer país</li>
+                        <li>Existencia de autoridad de control independiente</li>
+                        <li>Compromisos internacionales asumidos</li>
+                        <li>Revisión periódica cada 4 años</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="8-2">
+                <h2>8.2 Garantías</h2>
+
+                <div class="security-grid">
+                    <div class="transfer-mechanism">
+                        <h3>Cláusulas Contractuales Tipo (CCT)</h3>
+                        <ul>
+                            <li>Aprobadas por la Comisión Europea</li>
+                            <li>Vinculantes para las partes</li>
+                            <li>No requieren autorización previa</li>
+                            <li>Deben evaluarse las circunstancias específicas</li>
+                        </ul>
+                    </div>
+
+                    <div class="transfer-mechanism">
+                        <h3>Normas Corporativas Vinculantes (BCR)</h3>
+                        <ul>
+                            <li>Para grupos empresariales</li>
+                            <li>Aprobación por autoridad de control</li>
+                            <li>Mecanismos de cumplimiento interno</li>
+                            <li>Derechos exigibles para interesados</li>
+                        </ul>
+                    </div>
+
+                    <div class="transfer-mechanism">
+                        <h3>Códigos de Conducta</h3>
+                        <ul>
+                            <li>Aprobados según art. 40 RGPD</li>
+                            <li>Compromisos vinculantes y exigibles</li>
+                            <li>Mecanismos de supervisión</li>
+                            <li>Específicos por sector</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="document-template">
+                    <h3>Elementos esenciales de las CCT</h3>
+                    <ol>
+                        <li>Identificación de las partes</li>
+                        <li>Descripción de la transferencia</li>
+                        <li>Medidas técnicas y organizativas</li>
+                        <li>Mecanismos de supervisión</li>
+                        <li>Ley aplicable y jurisdicción</li>
+                        <li>Obligaciones de las partes</li>
+                        <li>Derechos de los interesados</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="8-3">
+                <h2>8.3 Excepciones</h2>
+
+                <div class="decision-tree">
+                    <h3>Árbol de decisión para excepciones</h3>
+                    
+                    <div class="decision-step">
+                        <h4>Consentimiento explícito</h4>
+                        <p>El interesado ha sido informado de los riesgos y consiente expresamente</p>
+                    </div>
+
+                    <div class="decision-step">
+                        <h4>Ejecución de un contrato</h4>
+                        <p>Necesaria para ejecutar un contrato entre el interesado y el responsable</p>
+                    </div>
+
+                    <div class="decision-step">
+                        <h4>Interés público</h4>
+                        <p>Transferencia necesaria por razones importantes de interés público</p>
+                    </div>
+
+                    <div class="decision-step">
+                        <h4>Reclamaciones judiciales</h4>
+                        <p>Necesaria para formular, ejercer o defender reclamaciones</p>
+                    </div>
+
+                    <div class="decision-step">
+                        <h4>Intereses vitales</h4>
+                        <p>Protección de intereses vitales del interesado u otras personas</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Consideraciones importantes:</h3>
+                    <ul>
+                        <li>Las excepciones deben interpretarse restrictivamente</li>
+                        <li>No pueden aplicarse a transferencias masivas o estructurales</li>
+                        <li>Requieren documentación y justificación</li>
+                        <li>Deben notificarse a la autoridad de control en algunos casos</li>
+                    </ul>
+                </div>
+
+                <div class="nota">
+                    <p><strong>Ejercicio práctico:</strong></p>
+                    <ol>
+                        <li>Identifica las transferencias internacionales en tu organización</li>
+                        <li>Evalúa los países de destino</li>
+                        <li>Determina las garantías necesarias</li>
+                        <li>Documenta las bases legales</li>
+                        <li>Implementa las medidas de seguimiento</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<!-- [Previous head and styles remain the same] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 4: Principios de Protección</title>
+    <style>
+   
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        
+        .principle-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #2196f3;
+        }
+
+        .principle-title {
+            color: #2196f3;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .practice-example {
+            background: #e8eaf6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+
+        .dos-and-donts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .dos {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .donts {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .dos-and-donts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <div id="cap4" class="chapter">
+            <h1>Capítulo 4: Principios de Protección de Datos</h1>
+
+            <div class="highlight-box">
+                <p>Los principios de protección de datos constituyen los pilares fundamentales sobre los que se asienta toda la normativa. Su cumplimiento es obligatorio y debe poder demostrarse en todo momento (principio de responsabilidad proactiva).</p>
+            </div>
+
+            <section id="4-1">
+                <h2>4.1 Licitud, lealtad y transparencia</h2>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">Licitud</h3>
+                    <p>Todo tratamiento debe basarse en una base jurídica válida:</p>
+                    <ul>
+                        <li>Consentimiento del interesado</li>
+                        <li>Ejecución de un contrato</li>
+                        <li>Obligación legal</li>
+                        <li>Intereses vitales</li>
+                        <li>Interés público</li>
+                        <li>Interés legítimo</li>
+                    </ul>
+
+                    <div class="practice-example">
+                        <h4>Ejemplo práctico:</h4>
+                        <p>Una empresa que necesita los datos de sus empleados para la gestión de nóminas tiene como base jurídica la ejecución del contrato laboral.</p>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">Lealtad</h3>
+                    <p>Los datos deben tratarse de manera leal y lícita, sin utilizar medios fraudulentos o engañosos.</p>
+                    
+                    <div class="dos-and-donts">
+                        <div class="dos">
+                            <h4>✓ Prácticas leales</h4>
+                            <ul>
+                                <li>Informar claramente sobre la finalidad</li>
+                                <li>Usar datos solo para los fines declarados</li>
+                                <li>Permitir el ejercicio de derechos</li>
+                            </ul>
+                        </div>
+                        <div class="donts">
+                            <h4>✗ Prácticas desleales</h4>
+                            <ul>
+                                <li>Ocultar finalidades del tratamiento</li>
+                                <li>Dificultar el ejercicio de derechos</li>
+                                <li>Usar datos para fines no declarados</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">Transparencia</h3>
+                    <p>La información debe ser:</p>
+                    <ul>
+                        <li>Concisa y de fácil acceso</li>
+                        <li>Usando lenguaje claro y sencillo</li>
+                        <li>Gratuita</li>
+                        <li>Facilitada por escrito o por medios electrónicos</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="4-2">
+                <h2>4.2 Limitación de la finalidad</h2>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">Finalidades determinadas</h3>
+                    <p>Los datos deben recogerse con fines:</p>
+                    <ul>
+                        <li>Determinados</li>
+                        <li>Explícitos</li>
+                        <li>Legítimos</li>
+                    </ul>
+
+                    <div class="warning-box">
+                        <p>No se permite el tratamiento posterior de manera incompatible con dichos fines.</p>
+                    </div>
+
+                    <div class="practice-example">
+                        <h4>Caso práctico:</h4>
+                        <p>Una empresa recopila emails para enviar newsletters. No puede usar esos emails para vender la base de datos a terceros sin consentimiento específico.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="4-3">
+                <h2>4.3 Minimización de datos</h2>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">Datos adecuados</h3>
+                    <p>Los datos deben ser:</p>
+                    <ul>
+                        <li>Adecuados</li>
+                        <li>Pertinentes</li>
+                        <li>Limitados a lo necesario</li>
+                    </ul>
+
+                    <div class="dos-and-donts">
+                        <div class="dos">
+                            <h4>✓ Buenas prácticas</h4>
+                            <ul>
+                                <li>Recoger solo datos necesarios</li>
+                                <li>Revisar periódicamente los datos</li>
+                                <li>Eliminar datos superfluos</li>
+                            </ul>
+                        </div>
+                        <div class="donts">
+                            <h4>✗ Malas prácticas</h4>
+                            <ul>
+                                <li>Recoger datos "por si acaso"</li>
+                                <li>Mantener datos innecesarios</li>
+                                <li>Solicitar datos excesivos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="4-4">
+                <h2>4.4 Exactitud</h2>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">Datos exactos</h3>
+                    <p>Los datos deben ser:</p>
+                    <ul>
+                        <li>Exactos</li>
+                        <li>Actualizados</li>
+                    </ul>
+
+                    <div class="key-point">
+                        <h4>Medidas necesarias:</h4>
+                        <ul>
+                            <li>Procedimientos de actualización</li>
+                            <li>Sistemas de verificación</li>
+                            <li>Procesos de rectificación</li>
+                            <li>Supresión de datos inexactos</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="nota">
+                    <p><strong>Ejercicio de evaluación:</strong></p>
+                    <p>Para cada tratamiento de datos en tu organización:</p>
+                    <ol>
+                        <li>Identifica la base legal que lo legitima</li>
+                        <li>Verifica que los datos son los mínimos necesarios</li>
+                        <li>Comprueba los procedimientos de actualización</li>
+                        <li>Documenta las medidas implementadas</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<!-- [Head section with previous styles remains the same] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 2: RGPD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        
+        .definition-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #1565c0;
+        }
+
+        .example-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .warning-box {
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #c62828;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            margin: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <div id="cap2" class="chapter">
+            <h1>Capítulo 2: Reglamento General de Protección de Datos (RGPD)</h1>
+
+            <div class="highlight-box">
+                <p>El RGPD (Reglamento UE 2016/679) representa la normativa más importante en materia de protección de datos personales en la Unión Europea. Entró en vigor el 25 de mayo de 2018 y es de aplicación directa en todos los Estados miembros.</p>
+            </div>
+
+            <section id="2-1">
+                <h2>2.1 Ámbito de aplicación</h2>
+
+                <h3>Ámbito territorial</h3>
+                <div class="definition-box">
+                    <p>El RGPD se aplica a:</p>
+                    <ul>
+                        <li>Tratamientos realizados en el contexto de actividades de un establecimiento del responsable o encargado en la UE</li>
+                        <li>Tratamientos de datos de interesados que residan en la UE por parte de organizaciones no establecidas en la UE cuando:
+                            <ul>
+                                <li>Ofrezcan bienes o servicios a dichos interesados</li>
+                                <li>Controlen su comportamiento dentro de la UE</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Ámbito material</h3>
+                <div class="example-box">
+                    <p><strong>Se aplica a:</strong></p>
+                    <ul>
+                        <li>Tratamiento total o parcialmente automatizado de datos personales</li>
+                        <li>Tratamiento no automatizado de datos personales contenidos o destinados a ser incluidos en un fichero</li>
+                    </ul>
+                    
+                    <p><strong>No se aplica a:</strong></p>
+                    <ul>
+                        <li>Actividades personales o domésticas</li>
+                        <li>Actividades de prevención y persecución de delitos</li>
+                        <li>Actividades de seguridad nacional</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="2-2">
+                <h2>2.2 Definiciones básicas</h2>
+
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Definición</th>
+                        </tr>
+                        <tr>
+                            <td>Datos personales</td>
+                            <td>Toda información sobre una persona física identificada o identificable</td>
+                        </tr>
+                        <tr>
+                            <td>Tratamiento</td>
+                            <td>Cualquier operación realizada sobre datos personales</td>
+                        </tr>
+                        <tr>
+                            <td>Responsable</td>
+                            <td>Persona física o jurídica que determina los fines y medios del tratamiento</td>
+                        </tr>
+                        <tr>
+                            <td>Encargado</td>
+                            <td>Persona física o jurídica que trata datos por cuenta del responsable</td>
+                        </tr>
+                        <tr>
+                            <td>Consentimiento</td>
+                            <td>Manifestación de voluntad libre, específica, informada e inequívoca</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <section id="2-3">
+                <h2>2.3 Principios fundamentales</h2>
+
+                <div class="checklist">
+                    <li><strong>Licitud, lealtad y transparencia:</strong> Los datos deben ser tratados de manera lícita, leal y transparente</li>
+                    <li><strong>Limitación de la finalidad:</strong> Recogidos con fines determinados, explícitos y legítimos</li>
+                    <li><strong>Minimización de datos:</strong> Adecuados, pertinentes y limitados a lo necesario</li>
+                    <li><strong>Exactitud:</strong> Exactos y actualizados</li>
+                    <li><strong>Limitación del plazo de conservación:</strong> Mantenidos durante no más tiempo del necesario</li>
+                    <li><strong>Integridad y confidencialidad:</strong> Tratados de forma que se garantice su seguridad</li>
+                    <li><strong>Responsabilidad proactiva:</strong> El responsable debe ser capaz de demostrar el cumplimiento</li>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Atención especial:</h3>
+                    <p>El incumplimiento de estos principios puede conllevar sanciones de hasta 20 millones de euros o el 4% del volumen de negocio anual global.</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>Ejemplo práctico:</h3>
+                    <p>Una empresa que gestiona una lista de clientes debe:</p>
+                    <ul>
+                        <li>Informar claramente sobre el uso de los datos</li>
+                        <li>Recoger solo los datos necesarios para su servicio</li>
+                        <li>Mantener los datos actualizados</li>
+                        <li>Eliminar los datos cuando ya no sean necesarios</li>
+                        <li>Implementar medidas de seguridad adecuadas</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="nota">
+                <p><strong>Ejercicio de autoevaluación:</strong></p>
+                <p>Identifica en tu organización:</p>
+                <ol>
+                    <li>¿Qué tipos de datos personales se tratan?</li>
+                    <li>¿Con qué finalidades se realiza el tratamiento?</li>
+                    <li>¿Qué medidas de seguridad están implementadas?</li>
+                    <li>¿Cómo se garantiza el cumplimiento de los principios del RGPD?</li>
+                </ol>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

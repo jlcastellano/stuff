@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 1: Marco Normativo Europeo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div id="cap1" class="chapter">
+            <h1>Capítulo 1: Marco Normativo Europeo</h1>
+
+            <div class="highlight-box">
+                <p>En este capítulo exploraremos la evolución de la normativa europea en materia de protección de datos, desde sus orígenes hasta la actualidad, analizando los principales hitos legislativos y su impacto en la privacidad digital.</p>
+            </div>
+
+            <section id="1-1">
+                <h2>1.1 Evolución histórica</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3>1950</h3>
+                        <p>Convenio Europeo de Derechos Humanos (CEDH)</p>
+                        <p>Primer reconocimiento del derecho a la vida privada en el artículo 8, estableciendo las bases para la futura protección de datos personales.</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3>1981</h3>
+                        <p>Convenio 108 del Consejo de Europa</p>
+                        <p>Primer instrumento internacional jurídicamente vinculante en materia de protección de datos. Estableció principios básicos para la protección de datos personales.</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3>1995</h3>
+                        <p>Directiva 95/46/CE</p>
+                        <p>Primera directiva específica sobre protección de datos personales. Estableció un marco regulatorio común para todos los Estados miembros.</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3>2016</h3>
+                        <p>Reglamento General de Protección de Datos (RGPD)</p>
+                        <p>Reforma integral de la normativa europea de protección de datos, directamente aplicable en todos los Estados miembros.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="1-2">
+                <h2>1.2 Directivas previas</h2>
+
+                <h3>Directiva 95/46/CE</h3>
+                <p>Esta directiva fue el primer marco comprehensivo de protección de datos en la UE, estableciendo:</p>
+                <ul>
+                    <li>Principios relativos a la calidad de los datos</li>
+                    <li>Criterios para legitimar el tratamiento de datos</li>
+                    <li>Derechos de los interesados</li>
+                    <li>Obligaciones de los responsables del tratamiento</li>
+                </ul>
+
+                <div class="nota">
+                    <p><strong>Nota importante:</strong> La Directiva 95/46/CE quedó derogada con la entrada en vigor del RGPD, pero su influencia en la legislación actual es innegable.</p>
+                </div>
+
+                <h3>Directiva 2002/58/CE (ePrivacy)</h3>
+                <p>Complementaria a la Directiva 95/46/CE, se centra específicamente en:</p>
+                <ul>
+                    <li>Protección de datos en comunicaciones electrónicas</li>
+                    <li>Confidencialidad de las comunicaciones</li>
+                    <li>Regulación de cookies y comunicaciones comerciales</li>
+                </ul>
+            </section>
+
+            <section id="1-3">
+                <h2>1.3 Marco actual</h2>
+
+                <div class="highlight-box">
+                    <h3>Pilares del marco normativo actual</h3>
+                    <ul>
+                        <li>Reglamento General de Protección de Datos (RGPD)</li>
+                        <li>Directiva de Policía 2016/680</li>
+                        <li>Reglamento 2018/1725 para instituciones de la UE</li>
+                    </ul>
+                </div>
+
+                <h3>Características principales del marco actual</h3>
+                <ul>
+                    <li>Aplicación directa en todos los Estados miembros</li>
+                    <li>Mayor armonización normativa</li>
+                    <li>Enfoque basado en el riesgo</li>
+                    <li>Régimen sancionador más estricto</li>
+                    <li>Nuevos derechos y garantías para los ciudadanos</li>
+                </ul>
+
+                <div class="nota">
+                    <p><strong>Ejercicio práctico:</strong> Identifica en tu organización qué aspectos del marco normativo actual tienen mayor impacto en las operaciones diarias.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

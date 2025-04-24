@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<!-- [Previous head and styles remain the same] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 3: Legislación Española</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        
+        .legislation-box {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #7b1fa2;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background-color: #4a148c;
+            color: white;
+            padding: 15px;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border: 1px solid #e1bee7;
+        }
+
+        .timeline-vertical {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-vertical::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #7b1fa2;
+        }
+
+        .timeline-item-vertical {
+            position: relative;
+            margin: 30px 0;
+            width: 45%;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .timeline-item-vertical:nth-child(odd) {
+            margin-left: auto;
+        }
+
+        .key-point {
+            background: #fff3e0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <div id="cap3" class="chapter">
+            <h1>Capítulo 3: Legislación Española</h1>
+
+            <div class="highlight-box">
+                <p>La legislación española en materia de protección de datos se articula principalmente a través de la Ley Orgánica 3/2018 de Protección de Datos Personales y Garantía de los Derechos Digitales (LOPDGDD), que adapta el ordenamiento jurídico español al RGPD y complementa sus disposiciones.</p>
+            </div>
+
+            <section id="3-1">
+                <h2>3.1 LOPDGDD</h2>
+
+                <div class="legislation-box">
+                    <h3>Características principales de la LOPDGDD</h3>
+                    <ul>
+                        <li>Entrada en vigor: 7 de diciembre de 2018</li>
+                        <li>Deroga la anterior LOPD (Ley Orgánica 15/1999)</li>
+                        <li>Complementa y adapta el RGPD al ordenamiento español</li>
+                        <li>Introduce nuevos derechos digitales</li>
+                    </ul>
+                </div>
+
+                <h3>Aspectos novedosos de la LOPDGDD</h3>
+                <div class="table-container">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspecto</th>
+                            <th>Novedad introducida</th>
+                        </tr>
+                        <tr>
+                            <td>Consentimiento</td>
+                            <td>Debe ser inequívoco y explícito. No válido el consentimiento tácito</td>
+                        </tr>
+                        <tr>
+                            <td>Edad de consentimiento</td>
+                            <td>Establecida en 14 años para España (el RGPD permite entre 13 y 16)</td>
+                        </tr>
+                        <tr>
+                            <td>Derechos digitales</td>
+                            <td>Incorpora nuevos derechos como desconexión digital, testamento digital, etc.</td>
+                        </tr>
+                        <tr>
+                            <td>DPO</td>
+                            <td>Regula específicamente la figura del Delegado de Protección de Datos</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <section id="3-2">
+                <h2>3.2 Reglamentos de desarrollo</h2>
+
+                <div class="timeline-vertical">
+                    <div class="timeline-item-vertical">
+                        <h3>Real Decreto 1720/2007</h3>
+                        <p>Antiguo reglamento de desarrollo de la LOPD. Parcialmente vigente en aspectos no contradictorios con RGPD y LOPDGDD.</p>
+                    </div>
+
+                    <div class="timeline-item-vertical">
+                        <h3>Instrucciones de la AEPD</h3>
+                        <p>Desarrollan aspectos específicos de la normativa de protección de datos.</p>
+                    </div>
+
+                    <div class="timeline-item-vertical">
+                        <h3>Códigos de Conducta</h3>
+                        <p>Instrumentos de autorregulación adaptados a sectores específicos.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="3-3">
+                <h2>3.3 Otras normativas relacionadas</h2>
+
+                <div class="key-point">
+                    <h3>Leyes sectoriales relevantes:</h3>
+                    <ul>
+                        <li>Ley 34/2002 de Servicios de la Sociedad de la Información (LSSI)</li>
+                        <li>Ley 9/2014 General de Telecomunicaciones</li>
+                        <li>Ley 41/2002 de Autonomía del Paciente (datos de salud)</li>
+                        <li>Ley 58/2003 General Tributaria</li>
+                    </ul>
+                </div>
+
+                <h3>Especificidades sectoriales</h3>
+                <div class="example-box">
+                    <h4>Sector Sanitario</h4>
+                    <ul>
+                        <li>Historia clínica digital</li>
+                        <li>Confidencialidad médica</li>
+                        <li>Investigación biomédica</li>
+                    </ul>
+
+                    <h4>Sector Financiero</h4>
+                    <ul>
+                        <li>Prevención del fraude</li>
+                        <li>Ficheros de solvencia</li>
+                        <li>Blanqueo de capitales</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Puntos críticos de cumplimiento:</h3>
+                    <ul>
+                        <li>Coordinación entre RGPD y normativa sectorial</li>
+                        <li>Identificación de bases jurídicas específicas</li>
+                        <li>Cumplimiento de requisitos adicionales sectoriales</li>
+                        <li>Medidas de seguridad reforzadas en sectores sensibles</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="nota">
+                <p><strong>Ejercicio práctico:</strong></p>
+                <ol>
+                    <li>Identifica qué normativas sectoriales aplican a tu organización</li>
+                    <li>Analiza los requisitos específicos de tu sector</li>
+                    <li>Elabora un checklist de cumplimiento normativo</li>
+                    <li>Revisa las medidas de seguridad implementadas</li>
+                </ol>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

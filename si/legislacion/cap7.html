@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislación en Protección de Datos - Capítulo 7: Régimen Sancionador</title>
+    <style>
+   
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 300px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h2 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        main {
+            margin-left: 300px;
+            padding: 40px;
+            width: calc(100% - 300px);
+        }
+
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .nota {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        .sanction-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .sanction-type-1 {
+            border-left: 6px solid #e74c3c;
+        }
+
+        .sanction-type-2 {
+            border-left: 6px solid #f39c12;
+        }
+
+        .sanction-type-3 {
+            border-left: 6px solid #3498db;
+        }
+
+        .fine-amount {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #c0392b;
+            margin: 10px 0;
+            padding: 5px 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .case-study {
+            background: #f5f6fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #dcdde1;
+        }
+
+        .timeline-sanctions {
+            position: relative;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .timeline-sanctions::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #e74c3c;
+        }
+
+        .sanction-step {
+            margin-left: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background: white;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .sanction-step::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 50%;
+            width: 20px;
+            height: 4px;
+            background: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Contenidos</h2>
+        <ul>
+            <li><a href="index.html">Índice General</a></li>
+            <li><a href="cap1.html">1. Marco Normativo Europeo</a></li>
+            <li><a href="cap2.html">2. RGPD</a></li>
+            <li><a href="cap3.html">3. Legislación Española</a></li>
+            <li><a href="cap4.html">4. Principios de Protección</a></li>
+            <li><a href="cap5.html">5. Derechos de los Interesados</a></li>
+            <li><a href="cap6.html">6. Medidas de Seguridad</a></li>
+            <li><a href="cap7.html">7. Régimen Sancionador</a></li>
+            <li><a href="cap8.html">8. Transferencias Internacionales</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div id="cap7" class="chapter">
+            <h1>Capítulo 7: Régimen Sancionador</h1>
+
+            <div class="highlight-box">
+                <p>El régimen sancionador establece las consecuencias del incumplimiento de la normativa de protección de datos, con multas que pueden alcanzar los 20 millones de euros o el 4% del volumen de negocio anual global.</p>
+            </div>
+
+            <section id="7-1">
+                <h2>7.1 Tipos de Infracciones</h2>
+
+                <div class="sanction-card sanction-type-1">
+                    <h3>Infracciones Muy Graves</h3>
+                    <div class="fine-amount">Hasta 20M€ o 4% facturación</div>
+                    <ul>
+                        <li>Transferencias internacionales sin garantías</li>
+                        <li>Incumplimiento de principios básicos</li>
+                        <li>Vulneración de derechos fundamentales</li>
+                        <li>Obstaculización ejercicio de derechos</li>
+                    </ul>
+
+                    <div class="case-study">
+                        <h4>Caso práctico:</h4>
+                        <p>Empresa que vende datos personales a terceros países sin base legal ni garantías adecuadas.</p>
+                        <p><strong>Sanción impuesta:</strong> 15M€</p>
+                    </div>
+                </div>
+
+                <div class="sanction-card sanction-type-2">
+                    <h3>Infracciones Graves</h3>
+                    <div class="fine-amount">Hasta 10M€ o 2% facturación</div>
+                    <ul>
+                        <li>Tratamiento sin base legal</li>
+                        <li>Falta de medidas técnicas y organizativas</li>
+                        <li>No realizar evaluación de impacto</li>
+                        <li>No designar DPO cuando sea obligatorio</li>
+                    </ul>
+
+                    <div class="case-study">
+                        <h4>Caso práctico:</h4>
+                        <p>Hospital que no implementa medidas de seguridad adecuadas para datos de salud.</p>
+                        <p><strong>Sanción impuesta:</strong> 5M€</p>
+                    </div>
+                </div>
+
+                <div class="sanction-card sanction-type-3">
+                    <h3>Infracciones Leves</h3>
+                    <div class="fine-amount">Hasta 3M€</div>
+                    <ul>
+                        <li>Incumplimientos formales</li>
+                        <li>No atender solicitudes de ejercicio de derechos</li>
+                        <li>No informar adecuadamente</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="7-2">
+                <h2>7.2 Sanciones</h2>
+
+                <div class="measure-category">
+                    <h3>Criterios de graduación</h3>
+                    <ul>
+                        <li>Naturaleza, gravedad y duración de la infracción</li>
+                        <li>Intencionalidad o negligencia</li>
+                        <li>Medidas tomadas para mitigar el daño</li>
+                        <li>Grado de responsabilidad</li>
+                        <li>Reincidencia</li>
+                        <li>Cooperación con la autoridad de control</li>
+                        <li>Categorías de datos afectados</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Medidas adicionales</h3>
+                    <ul>
+                        <li>Apercibimiento</li>
+                        <li>Prohibición temporal o definitiva del tratamiento</li>
+                        <li>Suspensión de transferencias internacionales</li>
+                        <li>Publicación de la sanción</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="7-3">
+                <h2>7.3 Procedimiento Sancionador</h2>
+
+                <div class="timeline-sanctions">
+                    <div class="sanction-step">
+                        <h3>1. Inicio del procedimiento</h3>
+                        <p>Por denuncia, iniciativa propia o a petición razonada</p>
+                    </div>
+
+                    <div class="sanction-step">
+                        <h3>2. Actuaciones previas</h3>
+                        <p>Investigación e inspección</p>
+                    </div>
+
+                    <div class="sanction-step">
+                        <h3>3. Medidas provisionales</h3>
+                        <p>Si existe riesgo para los derechos</p>
+                    </div>
+
+                    <div class="sanction-step">
+                        <h3>4. Acuerdo de inicio</h3>
+                        <p>Notificación al presunto infractor</p>
+                    </div>
+
+                    <div class="sanction-step">
+                        <h3>5. Alegaciones</h3>
+                        <p>Plazo para presentar pruebas y argumentos</p>
+                    </div>
+
+                    <div class="sanction-step">
+                        <h3>6. Resolución</h3>
+                        <p>Decisión final y sanción</p>
+                    </div>
+                </div>
+
+                <div class="nota">
+                    <p><strong>Ejercicio práctico de evaluación:</strong></p>
+                    <ol>
+                        <li>Identifica posibles infracciones en tu organización</li>
+                        <li>Calcula el riesgo económico potencial</li>
+                        <li>Establece medidas preventivas</li>
+                        <li>Desarrolla un protocolo de actuación ante inspecciones</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
