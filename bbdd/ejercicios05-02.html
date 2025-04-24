@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios SQL: Joins, Subconsultas y DML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .ejercicio {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .solucion {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .btn-solucion {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: #2980b9;
+        }
+        .context {
+            background-color: #e8f8e8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios Prácticos SQL Avanzado</h1>
+
+        <div class="context">
+            <h3>Contexto:</h3>
+            <p>Considera una librería con las siguientes tablas:</p>
+            <div class="code">
+CREATE TABLE libros (
+    id INT PRIMARY KEY,
+    titulo VARCHAR(100),
+    autor_id INT,
+    editorial_id INT,
+    genero VARCHAR(50),
+    precio DECIMAL(10,2),
+    stock INT
+);
+
+CREATE TABLE autores (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    nacionalidad VARCHAR(50),
+    fecha_nacimiento DATE
+);
+
+CREATE TABLE editoriales (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    pais VARCHAR(50)
+);
+
+CREATE TABLE ventas (
+    id INT PRIMARY KEY,
+    libro_id INT,
+    fecha_venta DATE,
+    cantidad INT,
+    precio_total DECIMAL(10,2)
+);</div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 1: INNER JOIN y Funciones de Agregación</h3>
+            <p>Obtener un listado que muestre el nombre del autor, la cantidad total de libros que ha escrito y el valor total de inventario (precio * stock) de sus libros. Mostrar solo los autores que tengan más de 3 libros publicados.</p>
+           
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 2: LEFT JOIN y Subconsultas</h3>
+            <p>Encontrar todos los autores que no tienen libros en stock (stock = 0) o no tienen libros publicados. Mostrar el nombre del autor y su nacionalidad.</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 3: Subconsultas Correlacionadas</h3>
+            <p>Listar los libros cuyo precio es mayor que el precio promedio de los libros de su mismo género. Mostrar título, género y precio.</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 4: UNION y Funciones de Fecha</h3>
+            <p>Crear un reporte que muestre en una sola lista:
+                - Los autores que cumplan años en el próximo mes
+                - Los libros que se hayan vendido en el último mes
+                Cada fila debe indicar si es un autor o un libro y la fecha relevante.</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 5: Transacciones y Actualizaciones Múltiples</h3>
+            <p>Escribir una transacción que:
+                1. Registre una nueva venta
+                2. Actualice el stock del libro
+                3. Si el stock queda en 0, actualice el precio aumentándolo un 10%</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 6: JOIN Múltiple y Funciones de Agregación</h3>
+            <p>Obtener un informe que muestre por cada editorial:
+                - Nombre de la editorial
+                - País
+                - Cantidad de autores diferentes
+                - Total de ventas del último año
+                - Promedio de precio de sus libros</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 7: Subconsultas en UPDATE</h3>
+            <p>Actualizar el precio de todos los libros que no han tenido ventas en los últimos 6 meses, aplicando un descuento del 15%.</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 8: INSERT con Subconsulta</h3>
+            <p>Crear una tabla de "libros_destacados" e insertar en ella todos los libros que cumplan al menos una de estas condiciones:
+                - Han vendido más de 100 unidades en total
+                - Su precio está por encima del promedio de su género
+                - Son del autor más vendido</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 9: DELETE con JOIN</h3>
+            <p>Eliminar todos los registros de ventas de libros cuyas editoriales ya no están activas (no tienen libros en stock).</p>
+            
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 10: Vistas y Permisos</h3>
+            <p>Crear una vista que muestre un resumen de ventas por género y mes, y asignar permisos de lectura a un usuario 'analista'.</p>
+            
+    </div>
+
+    <script>
+        function toggleSolucion(id) {
+            const solucion = document.getElementById(id);
+            if (solucion.style.display === 'none' || !solucion.style.display) {
+                solucion.style.display = 'block';
+            } else {
+                solucion.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
