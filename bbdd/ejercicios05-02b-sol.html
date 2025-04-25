@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Control de Acceso SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .ejercicio {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .ejercicio h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .dificultad {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        .solucion {
+            display: none;
+            background-color: #f0f8ff;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .btn-solucion {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios de Control de Acceso a Datos en SQL</h1>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 1: Gestión Básica de Usuarios</h3>
+            <p>Crea tres usuarios con las siguientes características:</p>
+            <ul>
+                <li>Usuario 'admin_local' que solo pueda conectarse desde localhost</li>
+                <li>Usuario 'vendedor' que pueda conectarse desde cualquier host</li>
+                <li>Usuario 'invitado' que use autenticación mediante mysql_native_password</li>
+            </ul>
+            <div class="dificultad">Dificultad: Básica</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol1')">Ver Solución</button>
+            <div id="sol1" class="solucion">
+                <div class="code">-- Crear usuario admin_local
+CREATE USER 'admin_local'@'localhost' 
+IDENTIFIED BY 'password123';
+
+-- Crear usuario vendedor
+CREATE USER 'vendedor'@'%' 
+IDENTIFIED BY 'password456';
+
+-- Crear usuario invitado
+CREATE USER 'invitado'@'localhost' 
+IDENTIFIED WITH mysql_native_password 
+BY 'password789';</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 2: Privilegios por Departamento</h3>
+            <p>Para una base de datos 'empresa', configura los siguientes roles y privilegios:</p>
+            <ul>
+                <li>Rol 'rol_ventas': acceso de lectura a las tablas 'productos' y 'clientes', y permiso de escritura en 'ventas'</li>
+                <li>Rol 'rol_inventario': acceso completo a la tabla 'productos' y solo lectura en 'ventas'</li>
+            </ul>
+            <div class="dificultad">Dificultad: Intermedia</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol2')">Ver Solución</button>
+            <div id="sol2" class="solucion">
+                <div class="code">-- Crear roles
+CREATE ROLE 'rol_ventas', 'rol_inventario';
+
+-- Configurar privilegios para rol_ventas
+GRANT SELECT ON empresa.productos TO 'rol_ventas';
+GRANT SELECT ON empresa.clientes TO 'rol_ventas';
+GRANT ALL PRIVILEGES ON empresa.ventas TO 'rol_ventas';
+
+-- Configurar privilegios para rol_inventario
+GRANT ALL PRIVILEGES ON empresa.productos TO 'rol_inventario';
+GRANT SELECT ON empresa.ventas TO 'rol_inventario';</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 3: Vistas Seguras</h3>
+            <p>Crea una vista llamada 'empleados_publicos' que muestre solo el nombre, departamento y años de servicio de los empleados, excluyendo información sensible como salarios. Asigna permisos de lectura a esta vista para el rol 'rol_publico'.</p>
+            <div class="dificultad">Dificultad: Intermedia</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol3')">Ver Solución</button>
+            <div id="sol3" class="solucion">
+                <div class="code">-- Crear la vista
+CREATE VIEW empleados_publicos AS
+SELECT 
+    nombre,
+    departamento,
+    TIMESTAMPDIFF(YEAR, fecha_ingreso, CURRENT_DATE) as años_servicio
+FROM empleados;
+
+-- Crear rol público
+CREATE ROLE 'rol_publico';
+
+-- Asignar permisos a la vista
+GRANT SELECT ON empresa.empleados_publicos TO 'rol_publico';</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 4: Gestión de Permisos Específicos</h3>
+            <p>Configura los siguientes permisos para el usuario 'analista_datos':</p>
+            <ul>
+                <li>Permiso de lectura en todas las tablas de la base de datos 'ventas2023'</li>
+                <li>Permiso de actualización solo en la columna 'estado' de la tabla 'pedidos'</li>
+                <li>Sin permiso para eliminar registros en ninguna tabla</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol4')">Ver Solución</button>
+            <div id="sol4" class="solucion">
+                <div class="code">-- Crear usuario analista_datos
+CREATE USER 'analista_datos'@'localhost' 
+IDENTIFIED BY 'password123';
+
+-- Asignar permisos de lectura en toda la base de datos
+GRANT SELECT ON ventas2023.* TO 'analista_datos'@'localhost';
+
+-- Asignar permiso de actualización específico
+GRANT UPDATE (estado) ON ventas2023.pedidos 
+TO 'analista_datos'@'localhost';</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 5: Roles Jerárquicos</h3>
+            <p>Implementa una estructura de roles jerárquica para un sistema de gestión escolar:</p>
+            <ul>
+                <li>Rol 'director': acceso completo a todas las tablas</li>
+                <li>Rol 'profesor': acceso a notas y asistencias de sus propias clases</li>
+                <li>Rol 'estudiante': solo lectura de sus propias notas</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol5')">Ver Solución</button>
+            <div id="sol5" class="solucion">
+                <div class="code">-- Crear roles
+CREATE ROLE 'director', 'profesor', 'estudiante';
+
+-- Configurar rol director
+GRANT ALL PRIVILEGES ON escuela.* TO 'director';
+
+-- Configurar rol profesor
+GRANT SELECT, INSERT, UPDATE ON escuela.notas TO 'profesor';
+GRANT SELECT, INSERT, UPDATE ON escuela.asistencias TO 'profesor';
+GRANT SELECT ON escuela.estudiantes TO 'profesor';
+
+-- Configurar rol estudiante
+GRANT SELECT ON escuela.notas_vista TO 'estudiante';
+
+-- Crear vista para estudiantes
+CREATE VIEW notas_vista AS
+SELECT n.* FROM notas n
+WHERE n.estudiante_id = CURRENT_USER();</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 6: Auditoría de Accesos</h3>
+            <p>Configura un sistema de auditoría que:</p>
+            <ul>
+                <li>Registre todos los intentos de acceso fallidos</li>
+                <li>Guarde un log de todas las modificaciones en la tabla 'empleados'</li>
+                <li>Crea una consulta que muestre estas actividades</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol6')">Ver Solución</button>
+            <div id="sol6" class="solucion">
+                <div class="code">-- Habilitar log general
+SET GLOBAL general_log = 'ON';
+SET GLOBAL general_log_file = '/var/log/mysql/mysql.log';
+
+-- Crear tabla de auditoría
+CREATE TABLE auditoria_empleados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    accion VARCHAR(50),
+    usuario VARCHAR(100),
+    fecha TIMESTAMP,
+    datos_antiguos TEXT,
+    datos_nuevos TEXT
+);
+
+-- Crear trigger para auditoría
+DELIMITER //
+CREATE TRIGGER audit_empleados_update
+AFTER UPDATE ON empleados
+FOR EACH ROW
+BEGIN
+    INSERT INTO auditoria_empleados 
+    (accion, usuario, fecha, datos_antiguos, datos_nuevos)
+    VALUES
+    ('UPDATE', CURRENT_USER(), NOW(),
+     JSON_OBJECT('old', OLD.nombre, 'old_salary', OLD.salario),
+     JSON_OBJECT('new', NEW.nombre, 'new_salary', NEW.salario));
+END;
+//
+DELIMITER ;
+
+-- Consulta para ver actividades
+SELECT * FROM auditoria_empleados
+ORDER BY fecha DESC;</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 7: Gestión de Contraseñas</h3>
+            <p>Implementa una política de contraseñas que incluya:</p>
+            <ul>
+                <li>Cambio obligatorio cada 30 días</li>
+                <li>Mínimo 8 caracteres con combinación de letras y números</li>
+                <li>Bloqueo de cuenta tras 3 intentos fallidos</li>
+            </ul>
+            <div class="dificultad">Dificultad: Intermedia</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol7')">Ver Solución</button>
+            <div id="sol7" class="solucion">
+                <div class="code">-- Configurar política de contraseñas
+SET GLOBAL validate_password.policy = MEDIUM;
+SET GLOBAL validate_password.length = 8;
+SET GLOBAL validate_password.mixed_case_count = 1;
+SET GLOBAL validate_password.number_count = 1;
+
+-- Configurar expiración de contraseña
+ALTER USER 'usuario1'@'localhost' 
+PASSWORD EXPIRE INTERVAL 30 DAY;
+
+-- Configurar bloqueo tras intentos fallidos
+CREATE TABLE login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100),
+    attempt_time TIMESTAMP,
+    attempts INT DEFAULT 1
+);
+
+DELIMITER //
+CREATE TRIGGER check_login_attempts
+BEFORE UPDATE ON mysql.user
+FOR EACH ROW
+BEGIN
+    IF (SELECT attempts FROM login_attempts 
+        WHERE username = USER() 
+        AND attempt_time > NOW() - INTERVAL 1 HOUR) >= 3 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Account locked due to too many failed attempts';
+    END IF;
+END;
+//
+DELIMITER ;</div>
+            </div>
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 8: Restricciones de Acceso Temporal</h3>
+            <p>Configura accesos temporales para usuarios de mantenimiento:</p>
+            <ul>
+                <li>Usuario que solo pueda conectarse en horario laboral (9:00-18:00)</li>
+                <li>Usuario con acceso completo pero solo durante el fin de semana</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+            <button class="btn-solucion" onclick="toggleSolucion('sol8')">Ver Solución</button>
+            <div id="sol8" class="solucion">
+                <div class="code">-- Crear usuarios de mantenimiento
+CREATE USER 'mant_diurno'@'localhost' 
+IDENTIFIED BY 'password123';
+CREATE USER 'mant_finde'@'localhost' 
+IDENTIFIED BY 'password456';
+
+-- Crear procedimiento para verificar horario
+DELIMITER //
+CREATE PROCEDURE check_access_time()
+BEGIN
+    IF (HOUR(NOW()) < 9 OR HOUR(NOW()) >= 18) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Acceso permitido solo en horario laboral';
+    END IF;
+END;
+//
+DELIMITER ;
+
+-- Crear trigger para verificar horario
+DELIMITER //
+CREATE TRIGGER check_maintenance_access
+BEFORE CONNECT ON *.* 
+FOR EACH ROW
+BEGIN
+    IF CURRENT_USER() = 'mant_diurno'@'localhost' THEN
+        CALL check_access_time();
+    ELSEIF CURRENT_USER() = 'mant_finde'@'localhost' 
+           AND WEEKDAY(NOW()) NOT IN (5,6) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Acceso permitido solo en fin de semana';
+    END IF;
+END;
+//
+DELIMITER ;</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSolucion(id) {
+            const solucion = document.getElementById(id);
+            if (solucion.style.display === 'none' || solucion.style.display === '') {
+                solucion.style.display = 'block';
+            } else {
+                solucion.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

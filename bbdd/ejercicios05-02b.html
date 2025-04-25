@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Control de Acceso SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .ejercicio {
+            background-color: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .ejercicio h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .dificultad {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        .solucion {
+            display: none;
+            background-color: #f0f8ff;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            white-space: pre;
+        }
+        .btn-solucion {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios de Control de Acceso a Datos en SQL</h1>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 1: Gestión Básica de Usuarios</h3>
+            <p>Crea tres usuarios con las siguientes características:</p>
+            <ul>
+                <li>Usuario 'admin_local' que solo pueda conectarse desde localhost</li>
+                <li>Usuario 'vendedor' que pueda conectarse desde cualquier host</li>
+                <li>Usuario 'invitado' que use autenticación mediante mysql_native_password</li>
+            </ul>
+            <div class="dificultad">Dificultad: Básica</div>
+
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 2: Privilegios por Departamento</h3>
+            <p>Para una base de datos 'empresa', configura los siguientes roles y privilegios:</p>
+            <ul>
+                <li>Rol 'rol_ventas': acceso de lectura a las tablas 'productos' y 'clientes', y permiso de escritura en 'ventas'</li>
+                <li>Rol 'rol_inventario': acceso completo a la tabla 'productos' y solo lectura en 'ventas'</li>
+            </ul>
+            <div class="dificultad">Dificultad: Intermedia</div>
+
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 3: Vistas Seguras</h3>
+            <p>Crea una vista llamada 'empleados_publicos' que muestre solo el nombre, departamento y años de servicio de los empleados, excluyendo información sensible como salarios. Asigna permisos de lectura a esta vista para el rol 'rol_publico'.</p>
+            <div class="dificultad">Dificultad: Intermedia</div>
+
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 4: Gestión de Permisos Específicos</h3>
+            <p>Configura los siguientes permisos para el usuario 'analista_datos':</p>
+            <ul>
+                <li>Permiso de lectura en todas las tablas de la base de datos 'ventas2023'</li>
+                <li>Permiso de actualización solo en la columna 'estado' de la tabla 'pedidos'</li>
+                <li>Sin permiso para eliminar registros en ninguna tabla</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 5: Roles Jerárquicos</h3>
+            <p>Implementa una estructura de roles jerárquica para un sistema de gestión escolar:</p>
+            <ul>
+                <li>Rol 'director': acceso completo a todas las tablas</li>
+                <li>Rol 'profesor': acceso a notas y asistencias de sus propias clases</li>
+                <li>Rol 'estudiante': solo lectura de sus propias notas</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 6: Auditoría de Accesos</h3>
+            <p>Configura un sistema de auditoría que:</p>
+            <ul>
+                <li>Registre todos los intentos de acceso fallidos</li>
+                <li>Guarde un log de todas las modificaciones en la tabla 'empleados'</li>
+                <li>Crea una consulta que muestre estas actividades</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 7: Gestión de Contraseñas</h3>
+            <p>Implementa una política de contraseñas que incluya:</p>
+            <ul>
+                <li>Cambio obligatorio cada 30 días</li>
+                <li>Mínimo 8 caracteres con combinación de letras y números</li>
+                <li>Bloqueo de cuenta tras 3 intentos fallidos</li>
+            </ul>
+            <div class="dificultad">Dificultad: Intermedia</div>
+  
+        </div>
+
+        <div class="ejercicio">
+            <h3>Ejercicio 8: Restricciones de Acceso Temporal</h3>
+            <p>Configura accesos temporales para usuarios de mantenimiento:</p>
+            <ul>
+                <li>Usuario que solo pueda conectarse en horario laboral (9:00-18:00)</li>
+                <li>Usuario con acceso completo pero solo durante el fin de semana</li>
+            </ul>
+            <div class="dificultad">Dificultad: Avanzada</div>
+ 
+    </div>
+
+    <script>
+        function toggleSolucion(id) {
+            const solucion = document.getElementById(id);
+            if (solucion.style.display === 'none' || solucion.style.display === '') {
+                solucion.style.display = 'block';
+            } else {
+                solucion.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
