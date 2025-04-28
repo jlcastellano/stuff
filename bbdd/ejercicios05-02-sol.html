@@ -163,7 +163,7 @@ SELECT
     nombre as descripcion,
     fecha_nacimiento as fecha
 FROM autores
-WHERE MONTH(fecha_nacimiento) = MONTH(DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH))
+WHERE MONTH(fecha_nacimiento) IN (7,8)
 UNION
 SELECT 
     'Libro' as tipo,
@@ -171,7 +171,7 @@ SELECT
     v.fecha_venta as fecha
 FROM libros l
 JOIN ventas v ON l.id = v.libro_id
-WHERE v.fecha_venta >= DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH);</div>
+WHERE v.fecha_venta BETWEEN 2023-07-01 AND 2023-08-31;</div>
             </div>
         </div>
 
