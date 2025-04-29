@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de VPNs</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <iframe src="../menu/sidebar.html" frameborder="0"></iframe>
+        </aside>
+
+        <main class="main-content">
+            <h1>Tipos de VPNs</h1>
+
+            <section id="introduccion">
+                <h2>Introducción</h2>
+                <div class="intro-content">
+                    <p>Las VPNs se pueden clasificar en diferentes tipos según su propósito y arquitectura. En este capítulo, analizaremos en detalle cada tipo, sus características específicas y escenarios de implementación más adecuados.</p>
+                    
+                    <div class="objetivos-aprendizaje">
+                        <h3>Objetivos de Aprendizaje</h3>
+                        <ul>
+                            <li>Comprender las diferencias entre los tipos principales de VPNs</li>
+                            <li>Identificar los casos de uso óptimos para cada tipo</li>
+                            <li>Aprender a seleccionar la solución VPN más apropiada</li>
+                            <li>Entender las consideraciones de implementación</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tipos-principales">
+                <h2>Clasificación de VPNs</h2>
+                <div class="tipos-vpn-grid">
+                    <div class="tipo-vpn">
+                        <h3>Por Método de Conexión</h3>
+                        <ul>
+                            <li>Acceso Remoto</li>
+                            <li>Sitio a Sitio</li>
+                            <li>Extranet VPN</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tipo-vpn">
+                        <h3>Por Nivel de Seguridad</h3>
+                        <ul>
+                            <li>Trusted VPN</li>
+                            <li>Secure VPN</li>
+                            <li>Hybrid VPN</li>
+                        </ul>
+                    </div>
+
+                    <div class="tipo-vpn">
+                        <h3>Por Protocolo</h3>
+                        <ul>
+                            <li>SSL/TLS VPN</li>
+                            <li>IPSec VPN</li>
+                            <li>PPTP VPN</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="acceso-remoto">
+                <h2>VPN de Acceso Remoto</h2>
+                <div style="float: right;">
+                    <img src="imagen.png" width="600px">
+                    <br>
+                    (En verde -> conexión sitio a sito | En rojo -> conexión de acceso remoto)
+                </div>                <div class="vpn-details">
+                    <div class="caracteristicas">
+                        <h3>Características Técnicas</h3>
+                        <ul>
+                            <li>
+                                <strong>Arquitectura Cliente-Servidor</strong>
+                                <p>El cliente inicia la conexión hacia el servidor VPN corporativo.</p>
+                            </li>
+                            <li>
+                                <strong>Autenticación Individual</strong>
+                                <p>Cada usuario requiere credenciales únicas para conectarse.</p>
+                            </li>
+                            <li>
+                                <strong>Asignación Dinámica de IP</strong>
+                                <p>Los clientes reciben direcciones IP del pool corporativo.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="implementacion">
+                        <h3>Consideraciones de Implementación</h3>
+                        <ul>
+                            <li>Gestión de certificados digitales</li>
+                            <li>Políticas de acceso por usuario</li>
+                            <li>Monitorización de conexiones</li>
+                            <li>Registro de actividades</li>
+                        </ul>
+                    </div>
+
+                    <div class="ejemplo-configuracion">
+                        <h3>Ejemplo de Configuración</h3>
+                        <div class="code-block">
+                            <pre>
+# Configuración básica de cliente VPN
+remote vpn.empresa.com
+port 1194
+proto udp
+dev tun
+auth-user-pass
+cipher AES-256-CBC
+verify-x509-name "VPN-Server" name</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sitio-sitio">
+                <h2>VPN Sitio a Sitio</h2>
+                <div style="float: right;">
+                    <img src="imagen.png" width="600px">
+                    <br>
+                    (En verde -> conexión sitio a sito | En rojo -> conexión de acceso remoto)
+                </div>                <div class="vpn-details">
+                    <div class="caracteristicas">
+                        <h3>Características Técnicas</h3>
+                        <ul>
+                            <li>
+                                <strong>Conexión Permanente</strong>
+                                <p>Enlace constante entre ubicaciones.</p>
+                            </li>
+                            <li>
+                                <strong>Enrutamiento Automático</strong>
+                                <p>Configuración de rutas estáticas o dinámicas entre redes.</p>
+                            </li>
+                            <li>
+                                <strong>Alta Disponibilidad</strong>
+                                <p>Mecanismos de failover y redundancia.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="diagrama-red">
+                        <h3>Diagrama de Implementación Típica</h3>
+                        <img src="../images/site-to-site.png" alt="Diagrama VPN Sitio a Sitio">
+                        <p class="diagrama-descripcion">Conexión entre dos oficinas mediante VPN sitio a sitio</p>
+                    </div>
+
+                    <div class="ejemplo-configuracion">
+                        <h3>Ejemplo de Configuración</h3>
+                        <div class="code-block">
+                            <pre>
+# Configuración de router VPN
+crypto isakmp policy 10
+ encryption aes 256
+ hash sha
+ authentication pre-share
+ group 2
+!
+crypto ipsec transform-set TS esp-aes 256 esp-sha-hmac
+ mode tunnel</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="casos-uso">
+                <h2>Casos de Uso Específicos</h2>
+                <div class="casos-grid">
+                    <div class="caso">
+                        <h3>Teletrabajo</h3>
+                        <ul>
+                            <li>Acceso a recursos corporativos</li>
+                            <li>Seguridad en conexiones domésticas</li>
+                            <li>Flexibilidad laboral</li>
+                        </ul>
+                    </div>
+
+                    <div class="caso">
+                        <h3>Conexión entre Sedes</h3>
+                        <ul>
+                            <li>Unificación de redes</li>
+                            <li>Compartición de recursos</li>
+                            <li>Centralización de servicios</li>
+                        </ul>
+                    </div>
+
+                    <div class="caso">
+                        <h3>Acceso de Proveedores</h3>
+                        <ul>
+                            <li>Acceso limitado a recursos</li>
+                            <li>Control de acceso granular</li>
+                            <li>Auditoría de actividades</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ejercicios">
+                <h2>Ejercicios Prácticos</h2>
+                <div class="ejercicios-container">
+                    <div class="ejercicio">
+                        <h3>Ejercicio 1: Análisis de Requisitos</h3>
+                        <p>Una empresa necesita implementar una solución VPN. Analiza el siguiente escenario:</p>
+                        <div class="escenario">
+                            <ul>
+                                <li>200 empleados en teletrabajo</li>
+                                <li>3 oficinas principales</li>
+                                <li>Necesidad de acceso a aplicaciones internas</li>
+                            </ul>
+                        </div>
+                        <button class="mostrar-solucion">Ver Solución Recomendada</button>
+                        <div class="solucion" style="display: none;">
+                            <p>Solución híbrida:</p>
+                            <ul>
+                                <li>VPN de acceso remoto para teletrabajadores</li>
+                                <li>VPN sitio a sitio entre oficinas principales</li>
+                                <li>Implementación de alta disponibilidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mejores-practicas">
+                <h2>Mejores Prácticas</h2>
+                <div class="practicas">
+                    <ul>
+                        <li>
+                            <strong>Planificación</strong>
+                            <p>Realizar un análisis detallado de necesidades antes de la implementación.</p>
+                        </li>
+                        <li>
+                            <strong>Seguridad</strong>
+                            <p>Implementar múltiples capas de seguridad y autenticación.</p>
+                        </li>
+                        <li>
+                            <strong>Monitorización</strong>
+                            <p>Establecer sistemas de monitoreo y alerta temprana.</p>
+                        </li>
+                        <li>
+                            <strong>Documentación</strong>
+                            <p>Mantener documentación actualizada de configuraciones y políticas.</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <nav class="chapter-navigation">
+                <a href="capitulo01.html" class="prev-chapter">← Conceptos Básicos</a>
+                <a href="capitulo03.html" class="next-chapter">Protocolos VPN →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script src="../js/scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolos VPN</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <iframe src="../menu/sidebar.html" frameborder="0"></iframe>
+        </aside>
+
+        <main class="main-content">
+            <h1>Protocolos VPN</h1>
+
+            <section id="introduccion">
+                <h2>Introducción</h2>
+                <p>Los protocolos VPN son las reglas y estándares que determinan cómo se transmiten los datos de forma segura a través de una conexión VPN. En este capítulo, analizaremos los principales protocolos, sus características y casos de uso más apropiados.</p>
+            </section>
+
+            <section id="pptp">
+                <h2>PPTP (Point-to-Point Tunneling Protocol)</h2>
+                <div class="protocolo-info">
+                    <h3>Características</h3>
+                    <ul>
+                        <li>Uno de los primeros protocolos VPN</li>
+                        <li>Fácil de configurar</li>
+                        <li>Compatible con la mayoría de sistemas</li>
+                        <li>Velocidades de conexión rápidas</li>
+                    </ul>
+                    <div class="advertencia">
+                        <p>⚠️ Considerado inseguro para estándares actuales</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="l2tp">
+                <h2>L2TP/IPsec</h2>
+                <div class="protocolo-info">
+                    <h3>Características</h3>
+                    <ul>
+                        <li>Combina L2TP para el túnel con IPsec para el cifrado</li>
+                        <li>Mayor seguridad que PPTP</li>
+                        <li>Ampliamente soportado</li>
+                        <li>Doble encapsulamiento</li>
+                    </ul>
+                    <div class="ventajas-desventajas">
+                        <div class="ventajas">
+                            <h4>Ventajas</h4>
+                            <ul>
+                                <li>Alta seguridad</li>
+                                <li>Buen soporte</li>
+                            </ul>
+                        </div>
+                        <div class="desventajas">
+                            <h4>Desventajas</h4>
+                            <ul>
+                                <li>Puede ser más lento</li>
+                                <li>Requiere más recursos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="openvpn">
+                <h2>OpenVPN</h2>
+                <div class="protocolo-info">
+                    <h3>Características</h3>
+                    <ul>
+                        <li>Protocolo de código abierto</li>
+                        <li>Altamente configurable</li>
+                        <li>Utiliza SSL/TLS para cifrado</li>
+                        <li>Considerado muy seguro</li>
+                    </ul>
+                    <div class="configuracion-ejemplo">
+                        <h4>Ejemplo de Configuración Básica</h4>
+                        <div class="code-block">
+                            <pre>
+port 1194
+proto udp
+dev tun
+ca ca.crt
+cert server.crt
+key server.key
+dh dh2048.pem
+server 10.8.0.0 255.255.255.0
+</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sstp">
+                <h2>SSTP (Secure Socket Tunneling Protocol)</h2>
+                <div class="protocolo-info">
+                    <h3>Características</h3>
+                    <ul>
+                        <li>Desarrollado por Microsoft</li>
+                        <li>Usa SSL 3.0</li>
+                        <li>Buena integración con Windows</li>
+                        <li>Puede atravesar firewalls fácilmente</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="ikev2">
+                <h2>IKEv2/IPsec</h2>
+                <div class="protocolo-info">
+                    <h3>Características</h3>
+                    <ul>
+                        <li>Excelente para conexiones móviles</li>
+                        <li>Reconexión rápida</li>
+                        <li>Alta seguridad</li>
+                        <li>Buen rendimiento</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="comparativa-protocolos">
+                <h2>Comparativa de Protocolos</h2>
+                <div class="tabla-comparativa">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Seguridad</th>
+                                <th>Velocidad</th>
+                                <th>Estabilidad</th>
+                                <th>Uso Recomendado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PPTP</td>
+                                <td>Baja</td>
+                                <td>Alta</td>
+                                <td>Media</td>
+                                <td>No recomendado</td>
+                            </tr>
+                            <tr>
+                                <td>L2TP/IPsec</td>
+                                <td>Alta</td>
+                                <td>Media</td>
+                                <td>Alta</td>
+                                <td>Uso general</td>
+                            </tr>
+                            <tr>
+                                <td>OpenVPN</td>
+                                <td>Muy Alta</td>
+                                <td>Alta</td>
+                                <td>Muy Alta</td>
+                                <td>Mejor opción general</td>
+                            </tr>
+                            <tr>
+                                <td>SSTP</td>
+                                <td>Alta</td>
+                                <td>Alta</td>
+                                <td>Alta</td>
+                                <td>Usuarios Windows</td>
+                            </tr>
+                            <tr>
+                                <td>IKEv2/IPsec</td>
+                                <td>Muy Alta</td>
+                                <td>Muy Alta</td>
+                                <td>Muy Alta</td>
+                                <td>Dispositivos móviles</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="ejercicio-practico">
+                <h2>Ejercicio Práctico</h2>
+                <div class="ejercicio">
+                    <h3>Selección de Protocolo VPN</h3>
+                    <p>Analiza los siguientes escenarios y selecciona el protocolo más adecuado:</p>
+                    
+                    <div class="caso">
+                        <p><strong>Escenario 1:</strong> Empresa que necesita máxima seguridad y tiene usuarios en múltiples plataformas.</p>
+                        <button class="mostrar-solucion">Mostrar Solución</button>
+                        <div class="solucion" style="display: none;">
+                            <p>OpenVPN - Ofrece la mejor combinación de seguridad, compatibilidad y flexibilidad.</p>
+                        </div>
+                    </div>
+
+                    <div class="caso">
+                        <p><strong>Escenario 2:</strong> Usuarios que necesitan conectarse frecuentemente desde dispositivos móviles.</p>
+                        <button class="mostrar-solucion">Mostrar Solución</button>
+                        <div class="solucion" style="display: none;">
+                            <p>IKEv2/IPsec - Mejor manejo de cambios de red y reconexiones.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="chapter-navigation">
+                <a href="capitulo02.html" class="prev-chapter">← Tipos de VPNs</a>
+                <a href="capitulo04.html" class="next-chapter">Importancia y Seguridad →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script src="../js/scripts.js"></script>
+</body>
+</html> 

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento y Monitorización de VPNs</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <iframe src="../menu/sidebar.html" frameborder="0"></iframe>
+        </aside>
+
+        <main class="main-content">
+            <h1>Mantenimiento y Monitorización de VPNs</h1>
+
+            <section id="introduccion">
+                <h2>Introducción</h2>
+                <div class="intro-content">
+                    <p>El mantenimiento y monitorización efectivos de una VPN son fundamentales para garantizar la seguridad, rendimiento y disponibilidad continua del servicio. Este capítulo profundiza en las estrategias y herramientas necesarias para una gestión profesional de infraestructuras VPN.</p>
+                    
+                    <div class="objetivos-aprendizaje">
+                        <h3>Objetivos de Mantenimiento</h3>
+                        <ul>
+                            <li>Asegurar la disponibilidad continua del servicio VPN</li>
+                            <li>Mantener niveles óptimos de seguridad</li>
+                            <li>Optimizar el rendimiento del sistema</li>
+                            <li>Prevenir y resolver incidencias proactivamente</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="estrategias-mantenimiento">
+                <h2>Estrategias de Mantenimiento Avanzado</h2>
+                <div class="estrategias-container">
+                    <div class="estrategia">
+                        <h3>Gestión de Actualizaciones</h3>
+                        <div class="proceso-actualizacion">
+                            <h4>Procedimiento de Actualización Segura</h4>
+                            <ol>
+                                <li>
+                                    <strong>Evaluación de Actualizaciones</strong>
+                                    <ul>
+                                        <li>Análisis de notas de versión</li>
+                                        <li>Evaluación de impacto</li>
+                                        <li>Pruebas en entorno de desarrollo</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Planificación</strong>
+                                    <ul>
+                                        <li>Ventana de mantenimiento</li>
+                                        <li>Plan de rollback</li>
+                                        <li>Comunicación a usuarios</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Implementación</strong>
+                                    <div class="code-block">
+                                        <pre>
+# Script de actualización segura
+#!/bin/bash
+# Backup de configuración
+cp /etc/openvpn/server.conf /etc/openvpn/backup/
+# Actualización
+apt update && apt upgrade openvpn -y
+# Verificación
+systemctl status openvpn
+# Test de conectividad
+ping -c 4 vpn-endpoint</pre>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="estrategia">
+                        <h3>Gestión Avanzada de Certificados</h3>
+                        <div class="certificados-management">
+                            <h4>Sistema de Rotación de Certificados</h4>
+                            <div class="code-block">
+                                <pre>
+# Script de renovación automática
+#!/bin/bash
+# Verificar certificados próximos a expirar
+openssl x509 -enddate -noout -in /etc/openvpn/server.crt
+# Generar nuevos certificados
+./easy-rsa/easyrsa build-server-full newserver nopass
+# Rotación de certificados
+mv /etc/openvpn/server.crt /etc/openvpn/archive/
+cp /etc/easy-rsa/pki/issued/newserver.crt /etc/openvpn/server.crt</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="monitorizacion-avanzada">
+                <h2>Sistema de Monitorización Integral</h2>
+                <div class="monitorizacion-container">
+                    <div class="metricas-avanzadas">
+                        <h3>Métricas Críticas</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Métrica</th>
+                                    <th>Umbral</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Rendimiento</td>
+                                    <td>Latencia</td>
+                                    <td>>150ms</td>
+                                    <td>Optimización de ruta</td>
+                                </tr>
+                                <tr>
+                                    <td>Seguridad</td>
+                                    <td>Intentos fallidos</td>
+                                    <td>>5 en 5min</td>
+                                    <td>Bloqueo temporal IP</td>
+                                </tr>
+                                <tr>
+                                    <td>Recursos</td>
+                                    <td>CPU Usage</td>
+                                    <td>>80%</td>
+                                    <td>Escalado de recursos</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="sistema-alertas">
+                        <h3>Configuración Avanzada de Alertas</h3>
+                        <div class="alertas-ejemplo">
+                            <h4>Integración con Sistemas de Notificación</h4>
+                            <div class="code-block">
+                                <pre>
+# Configuración Prometheus Alert Manager
+groups:
+- name: vpn_alerts
+  rules:
+  - alert: VPNHighLatency
+    expr: vpn_latency_seconds > 0.15
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Alta latencia en VPN"
+      description: "La latencia ha superado 150ms por 5 minutos"</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="optimizacion-avanzada">
+                <h2>Optimización Avanzada de Rendimiento</h2>
+                <div class="optimizacion-container">
+                    <div class="tuning-parametros">
+                        <h3>Ajuste Fino de Parámetros</h3>
+                        <div class="code-block">
+                            <pre>
+# Optimización avanzada de kernel
+# Ajustes TCP
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_timestamps = 1
+net.ipv4.tcp_sack = 1
+net.ipv4.tcp_fin_timeout = 15
+net.ipv4.tcp_keepalive_time = 300
+net.ipv4.tcp_keepalive_probes = 5
+net.ipv4.tcp_keepalive_intvl = 15
+
+# Ajustes de memoria
+net.core.rmem_default = 8388608
+net.core.rmem_max = 16777216
+net.core.wmem_default = 8388608
+net.core.wmem_max = 16777216
+
+# Ajustes específicos VPN
+net.ipv4.ip_forward = 1
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recuperacion-desastres">
+                <h2>Plan de Recuperación ante Desastres</h2>
+                <div class="disaster-recovery">
+                    <h3>Procedimientos de Recuperación</h3>
+                    <div class="procedimiento">
+                        <h4>Failover Automático</h4>
+                        <div class="code-block">
+                            <pre>
+# Configuración de keepalived para alta disponibilidad
+vrrp_instance VPN_HA {
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 100
+    authentication {
+        auth_type PASS
+        auth_pass vpn_secret
+    }
+    virtual_ipaddress {
+        192.168.1.100
+    }
+    notify_master "/etc/keepalived/master.sh"
+    notify_backup "/etc/keepalived/backup.sh"
+    notify_fault "/etc/keepalived/fault.sh"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="chapter-navigation">
+                <a href="capitulo05.html" class="prev-chapter">← Implementación</a>
+                <a href="capitulo07.html" class="next-chapter">Casos de Uso →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script src="../js/scripts.js"></script>
+</body>
+</html>

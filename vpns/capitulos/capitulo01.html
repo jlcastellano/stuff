@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conceptos Básicos de VPNs</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <iframe src="../menu/sidebar.html" frameborder="0"></iframe>
+        </aside>
+
+        <main class="main-content">
+            <h1>Conceptos Básicos de VPNs</h1>
+
+            <section id="introduccion">
+                <h2>Introducción</h2>
+                <p>Las Redes Privadas Virtuales (VPNs) se han convertido en una herramienta fundamental en la era digital actual. En este capítulo, exploraremos en profundidad los conceptos fundamentales, su importancia en la seguridad moderna y cómo esta tecnología está transformando la manera en que nos conectamos de forma segura a través de Internet.</p>
+                
+                <div class="objetivos-aprendizaje">
+                    <h3>Objetivos de Aprendizaje</h3>
+                    <ul>
+                        <li>Comprender los fundamentos técnicos de las VPNs</li>
+                        <li>Identificar los componentes clave de una infraestructura VPN</li>
+                        <li>Entender los procesos de encriptación y túneles seguros</li>
+                        <li>Reconocer las ventajas y limitaciones de las VPNs</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="que-es">
+                <h2>¿Qué es una VPN?</h2>
+                <div class="concepto-principal">
+                    <p>Una VPN es una tecnología de red que crea una conexión cifrada y segura sobre una red menos segura, típicamente Internet. Esta conexión se conoce como "túnel", y permite que los datos viajen de manera protegida entre dos puntos.</p>
+                    
+                    <div class="beneficios-vpn">
+                        <h3>Beneficios Principales</h3>
+                        <ul>
+                            <li>
+                                <strong>Seguridad Mejorada:</strong>
+                                <p>Protección contra interceptación de datos y ataques maliciosos mediante cifrado avanzado.</p>
+                            </li>
+                            <li>
+                                <strong>Privacidad:</strong>
+                                <p>Ocultamiento de la dirección IP real y datos de navegación del usuario.</p>
+                            </li>
+                            <li>
+                                <strong>Acceso Remoto:</strong>
+                                <p>Conexión segura a recursos corporativos desde cualquier ubicación.</p>
+                            </li>
+                            <li>
+                                <strong>Evasión de Restricciones Geográficas:</strong>
+                                <p>Capacidad para acceder a contenido bloqueado por región.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="componentes">
+                <h2>Componentes de una VPN</h2>
+                <div class="componentes-principales">
+                    <h3>Elementos Fundamentales</h3>
+                    <div class="grid-componentes">
+                        <div class="componente">
+                            <h4>Cliente VPN</h4>
+                            <p>Software que se instala en el dispositivo del usuario final para establecer la conexión VPN.</p>
+                            <ul>
+                                <li>Interfaz de usuario</li>
+                                <li>Configuraciones de conexión</li>
+                                <li>Gestión de credenciales</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="componente">
+                            <h4>Servidor VPN</h4>
+                            <p>Punto de terminación que acepta conexiones de clientes VPN y gestiona el tráfico.</p>
+                            <ul>
+                                <li>Autenticación de usuarios</li>
+                                <li>Gestión de túneles</li>
+                                <li>Control de acceso</li>
+                            </ul>
+                        </div>
+
+                        <div class="componente">
+                            <h4>Protocolos VPN</h4>
+                            <p>Conjunto de reglas que determinan cómo se establece y mantiene la conexión segura.</p>
+                            <ul>
+                                <li>OpenVPN</li>
+                                <li>IPSec</li>
+                                <li>L2TP/IPSec</li>
+                                <li>SSTP</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="funcionamiento-detallado">
+                <h2>Funcionamiento Detallado</h2>
+                <div class="proceso-vpn">
+                    <h3>Proceso Paso a Paso</h3>
+                    <ol class="pasos-detallados">
+                        <li>
+                            <strong>Inicio de Conexión</strong>
+                            <div class="paso-detalle">
+                                <p>El cliente VPN inicia una solicitud de conexión al servidor VPN:</p>
+                                <ul>
+                                    <li>Verificación inicial de credenciales</li>
+                                    <li>Comprobación de certificados</li>
+                                    <li>Negociación de parámetros de conexión</li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <li>
+                            <strong>Autenticación</strong>
+                            <div class="paso-detalle">
+                                <p>Proceso de verificación bidireccional:</p>
+                                <ul>
+                                    <li>Verificación de identidad del cliente</li>
+                                    <li>Validación del servidor</li>
+                                    <li>Intercambio de claves de sesión</li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <strong>Establecimiento del Túnel</strong>
+                            <div class="paso-detalle">
+                                <p>Creación del canal seguro de comunicación:</p>
+                                <ul>
+                                    <li>Negociación de algoritmos de cifrado</li>
+                                    <li>Establecimiento de parámetros de túnel</li>
+                                    <li>Configuración de rutas virtuales</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="ejercicios-practicos">
+                <h2>Ejercicios Prácticos</h2>
+                <div class="ejercicios">
+                    <div class="ejercicio">
+                        <h3>Ejercicio 1: Análisis de Componentes</h3>
+                        <div class="ejercicio-contenido">
+                            <p>Identifica los componentes VPN en un escenario empresarial:</p>
+                            <div class="escenario">
+                                <p>Una empresa con oficinas en Madrid y Barcelona necesita compartir recursos de forma segura.</p>
+                                <button class="mostrar-solucion">Mostrar Solución</button>
+                                <div class="solucion" style="display: none;">
+                                    <ul>
+                                        <li>Servidor VPN: Ubicado en la oficina principal (Madrid)</li>
+                                        <li>Clientes VPN: Equipos en la oficina de Barcelona</li>
+                                        <li>Túnel: Conexión cifrada entre ambas oficinas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ejercicio">
+                        <h3>Ejercicio 2: Configuración Básica</h3>
+                        <div class="ejercicio-contenido">
+                            <p>Identifica los parámetros necesarios para configurar una conexión VPN:</p>
+                            <button class="mostrar-solucion">Mostrar Solución</button>
+                            <div class="solucion" style="display: none;">
+                                <ul>
+                                    <li>Dirección del servidor VPN</li>
+                                    <li>Protocolo de conexión</li>
+                                    <li>Credenciales de usuario</li>
+                                    <li>Certificados de seguridad</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mejores-practicas">
+                <h2>Mejores Prácticas</h2>
+                <div class="practicas-recomendadas">
+                    <ul>
+                        <li>
+                            <strong>Seguridad</strong>
+                            <p>Utilizar siempre protocolos de cifrado actualizados y fuertes.</p>
+                        </li>
+                        <li>
+                            <strong>Autenticación</strong>
+                            <p>Implementar autenticación de doble factor cuando sea posible.</p>
+                        </li>
+                        <li>
+                            <strong>Monitorización</strong>
+                            <p>Mantener registros de conexiones y actividad para auditoría.</p>
+                        </li>
+                        <li>
+                            <strong>Actualizaciones</strong>
+                            <p>Mantener el software VPN actualizado con los últimos parches de seguridad.</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <nav class="chapter-navigation">
+                <a href="../index.html" class="prev-chapter">← Volver al Inicio</a>
+                <a href="capitulo02.html" class="next-chapter">Siguiente: Tipos de VPNs →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script src="../js/scripts.js"></script>
+</body>
+</html>

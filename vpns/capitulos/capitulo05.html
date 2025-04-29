@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementación de VPNs</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <iframe src="../menu/sidebar.html" frameborder="0"></iframe>
+        </aside>
+
+        <main class="main-content">
+            <h1>Implementación de VPNs</h1>
+
+            <section id="introduccion">
+                <h2>Introducción</h2>
+                <div class="intro-content">
+                    <p>La implementación exitosa de una VPN requiere una planificación meticulosa y un entendimiento profundo de los componentes involucrados. Este capítulo proporciona una guía detallada para asegurar una implementación efectiva y segura.</p>
+                    
+                    <div class="objetivos-implementacion">
+                        <h3>Objetivos de Implementación</h3>
+                        <ul>
+                            <li>Establecer una infraestructura VPN robusta y segura</li>
+                            <li>Garantizar alta disponibilidad y rendimiento</li>
+                            <li>Implementar políticas de seguridad efectivas</li>
+                            <li>Facilitar la gestión y monitorización</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="planificacion-detallada">
+                <h2>Planificación Estratégica</h2>
+                <div class="planificacion-container">
+                    <div class="evaluacion-necesidades">
+                        <h3>Análisis de Requerimientos</h3>
+                        <div class="requisitos-tabla">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Aspecto</th>
+                                        <th>Consideraciones</th>
+                                        <th>Métricas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Usuarios</td>
+                                        <td>
+                                            <ul>
+                                                <li>Número total</li>
+                                                <li>Ubicaciones</li>
+                                                <li>Roles</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Conexiones simultáneas</li>
+                                                <li>Picos de uso</li>
+                                                <li>Crecimiento proyectado</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Recursos</td>
+                                        <td>
+                                            <ul>
+                                                <li>Aplicaciones</li>
+                                                <li>Servicios</li>
+                                                <li>Datos</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Ancho de banda</li>
+                                                <li>Latencia máxima</li>
+                                                <li>Disponibilidad requerida</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="arquitectura-vpn">
+                        <h3>Diseño de Arquitectura</h3>
+                        <div class="componentes">
+                            <h4>Componentes Principales</h4>
+                            <ul>
+                                <li>
+                                    <strong>Servidores VPN</strong>
+                                    <ul>
+                                        <li>Servidor principal</li>
+                                        <li>Servidor de respaldo</li>
+                                        <li>Balanceadores de carga</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Infraestructura de Red</strong>
+                                    <ul>
+                                        <li>Firewalls</li>
+                                        <li>Routers</li>
+                                        <li>Switches</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Sistemas de Autenticación</strong>
+                                    <ul>
+                                        <li>Servidor RADIUS</li>
+                                        <li>Directorio Activo</li>
+                                        <li>Sistema 2FA</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="implementacion-detallada">
+                <h2>Proceso de Implementación Detallado</h2>
+                
+                <div class="fase-implementacion">
+                    <h3>Fase 1: Preparación del Entorno</h3>
+                    <div class="preparacion-pasos">
+                        <div class="paso-detallado">
+                            <h4>Configuración del Servidor</h4>
+                            <div class="code-block">
+                                <pre>
+# Actualización del sistema
+sudo apt update && sudo apt upgrade -y
+
+# Instalación de dependencias
+sudo apt install -y build-essential openssl libssl-dev net-tools
+
+# Configuración de red
+sudo nano /etc/sysctl.conf
+net.ipv4.ip_forward=1
+
+# Aplicar cambios
+sudo sysctl -p</pre>
+                            </div>
+                        </div>
+
+                        <div class="paso-detallado">
+                            <h4>Configuración de Firewall</h4>
+                            <div class="code-block">
+                                <pre>
+# Reglas iptables básicas
+sudo iptables -A INPUT -i eth0 -m state --state NEW -p udp --dport 1194 -j ACCEPT
+sudo iptables -A INPUT -i tun+ -j ACCEPT
+sudo iptables -A FORWARD -i tun+ -j ACCEPT
+sudo iptables -A FORWARD -i tun+ -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i eth0 -o tun+ -m state --state RELATED,ESTABLISHED -j ACCEPT</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fase-implementacion">
+                    <h3>Fase 2: Implementación de Alta Disponibilidad</h3>
+                    <div class="ha-configuracion">
+                        <h4>Configuración de Cluster</h4>
+                        <div class="code-block">
+                            <pre>
+# Configuración de keepalived
+vrrp_instance VI_1 {
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 100
+    authentication {
+        auth_type PASS
+        auth_pass secreto
+    }
+    virtual_ipaddress {
+        192.168.1.100
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="monitorizacion-avanzada">
+                <h2>Monitorización y Mantenimiento</h2>
+                <div class="herramientas-monitoreo">
+                    <h3>Herramientas de Monitorización</h3>
+                    <div class="herramienta">
+                        <h4>Nagios</h4>
+                        <div class="config-ejemplo">
+                            <pre>
+define service {
+    use                 generic-service
+    host_name           vpn-server
+    service_description VPN Status
+    check_command       check_vpn
+    check_interval      5
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="herramienta">
+                        <h4>Grafana Dashboard</h4>
+                        <ul>
+                            <li>Métricas de rendimiento</li>
+                            <li>Estadísticas de conexión</li>
+                            <li>Uso de recursos</li>
+                            <li>Alertas personalizadas</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="troubleshooting-avanzado">
+                <h2>Solución Avanzada de Problemas</h2>
+                <div class="problemas-comunes">
+                    <h3>Diagnóstico y Solución</h3>
+                    <div class="problema-detallado">
+                        <h4>Problema: Pérdida de Conexión Intermitente</h4>
+                        <div class="diagnostico">
+                            <pre>
+# Verificar logs
+tail -f /var/log/openvpn/openvpn.log
+
+# Comprobar MTU
+ping -f -l 1500 vpn-server
+
+# Analizar conexiones
+netstat -tupan | grep openvpn</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="chapter-navigation">
+                <a href="capitulo04.html" class="prev-chapter">← Importancia y Seguridad</a>
+                <a href="capitulo06.html" class="next-chapter">Mantenimiento y Monitorización →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script src="../js/scripts.js"></script>
+</body>
+</html>
