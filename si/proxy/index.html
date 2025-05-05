@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #f5f6fa;
+            --nav-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-color);
+            height: var(--nav-height);
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav ul li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: calc(var(--nav-height) + 20px) auto 40px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            nav {
+                height: auto;
+            }
+
+            main {
+                margin-top: 200px;
+                padding: 15px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .exercise-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .solution {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .show-solution-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background 0.3s ease;
+        }
+
+        .show-solution-btn:hover {
+            background: var(--primary-color);
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .basic {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .intermediate {
+            background: #f1c40f;
+            color: black;
+        }
+
+        .advanced {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="proxy.html">Proxy</a></li>
+            <li><a href="proxy-types.html">Tipos de Proxy</a></li>
+            <li><a href="proxy-config.html">Configuración</a></li>
+            <li><a href="proxy-security.html">Seguridad</a></li>
+            <li><a href="exercises.html">Ejercicios</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Servidores Proxy: Configuración y Gestión</h1>
+            <p>Guía completa sobre implementación, configuración y optimización de servidores proxy en entornos empresariales</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2>Fundamentos de Proxy</h2>
+                <p>Comprende los conceptos básicos de los servidores proxy, su funcionamiento y aplicaciones principales en la seguridad de redes.</p>
+                <a href="proxy.html" class="btn">Ver más</a>
+            </div>
+
+            <div class="card">
+                <h2>Tipos de Proxy</h2>
+                <p>Explora las diferentes categorías de servidores proxy: forward proxy, reverse proxy, transparent proxy, y más. Aprende sus características y casos de uso.</p>
+                <a href="proxy-types.html" class="btn">Ver más</a>
+            </div>
+
+            <div class="card">
+                <h2>Configuración de Proxy</h2>
+                <p>Guía paso a paso para configurar diferentes tipos de servidores proxy, incluyendo Squid, Nginx como proxy reverso, y configuraciones avanzadas.</p>
+                <a href="proxy-config.html" class="btn">Ver más</a>
+            </div>
+
+            <div class="card">
+                <h2>Seguridad en Proxy</h2>
+                <p>Aprende las mejores prácticas de seguridad, autenticación, filtrado de contenido y monitorización de servidores proxy.</p>
+                <a href="proxy-security.html" class="btn">Ver más</a>
+            </div>
+
+            <div class="card">
+                <h2>Proxy Avanzado</h2>
+                <p>Técnicas avanzadas como balanceo de carga, caché distribuido, SSL/TLS termination y optimización de rendimiento.</p>
+                <a href="proxy-advanced.html" class="btn">Ver más</a>
+            </div>
+
+            <div class="card">
+                <h2>Ejercicios Prácticos</h2>
+                <p>Pon a prueba tus conocimientos con ejercicios prácticos de configuración y resolución de problemas en servidores proxy.</p>
+                <a href="exercises.html" class="btn">Ver más</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Servidores Proxy: Configuración y Gestión Avanzada</p>
+    </footer>
+</body>
+</html>

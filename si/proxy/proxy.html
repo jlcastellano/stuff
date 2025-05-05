@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidor Proxy - Seguridad en Redes</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #f5f6fa;
+            --nav-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-color);
+            height: var(--nav-height);
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav ul li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: calc(var(--nav-height) + 20px) auto 40px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            nav {
+                height: auto;
+            }
+
+            main {
+                margin-top: 200px;
+                padding: 15px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+        }
+
+        .code-block .comment {
+            color: #6c757d;
+        }
+
+        .code-block .keyword {
+            color: #00b894;
+        }
+
+        .code-block .string {
+            color: #ffeaa7;
+        }
+
+        .code-block .number {
+            color: #fd79a8;
+        }
+
+        .configuration-steps {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .configuration-steps ol {
+            margin-left: 20px;
+        }
+
+        .configuration-steps li {
+            margin: 10px 0;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            color: #004085;
+        }
+
+        .command-example {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid var(--secondary-color);
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="proxy.html">Proxy</a></li>
+            <li><a href="proxy-types.html">Tipos de Proxy</a></li>
+            <li><a href="proxy-config.html">Configuración</a></li>
+            <li><a href="proxy-security.html">Seguridad</a></li>
+            <li><a href="exercises.html">Ejercicios</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Servidor Proxy</h1>
+            <p>Configuración y gestión de servidores proxy para optimización y seguridad de red</p>
+        </div>
+
+        <section class="content-section">
+            <h2>¿Qué es un Servidor Proxy?</h2>
+            <div class="info-box">
+                <p>Un servidor proxy actúa como intermediario entre los usuarios de una red local y la Internet, permitiendo:</p>
+                <ul>
+                    <li>Control de acceso a contenidos</li>
+                    <li>Almacenamiento en caché</li>
+                    <li>Anonimización de conexiones</li>
+                    <li>Balanceo de carga</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Instalación de Squid Proxy</h2>
+            <div class="configuration-steps">
+                <h3>Pasos de Instalación en Ubuntu/Debian</h3>
+                <ol>
+                    <li>Actualizar repositorios:
+                        <div class="command-example">sudo apt update</div>
+                    </li>
+                    <li>Instalar Squid:
+                        <div class="command-example">sudo apt install squid</div>
+                    </li>
+                    <li>Verificar estado:
+                        <div class="command-example">sudo systemctl status squid</div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="code-block"><pre>
+                <span class="comment"># Configuración básica de Squid (/etc/squid/squid.conf)</span>
+                
+http_port 3128
+
+<span class="comment"># ACL para red local</span>
+acl localnet src 192.168.1.0/24
+
+<span class="comment"># ACL para sitios permitidos</span>
+acl whitelist dstdomain "/etc/squid/whitelist.txt"
+
+<span class="comment"># ACL para sitios prohibidos</span>
+acl blacklist dstdomain "/etc/squid/blacklist.txt"
+
+<span class="comment"># Reglas de acceso</span>
+http_access deny blacklist
+http_access allow localnet whitelist
+http_access deny all
+</pre> </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Configuración de Caché</h2>
+            <div class="code-block"><pre>
+<span class="comment"># Configuración de caché en Squid</span>
+cache_dir ufs /var/spool/squid 10000 16 256
+maximum_object_size 100 MB
+cache_mem 512 MB
+
+<span class="comment"># Políticas de caché</span>
+refresh_pattern ^ftp:           1440    20%     10080
+refresh_pattern ^gopher:        1440    0%      1440
+refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
+refresh_pattern .               0       20%     4320
+</pre></div>
+
+            <div class="alert alert-info">
+                <h4>Nota sobre Caché:</h4>
+                <p>La configuración de caché debe ajustarse según los recursos del servidor y el tráfico esperado.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Autenticación de Usuarios</h2>
+            <div class="code-block">
+<span class="comment"># Configuración de autenticación básica</span>
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+
+<span class="comment"># ACL para usuarios autenticados</span>
+acl authenticated proxy_auth REQUIRED
+
+<span class="comment"># Regla de acceso para usuarios autenticados</span>
+http_access allow authenticated
+            </div>
+
+            <div class="configuration-steps">
+                <h3>Crear usuario para autenticación:</h3>
+                <div class="command-example">sudo htpasswd -c /etc/squid/passwd usuario1</div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Configuración de Logs</h2>
+            <div class="code-block"><pre>
+<span class="comment"># Configuración de logs</span>
+access_log /var/log/squid/access.log squid
+cache_log /var/log/squid/cache.log
+cache_store_log /var/log/squid/store.log
+
+<span class="comment"># Formato personalizado de logs</span>
+logformat combined %>a %[ui %[un [%tl] "%rm %ru HTTP/%rv" %>Hs %<st "%{Referer}>h" "%{User-Agent}>h"
+</pre></div>
+        </section>
+
+        <section class="content-section">
+            <h2>Configuración de Cliente</h2>
+            <div class="configuration-steps">
+                <h3>Windows:</h3>
+                <ol>
+                    <li>Abrir Configuración de Red</li>
+                    <li>Configuración de Proxy Manual:
+                        <ul>
+                            <li>Dirección: IP_DEL_SERVIDOR</li>
+                            <li>Puerto: 3128</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Linux (Terminal):</h3>
+                <div class="code-block"><pre>
+export http_proxy="http://IP_DEL_SERVIDOR:3128"
+export https_proxy="http://IP_DEL_SERVIDOR:3128"
+</pre></div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Monitorización y Mantenimiento</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>Comandos útiles</h3>
+                    <div class="command-example">
+# Verificar sintaxis de configuración
+squid -k parse
+
+# Recargar configuración
+squid -k reconfigure
+
+# Rotar logs
+squid -k rotate
+
+# Limpiar caché
+squid -k shutdown
+rm -rf /var/spool/squid/*
+squid -z
+service squid start
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>Recomendaciones de Seguridad:</h4>
+                <ul>
+                    <li>Mantener Squid actualizado</li>
+                    <li>Revisar logs regularmente</li>
+                    <li>Implementar límites de ancho de banda</li>
+                    <li>Configurar correctamente los permisos de archivos</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Servidores Proxy: Configuración y Gestión Avanzada<</p>
+    </footer>
+</body>
+</html>

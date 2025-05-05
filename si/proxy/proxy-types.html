@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Proxy - Seguridad en Redes</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #f5f6fa;
+            --nav-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-color);
+            height: var(--nav-height);
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav ul li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: calc(var(--nav-height) + 20px) auto 40px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            nav {
+                height: auto;
+            }
+
+            main {
+                margin-top: 200px;
+                padding: 15px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .proxy-type-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .comparison-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        .comparison-matrix th,
+        .comparison-matrix td {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        .comparison-matrix th {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .comparison-matrix tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .benefit {
+            color: #27ae60;
+        }
+
+        .drawback {
+            color: #c0392b;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .use-case {
+            background: #e8f4fc;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .implementation-note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="proxy.html">Proxy</a></li>
+            <li><a href="proxy-types.html">Tipos de Proxy</a></li>
+            <li><a href="proxy-config.html">Configuración</a></li>
+            <li><a href="proxy-security.html">Seguridad</a></li>
+            <li><a href="exercises.html">Ejercicios</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Tipos de Proxy</h1>
+            <p>Análisis completo de los diferentes tipos de servidores proxy y sus aplicaciones</p>
+        </div>
+
+        <section class="content-section">
+            <h2>Clasificación por Función</h2>
+
+            <div class="proxy-type-card">
+                <h3>1. Proxy Forward (Proxy Directo)</h3>
+                <p>Actúa como intermediario para las solicitudes de clientes hacia Internet.</p>
+                
+                <div class="diagram">
+                    <pre>
+Cliente -> [Proxy Forward] -> Internet
+                    </pre>
+                </div>
+
+                <h4>Características:</h4>
+                <ul>
+                    <li>Caché de contenido web</li>
+                    <li>Filtrado de contenido</li>
+                    <li>Control de acceso</li>
+                    <li>Registro de actividad</li>
+                </ul>
+
+                <div class="use-case">
+                    <h4>Caso de Uso:</h4>
+                    <p>Entornos empresariales donde se necesita controlar y monitorear el acceso a Internet de los empleados.</p>
+                </div>
+            </div>
+
+            <div class="proxy-type-card">
+                <h3>2. Proxy Reverse (Proxy Inverso)</h3>
+                <p>Actúa como intermediario para las solicitudes desde Internet hacia servidores internos.</p>
+                
+                <div class="diagram">
+                    <pre>
+Internet -> [Proxy Reverse] -> Servidores Internos
+                    </pre>
+                </div>
+
+                <h4>Características:</h4>
+                <ul>
+                    <li>Balanceo de carga</li>
+                    <li>Caché de contenido estático</li>
+                    <li>Terminación SSL</li>
+                    <li>Compresión de contenido</li>
+                </ul>
+
+                <div class="use-case">
+                    <h4>Caso de Uso:</h4>
+                    <p>Sitios web de alto tráfico que necesitan distribuir la carga entre múltiples servidores.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Clasificación por Nivel de Anonimato</h2>
+
+            <div class="proxy-type-card">
+                <h3>1. Proxy Transparente</h3>
+                <p>No modifica las solicitudes ni oculta información del cliente.</p>
+                
+                <h4>Características:</h4>
+                <ul>
+                    <li>Sin anonimato</li>
+                    <li>Caché de contenido</li>
+                    <li>Fácil implementación</li>
+                </ul>
+            </div>
+
+            <div class="proxy-type-card">
+                <h3>2. Proxy Anónimo</h3>
+                <p>Oculta la IP del cliente pero identifica que se está usando un proxy.</p>
+                
+                <h4>Características:</h4>
+                <ul>
+                    <li>Anonimato básico</li>
+                    <li>Modificación de headers HTTP</li>
+                    <li>Protección de privacidad moderada</li>
+                </ul>
+            </div>
+
+            <div class="proxy-type-card">
+                <h3>3. Proxy Elite (Highly Anonymous)</h3>
+                <p>Oculta completamente la información del cliente y el uso del proxy.</p>
+                
+                <h4>Características:</h4>
+                <ul>
+                    <li>Máximo anonimato</li>
+                    <li>Eliminación de headers identificativos</li>
+                    <li>Rotación de IPs</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Clasificación por Protocolo</h2>
+
+            <div class="proxy-type-card">
+                <h3>1. HTTP Proxy</h3>
+                <p>Especializado en tráfico web HTTP/HTTPS.</p>
+                
+                <h4>Características:</h4>
+                <ul>
+                    <li>Caché web</li>
+                    <li>Filtrado de contenido</li>
+                    <li>Modificación de solicitudes</li>
+                </ul>
+            </div>
+
+            <div class="proxy-type-card">
+                <h3>2. SOCKS Proxy</h3>
+                <p>Proxy de bajo nivel que soporta cualquier tipo de tráfico.</p>
+                
+                <h4>Características:</h4>
+                <ul>
+                    <li>Versiones SOCKS4 y SOCKS5</li>
+                    <li>Soporte para múltiples protocolos</li>
+                    <li>Sin caché de contenido</li>
+                </ul>
+            </div>
+
+            <div class="proxy-type-card">
+                <h3>3. FTP Proxy</h3>
+                <p>Especializado en transferencia de archivos.</p>
+                
+                <h4>Características:</h4>
+                <ul>
+                    <li>Caché de archivos</li>
+                    <li>Control de transferencias</li>
+                    <li>Logging específico FTP</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Comparativa de Tipos de Proxy</h2>
+            <table class="comparison-matrix">
+                <thead>
+                    <tr>
+                        <th>Tipo de Proxy</th>
+                        <th>Rendimiento</th>
+                        <th>Seguridad</th>
+                        <th>Anonimato</th>
+                        <th>Complejidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Forward Proxy</td>
+                        <td>Alto</td>
+                        <td>Medio</td>
+                        <td>Variable</td>
+                        <td>Media</td>
+                    </tr>
+                    <tr>
+                        <td>Reverse Proxy</td>
+                        <td>Muy Alto</td>
+                        <td>Alto</td>
+                        <td>N/A</td>
+                        <td>Alta</td>
+                    </tr>
+                    <tr>
+                        <td>Transparente</td>
+                        <td>Muy Alto</td>
+                        <td>Bajo</td>
+                        <td>Ninguno</td>
+                        <td>Baja</td>
+                    </tr>
+                    <tr>
+                        <td>Elite</td>
+                        <td>Medio</td>
+                        <td>Muy Alto</td>
+                        <td>Muy Alto</td>
+                        <td>Muy Alta</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="content-section">
+            <h2>Consideraciones de Implementación</h2>
+            
+            <div class="implementation-note">
+                <h3>Selección del Tipo de Proxy</h3>
+                <p>Factores a considerar:</p>
+                <ul>
+                    <li>Objetivo principal (seguridad, rendimiento, anonimato)</li>
+                    <li>Tipo de tráfico a manejar</li>
+                    <li>Recursos disponibles</li>
+                    <li>Nivel de experiencia del equipo técnico</li>
+                </ul>
+            </div>
+
+            <div class="implementation-note">
+                <h3>Mejores Prácticas</h3>
+                <ul>
+                    <li>Implementar monitoreo y logging</li>
+                    <li>Establecer políticas de uso claras</li>
+                    <li>Mantener actualizaciones regulares</li>
+                    <li>Realizar copias de seguridad de la configuración</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Servidores Proxy: Configuración y Gestión Avanzada<</p>
+    </footer>
+</body>
+</html>

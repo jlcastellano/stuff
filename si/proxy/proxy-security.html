@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad en Squid Proxy</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #f5f6fa;
+            --nav-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-color);
+            height: var(--nav-height);
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav ul li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: var(--secondary-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: calc(var(--nav-height) + 20px) auto 40px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .security-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .code-block pre {
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+            padding: 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .info-box {
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            color: #004085;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .security-checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .security-checklist li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            nav {
+                height: auto;
+            }
+
+            main {
+                margin-top: 200px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="proxy.html">Proxy</a></li>
+            <li><a href="proxy-types.html">Tipos de Proxy</a></li>
+            <li><a href="proxy-config.html">Configuración</a></li>
+            <li><a href="proxy-security.html">Seguridad</a></li>
+            <li><a href="exercises.html">Ejercicios</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Seguridad en Squid Proxy</h1>
+            <p>Guía completa de configuración de seguridad y mejores prácticas para Squid Proxy</p>
+        </div>
+
+        <section class="security-section">
+            <h2>Autenticación Segura</h2>
+            <div class="info-box">
+                <p>La autenticación es la primera línea de defensa en tu proxy. Implementa autenticación robusta para controlar el acceso.</p>
+            </div>
+
+            <h3>Autenticación LDAP</h3>
+            <div class="code-block">
+<pre>
+# Configuración de autenticación LDAP
+auth_param basic program /usr/lib/squid/basic_ldap_auth -b "dc=ejemplo,dc=com" -f "uid=%s" ldap.ejemplo.com
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+
+# ACL para usuarios autenticados
+acl authenticated proxy_auth REQUIRED
+http_access allow authenticated</pre>
+            </div>
+
+            <h3>Autenticación con Digest</h3>
+            <div class="code-block">
+<pre>
+# Configuración de autenticación Digest
+auth_param digest program /usr/lib/squid/digest_file_auth /etc/squid/digest_passwords
+auth_param digest children 5
+auth_param digest realm Proxy Authentication
+auth_param digest nonce_garbage_interval 5 minutes
+auth_param digest nonce_max_duration 30 minutes
+auth_param digest nonce_max_count 50</pre>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Control de Acceso Avanzado</h2>
+            
+            <h3>Restricciones por IP y Red</h3>
+            <div class="code-block">
+<pre>
+# ACLs para control de acceso por IP
+acl red_confiable src 192.168.1.0/24
+acl red_admin src 192.168.2.0/24
+acl servidores_internos dst 10.0.0.0/8
+
+# Reglas de acceso
+http_access allow red_admin
+http_access allow red_confiable servidores_internos
+http_access deny all</pre>
+            </div>
+
+            <h3>Restricciones por Protocolo y Puerto</h3>
+            <div class="code-block">
+<pre>
+# Definición de puertos seguros
+acl SSL_ports port 443
+acl Safe_ports port 80          # http
+acl Safe_ports port 443         # https
+acl Safe_ports port 1025-65535  # puertos no privilegiados
+acl CONNECT method CONNECT
+
+# Reglas de seguridad para puertos
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports</pre>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Filtrado de Contenido</h2>
+            
+            <h3>Bloqueo de Sitios por Dominio</h3>
+            <div class="code-block">
+<pre>
+# Bloqueo de sitios específicos
+acl sitios_bloqueados dstdomain "/etc/squid/sitios_bloqueados.txt"
+acl palabras_clave url_regex -i "/etc/squid/palabras_clave.txt"
+
+# Reglas de bloqueo
+http_access deny sitios_bloqueados
+http_access deny palabras_clave</pre>
+            </div>
+
+            <h3>Filtrado MIME</h3>
+            <div class="code-block">
+<pre>
+# Bloqueo de tipos MIME específicos
+acl tipos_bloqueados rep_mime_type ^application/executable$
+acl extensiones_bloqueadas urlpath_regex \.exe$ \.bat$ \.cmd$
+
+# Reglas de bloqueo
+http_reply_access deny tipos_bloqueados
+http_access deny extensiones_bloqueadas</pre>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Configuración SSL/HTTPS</h2>
+            <div class="warning-box">
+                <p>La interceptación SSL debe implementarse con cuidado y considerando las implicaciones de privacidad.</p>
+            </div>
+
+            <div class="code-block">
+<pre>
+# Configuración SSL Bump
+http_port 3128 ssl-bump \
+    cert=/etc/squid/ssl_cert/squid.pem \
+    generate-host-certificates=on \
+    dynamic_cert_mem_cache_size=4MB
+
+# ACLs para SSL
+acl step1 at_step SslBump1
+acl step2 at_step SslBump2
+acl step3 at_step SslBump3
+
+# Reglas SSL Bump
+ssl_bump peek step1
+ssl_bump bump step2
+ssl_bump splice step3</pre>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Protección contra Ataques</h2>
+            
+            <h3>Límites de Conexión</h3>
+            <div class="code-block">
+<pre>
+# Límites de conexión por cliente
+acl clientes_excesivos maxconn 10
+http_access deny clientes_excesivos
+
+# Configuración de delay pools
+delay_pools 2
+delay_class 1 1
+delay_parameters 1 16000/16000
+delay_access 1 allow all</pre>
+            </div>
+
+            <h3>Protección contra DOS</h3>
+            <div class="code-block">
+<pre>
+# Configuración de cuotas
+acl magic_words url_regex -i \.mp3$ \.exe$ \.zip$
+delay_pools 1
+delay_class 1 2
+delay_access 1 allow magic_words
+delay_parameters 1 -1/-1 64000/128000</pre>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Monitoreo y Logs</h2>
+            
+            <h3>Configuración de Logs Detallados</h3>
+            <div class="code-block">
+<pre>
+# Formato de log personalizado
+logformat squid_security %ts.%03tu %6tr %>a %Ss/%03>Hs %<st %rm %ru %[un %Sh/%<a %mt
+access_log /var/log/squid/access.log squid_security
+
+# Logs de caché y errores
+cache_log /var/log/squid/cache.log
+cache_store_log /var/log/squid/store.log
+logfile_rotate 10</pre>
+            </div>
+
+            <h3>Auditoría de Seguridad</h3>
+            <div class="code-block">
+<pre>
+# Configuración de debug para auditoría
+debug_options ALL,1 33,2 28,9
+cache_log /var/log/squid/security_audit.log
+
+# Rotación de logs
+logfile_rotate 7
+authenticate_ttl 1 hour
+negative_ttl 1 minute</pre>
+            </div>
+        </section>
+
+        <section class="security-section">
+            <h2>Lista de Verificación de Seguridad</h2>
+            <ul class="security-checklist">
+                <li>✓ Implementar autenticación robusta</li>
+                <li>✓ Configurar ACLs restrictivas</li>
+                <li>✓ Habilitar filtrado de contenido</li>
+                <li>✓ Configurar SSL/HTTPS seguro</li>
+                <li>✓ Implementar límites de conexión</li>
+                <li>✓ Configurar logs detallados</li>
+                <li>✓ Mantener actualizaciones regulares</li>
+                <li>✓ Realizar auditorías periódicas</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Servidores Proxy: Configuración y Gestión Avanzada</p>
+    </footer>
+</body>
+</html>

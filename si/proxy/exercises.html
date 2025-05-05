@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Prácticos de Squid Proxy</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --text-color: #333;
+            --bg-color: #f5f6fa;
+            --nav-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-color);
+            height: var(--nav-height);
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav ul li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: var(--secondary-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: calc(var(--nav-height) + 20px) auto 40px;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .exercise-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .exercise {
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .solution {
+            display: none;
+            background: #e8f4fd;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .show-solution {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .show-solution:hover {
+            background: var(--primary-color);
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .code-block pre {
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tip-box {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .basic {
+            background: var(--success-color);
+        }
+
+        .intermediate {
+            background: var(--secondary-color);
+        }
+
+        .advanced {
+            background: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            nav {
+                height: auto;
+            }
+
+            main {
+                margin-top: 200px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="proxy.html">Proxy</a></li>
+            <li><a href="proxy-types.html">Tipos de Proxy</a></li>
+            <li><a href="proxy-config.html">Configuración</a></li>
+            <li><a href="proxy-security.html">Seguridad</a></li>
+            <li><a href="exercises.html">Ejercicios</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Ejercicios Prácticos de Squid Proxy</h1>
+            <p>Mejora tus habilidades con ejercicios prácticos de configuración y administración</p>
+        </div>
+
+        <section class="exercise-section">
+            <h2>Ejercicios Básicos</h2>
+            
+            <div class="exercise">
+                <span class="difficulty basic">Básico</span>
+                <h3>Ejercicio 1: Configuración Básica</h3>
+                <p>Configura un servidor Squid proxy básico que:</p>
+                <ul>
+                    <li>Escuche en el puerto 3128</li>
+                    <li>Permita acceso desde la red local 192.168.1.0/24</li>
+                    <li>Deniegue todo otro acceso</li>
+                </ul>
+                <button class="show-solution" onclick="toggleSolution('solution1')">Ver Solución</button>
+                <div id="solution1" class="solution">
+                    <div class="code-block">
+<pre>
+# Configuración básica de Squid
+http_port 3128
+
+# Definir ACL para red local
+acl localnet src 192.168.1.0/24
+
+# Reglas de acceso
+http_access allow localnet
+http_access deny all
+
+# Configuración básica de caché
+cache_dir ufs /var/spool/squid 100 16 256</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <span class="difficulty basic">Básico</span>
+                <h3>Ejercicio 2: Autenticación Simple</h3>
+                <p>Implementa autenticación básica con los siguientes requisitos:</p>
+                <ul>
+                    <li>Usar autenticación básica con archivo de contraseñas</li>
+                    <li>Crear dos usuarios: admin y usuario1</li>
+                    <li>Las credenciales deben expirar después de 2 horas</li>
+                </ul>
+                <button class="show-solution" onclick="toggleSolution('solution2')">Ver Solución</button>
+                <div id="solution2" class="solution">
+                    <div class="code-block">
+<pre>
+# Crear archivo de contraseñas
+# sudo htpasswd -c /etc/squid/passwd admin
+# sudo htpasswd /etc/squid/passwd usuario1
+
+# Configuración de autenticación
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+
+# ACL para usuarios autenticados
+acl authenticated proxy_auth REQUIRED
+
+# Reglas de acceso
+http_access allow authenticated
+http_access deny all</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercise-section">
+            <h2>Ejercicios Intermedios</h2>
+
+            <div class="exercise">
+                <span class="difficulty intermediate">Intermedio</span>
+                <h3>Ejercicio 3: Control de Acceso por Horario</h3>
+                <p>Configura un proxy que:</p>
+                <ul>
+                    <li>Permita acceso solo en horario laboral (Lunes a Viernes, 8:00-17:00)</li>
+                    <li>Bloquee sitios específicos en todo momento</li>
+                    <li>Permita acceso a ciertos sitios sin restricción horaria</li>
+                </ul>
+                <button class="show-solution" onclick="toggleSolution('solution3')">Ver Solución</button>
+                <div id="solution3" class="solution">
+                    <div class="code-block">
+<pre>
+# Definir ACLs de tiempo y sitios
+acl horario_laboral time M T W H F 8:00-17:00
+acl sitios_bloqueados dstdomain "/etc/squid/sitios_bloqueados.txt"
+acl sitios_permitidos dstdomain "/etc/squid/sitios_permitidos.txt"
+
+# Reglas de acceso
+http_access allow sitios_permitidos
+http_access deny sitios_bloqueados
+http_access allow localnet horario_laboral
+http_access deny all</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <span class="difficulty intermediate">Intermedio</span>
+                <h3>Ejercicio 4: Configuración de Caché</h3>
+                <p>Implementa una configuración de caché que:</p>
+                <ul>
+                    <li>Use 2GB de espacio en disco</li>
+                    <li>Limite el tamaño máximo de objetos a 50MB</li>
+                    <li>Configure patrones de refresco específicos para diferentes tipos de contenido</li>
+                </ul>
+                <button class="show-solution" onclick="toggleSolution('solution4')">Ver Solución</button>
+                <div id="solution4" class="solution">
+                    <div class="code-block">
+<pre>
+# Configuración de caché
+cache_dir ufs /var/spool/squid 2048 16 256
+maximum_object_size 50 MB
+cache_mem 512 MB
+
+# Patrones de refresco
+refresh_pattern ^ftp:           1440    20%     10080
+refresh_pattern -i \.(gif|png|jpg|jpeg|ico)$ 1440 50% 2880
+refresh_pattern -i \.(css|js)$  1440    50%     2880
+refresh_pattern .               0       20%     4320</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercise-section">
+            <h2>Ejercicios Avanzados</h2>
+
+            <div class="exercise">
+                <span class="difficulty advanced">Avanzado</span>
+                <h3>Ejercicio 5: SSL Bump y HTTPS</h3>
+                <p>Configura SSL Bump para:</p>
+                <ul>
+                    <li>Interceptar tráfico HTTPS</li>
+                    <li>Generar certificados dinámicamente</li>
+                    <li>Excluir sitios bancarios y de salud</li>
+                </ul>
+                <button class="show-solution" onclick="toggleSolution('solution5')">Ver Solución</button>
+                <div id="solution5" class="solution">
+                    <div class="code-block">
+<pre>
+# Configuración SSL
+http_port 3128 ssl-bump \
+    cert=/etc/squid/ssl_cert/squid.pem \
+    generate-host-certificates=on \
+    dynamic_cert_mem_cache_size=4MB
+
+# ACLs para SSL
+acl step1 at_step SslBump1
+acl step2 at_step SslBump2
+acl step3 at_step SslBump3
+acl sitios_nobump ssl::server_name .banco.com .salud.org
+
+# Reglas SSL Bump
+ssl_bump splice sitios_nobump
+ssl_bump peek step1
+ssl_bump bump step2
+ssl_bump splice step3</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <span class="difficulty advanced">Avanzado</span>
+                <h3>Ejercicio 6: Balanceo de Carga y Alta Disponibilidad</h3>
+                <p>Configura un sistema de proxy con:</p>
+                <ul>
+                    <li>Balanceo de carga entre dos servidores Squid</li>
+                    <li>Configuración de caché peer</li>
+                    <li>Monitoreo de salud de los servidores</li>
+                </ul>
+                <button class="show-solution" onclick="toggleSolution('solution6')">Ver Solución</button>
+                <div id="solution6" class="solution">
+                    <div class="code-block">
+<pre>
+# Configuración de cache_peer
+cache_peer 192.168.1.10 parent 3128 0 no-query
+cache_peer 192.168.1.11 parent 3128 0 no-query round-robin
+
+# ICP queries
+icp_port 3130
+icp_access allow localnet
+
+# Configuración de cache_peer_access
+cache_peer_access 192.168.1.10 allow all
+cache_peer_access 192.168.1.11 allow all
+
+# Monitoreo de salud
+cache_peer_domain 192.168.1.10 *
+cache_peer_domain 192.168.1.11 *
+
+# Logging específico
+cache_log /var/log/squid/cache.log
+cache_store_log /var/log/squid/store.log
+logformat combined %>a %ui %un [%tl] "%rm %ru HTTP/%rv" %>Hs %<st "%{Referer}>h" "%{User-Agent}>h"</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Servidores Proxy: Configuración y Gestión Avanzada</p>
+    </footer>
+
+    <script>
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+            } else {
+                solution.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
