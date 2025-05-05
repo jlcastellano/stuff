@@ -326,7 +326,7 @@ refresh_pattern .               0       20%     4320
 
         <section class="content-section">
             <h2>Autenticación de Usuarios</h2>
-            <div class="code-block">
+            <div class="code-block"><pre>
 <span class="comment"># Configuración de autenticación básica</span>
 auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
 auth_param basic children 5
@@ -338,7 +338,7 @@ acl authenticated proxy_auth REQUIRED
 
 <span class="comment"># Regla de acceso para usuarios autenticados</span>
 http_access allow authenticated
-            </div>
+</pre></div>
 
             <div class="configuration-steps">
                 <h3>Crear usuario para autenticación:</h3>
