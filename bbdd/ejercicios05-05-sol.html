@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Transacciones SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .exercise {
+            background-color: #e8f4f8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .solution {
+            background-color: #f9edc5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .hint {
+            color: #666;
+            font-style: italic;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios de Transacciones SQL</h1>
+
+        <div class="exercise">
+            <h3>Ejercicio 1: Identificación de Problemas de Concurrencia</h3>
+            <p>En un sistema bancario, dos transacciones se ejecutan simultáneamente:</p>
+            <div class="code">
+-- Transacción 1
+START TRANSACTION;
+    SELECT saldo FROM cuentas WHERE id = 100;
+    -- (saldo = 1000)
+    -- espera 5 segundos
+    SELECT saldo FROM cuentas WHERE id = 100;
+COMMIT;
+
+-- Transacción 2 (ejecutada durante la espera)
+START TRANSACTION;
+    UPDATE cuentas SET saldo = 800 WHERE id = 100;
+COMMIT;</div>
+            <p>¿Qué problema de concurrencia se está produciendo en este escenario?</p>
+            <button onclick="toggleSolution('solution1')">Ver Solución</button>
+            <div id="solution1" class="solution">
+                <p>Este es un caso clásico de una <strong>lectura no repetible (non-repeatable read)</strong>.</p>
+                <p>La primera lectura de la Transacción 1 mostrará 1000, pero la segunda lectura mostrará 800, porque la Transacción 2 ha modificado y confirmado el valor entre las dos lecturas.</p>
+                <p>Para prevenir este problema, se debería usar un nivel de aislamiento REPEATABLE READ o superior.</p>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 2: Diseño de Transacción Segura</h3>
+            <p>Diseña una transacción para transferir dinero entre dos cuentas que sea:</p>
+            <ul>
+                <li>Atómica</li>
+                <li>Consistente (el saldo no puede ser negativo)</li>
+                <li>Protegida contra lecturas sucias</li>
+            </ul>
+            <button onclick="toggleSolution('solution2')">Ver Solución</button>
+            <div id="solution2" class="solution">
+                <div class="code">
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+START TRANSACTION;
+    -- Verificar y bloquear cuenta origen
+    SELECT @saldo := saldo FROM cuentas 
+    WHERE id = 1 FOR UPDATE;
+    
+    IF @saldo >= 500 THEN
+        -- Debitar cuenta origen
+        UPDATE cuentas 
+        SET saldo = saldo - 500 
+        WHERE id = 1;
+        
+        -- Acreditar cuenta destino
+        UPDATE cuentas 
+        SET saldo = saldo + 500 
+        WHERE id = 2;
+        
+        COMMIT;
+    ELSE
+        ROLLBACK;
+        SELECT 'Saldo insuficiente' AS mensaje;
+    END IF;</div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 3: Corrección de Código</h3>
+            <p>El siguiente código tiene un problema. Identifícalo y corrígelo:</p>
+            <div class="code">
+START TRANSACTION;
+    UPDATE inventario SET stock = stock - 1 
+    WHERE producto_id = 100;
+    
+    INSERT INTO ventas (producto_id, cantidad) 
+    VALUES (100, 1);
+    
+    IF stock < 0 THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;</div>
+            <button onclick="toggleSolution('solution3')">Ver Solución</button>
+            <div id="solution3" class="solution">
+                <p>El problema es que se está verificando el stock después de actualizarlo. La solución correcta sería:</p>
+                <div class="code">
+START TRANSACTION;
+    -- Primero verificar el stock
+    SELECT @stock := stock FROM inventario 
+    WHERE producto_id = 100 FOR UPDATE;
+    
+    IF @stock > 0 THEN
+        UPDATE inventario SET stock = stock - 1 
+        WHERE producto_id = 100;
+        
+        INSERT INTO ventas (producto_id, cantidad) 
+        VALUES (100, 1);
+        
+        COMMIT;
+    ELSE
+        ROLLBACK;
+        SELECT 'Stock insuficiente' AS mensaje;
+    END IF;</div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 4: Niveles de Aislamiento</h3>
+            <p>Para cada uno de los siguientes escenarios, elige el nivel de aislamiento más apropiado (el menos restrictivo que resuelva el problema):</p>
+            <ol>
+                <li>Generación de reportes estadísticos que pueden tolerar algunas inconsistencias</li>
+                <li>Proceso de pago que requiere saldo exacto</li>
+                <li>Actualización de inventario que debe prevenir ventas duplicadas</li>
+                <li>Conteo de registros que debe ser consistente durante toda la transacción</li>
+            </ol>
+            <button onclick="toggleSolution('solution4')">Ver Solución</button>
+            <div id="solution4" class="solution">
+                <ol>
+                    <li>READ UNCOMMITTED - Suficiente para reportes no críticos</li>
+                    <li>READ COMMITTED - Previene lecturas sucias de saldos no confirmados</li>
+                    <li>SERIALIZABLE - Necesario para prevenir inserciones fantasma en el inventario</li>
+                    <li>REPEATABLE READ - Asegura que los conteos sean consistentes</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 5: Uso de Savepoints</h3>
+            <p>Diseña una transacción que use savepoints para un proceso de compra con múltiples productos, donde si falla un producto, los anteriores se mantienen:</p>
+            <button onclick="toggleSolution('solution5')">Ver Solución</button>
+            <div id="solution5" class="solution">
+                <div class="code">
+START TRANSACTION;
+
+    INSERT INTO pedidos (cliente_id) VALUES (1);
+    SET @pedido_id = LAST_INSERT_ID();
+    
+    -- Primer producto
+    SAVEPOINT producto1;
+    UPDATE inventario SET stock = stock - 1 WHERE id = 100;
+    INSERT INTO detalles_pedido VALUES (@pedido_id, 100, 1);
+    
+    -- Segundo producto
+    SAVEPOINT producto2;
+    UPDATE inventario SET stock = stock - 1 WHERE id = 101;
+    IF ROW_COUNT() = 0 THEN
+        ROLLBACK TO producto2;
+        -- Continuar con el resto del pedido
+    ELSE
+        INSERT INTO detalles_pedido VALUES (@pedido_id, 101, 1);
+    END IF;
+    
+COMMIT;</div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 6: Detección de Pérdida de Actualizaciones</h3>
+            <p>Analiza el siguiente escenario y propón una solución:</p>
+            <div class="code">
+-- Usuario 1
+START TRANSACTION;
+    SELECT precio FROM productos WHERE id = 1;  -- precio = 100
+    -- Calcula nuevo precio con 10% de incremento
+    UPDATE productos SET precio = 110 WHERE id = 1;
+COMMIT;
+
+-- Usuario 2 (simultáneamente)
+START TRANSACTION;
+    SELECT precio FROM productos WHERE id = 1;  -- precio = 100
+    -- Calcula nuevo precio con 20% de descuento
+    UPDATE productos SET precio = 80 WHERE id = 1;
+COMMIT;</div>
+            <button onclick="toggleSolution('solution6')">Ver Solución</button>
+            <div id="solution6" class="solution">
+                <p>El problema es una pérdida de actualización (lost update). La solución es usar SELECT FOR UPDATE:</p>
+                <div class="code">
+-- Usuario 1
+START TRANSACTION;
+    SELECT precio FROM productos WHERE id = 1 FOR UPDATE;
+    -- Calcula nuevo precio con 10% de incremento
+    UPDATE productos SET precio = 110 WHERE id = 1;
+COMMIT;
+
+-- Usuario 2 esperará hasta que la primera transacción termine</div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 7: Deadlock Prevention</h3>
+            <p>Identifica el potencial deadlock en este código y corrígelo:</p>
+            <div class="code">
+-- Transacción 1
+START TRANSACTION;
+    UPDATE cuentas SET saldo = saldo - 100 WHERE id = 1;
+    UPDATE cuentas SET saldo = saldo + 100 WHERE id = 2;
+COMMIT;
+
+-- Transacción 2 (simultánea)
+START TRANSACTION;
+    UPDATE cuentas SET saldo = saldo - 50 WHERE id = 2;
+    UPDATE cuentas SET saldo = saldo + 50 WHERE id = 1;
+COMMIT;</div>
+            <button onclick="toggleSolution('solution7')">Ver Solución</button>
+            <div id="solution7" class="solution">
+                <p>La solución es ordenar las actualizaciones siempre en el mismo orden:</p>
+                <div class="code">
+-- Transacción 1
+START TRANSACTION;
+    UPDATE cuentas SET saldo = saldo - 100 WHERE id = 1;
+    UPDATE cuentas SET saldo = saldo + 100 WHERE id = 2;
+COMMIT;
+
+-- Transacción 2
+START TRANSACTION;
+    UPDATE cuentas SET saldo = saldo - 50 WHERE id = 1;
+    UPDATE cuentas SET saldo = saldo + 50 WHERE id = 2;
+COMMIT;</div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h3>Ejercicio 8: Gestión de Errores</h3>
+            <p>Mejora esta transacción agregando gestión de errores apropiada:</p>
+            <div class="code">
+START TRANSACTION;
+    INSERT INTO pedidos VALUES (NULL, 1, NOW());
+    INSERT INTO detalles_pedido VALUES (LAST_INSERT_ID(), 100, 2);
+    UPDATE inventario SET stock = stock - 2 WHERE producto_id = 100;
+COMMIT;</div>
+            <button onclick="toggleSolution('solution8')">Ver Solución</button>
+            <div id="solution8" class="solution">
+                <div class="code">
+DELIMITER //
+
+CREATE PROCEDURE crear_pedido(IN p_cliente_id INT, IN p_producto_id INT, IN p_cantidad INT)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error en la transacción' AS mensaje;
+    END;
+
+    START TRANSACTION;
+        -- Verificar stock
+        SELECT @stock := stock FROM inventario 
+        WHERE producto_id = p_producto_id FOR UPDATE;
+        
+        IF @stock >= p_cantidad THEN
+            INSERT INTO pedidos VALUES (NULL, p_cliente_id, NOW());
+            SET @pedido_id = LAST_INSERT_ID();
+            
+            INSERT INTO detalles_pedido 
+            VALUES (@pedido_id, p_producto_id, p_cantidad);
+            
+            UPDATE inventario 
+            SET stock = stock - p_cantidad 
+            WHERE producto_id = p_producto_id;
+            
+            COMMIT;
+            SELECT 'Pedido creado con éxito' AS mensaje;
+        ELSE
+            ROLLBACK;
+            SELECT 'Stock insuficiente' AS mensaje;
+        END IF;
+END //
+
+DELIMITER ;</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'none' || solution.style.display === '') {
+                solution.style.display = 'block';
+            } else {
+                solution.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
