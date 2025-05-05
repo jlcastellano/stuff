@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servidor Proxy - Seguridad en Redes</title>
+    <title>Proxy: Definición y Usos</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -62,7 +62,6 @@
 
         nav ul li a:hover {
             background: var(--secondary-color);
-            transform: translateY(-2px);
         }
 
         main {
@@ -83,67 +82,64 @@
             margin-bottom: 40px;
         }
 
-        .hero h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: white;
+        .content-section {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .hero p {
-            font-size: 1.2em;
-            max-width: 800px;
-            margin: 0 auto;
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
         }
 
-        .card-grid {
+        .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            gap: 20px;
+            margin: 20px 0;
         }
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h2 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .card p {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--secondary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-        footer {
-            text-align: center;
+        .feature-card {
             padding: 20px;
-            background: var(--primary-color);
-            color: white;
-            margin-top: 40px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .use-case {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin: 15px 0;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -161,76 +157,9 @@
                 padding: 15px;
             }
 
-            .card-grid {
+            .feature-grid {
                 grid-template-columns: 1fr;
             }
-        }
-
-        .code-block {
-            background: #2d3436;
-            color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 20px 0;
-        }
-
-        .code-block .comment {
-            color: #6c757d;
-        }
-
-        .code-block .keyword {
-            color: #00b894;
-        }
-
-        .code-block .string {
-            color: #ffeaa7;
-        }
-
-        .code-block .number {
-            color: #fd79a8;
-        }
-
-        .configuration-steps {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .configuration-steps ol {
-            margin-left: 20px;
-        }
-
-        .configuration-steps li {
-            margin: 10px 0;
-        }
-
-        .alert {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeeba;
-            color: #856404;
-        }
-
-        .alert-info {
-            background: #cce5ff;
-            border: 1px solid #b8daff;
-            color: #004085;
-        }
-
-        .command-example {
-            background: #f8f9fa;
-            padding: 10px;
-            border-left: 4px solid var(--secondary-color);
-            font-family: monospace;
-            margin: 10px 0;
         }
     </style>
 </head>
@@ -248,177 +177,206 @@
 
     <main>
         <div class="hero">
-            <h1>Servidor Proxy</h1>
-            <p>Configuración y gestión de servidores proxy para optimización y seguridad de red</p>
+            <h1>Proxy: Definición y Usos</h1>
+        
         </div>
 
         <section class="content-section">
-            <h2>¿Qué es un Servidor Proxy?</h2>
+            <h2>¿Qué es un Proxy?</h2>
             <div class="info-box">
-                <p>Un servidor proxy actúa como intermediario entre los usuarios de una red local y la Internet, permitiendo:</p>
+                <p>Un servidor proxy es un sistema o aplicación que actúa como intermediario entre los usuarios y los recursos que solicitan en Internet. Funciona como una capa de abstracción y control que puede modificar, redirigir o filtrar las solicitudes según reglas predefinidas.</p>
+            </div>
+
+            <h3>Características Fundamentales</h3>
+            <ul>
+                <li>Intermediación de conexiones</li>
+                <li>Procesamiento en la capa de aplicación (Capa 7 del modelo OSI)</li>
+                <li>Capacidad de modificar y filtrar contenido</li>
+                <li>Almacenamiento en caché</li>
+                <li>Control de acceso y autenticación</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>Funcionamiento Técnico</h2>
+            
+            <div class="diagram">
+                [Cliente] ←→ [Servidor Proxy] ←→ [Internet]
+            </div>
+
+            <h3>Proceso de una Solicitud</h3>
+            <ol>
+                <li>El cliente envía una solicitud al servidor proxy</li>
+                <li>El proxy verifica las políticas de acceso y reglas de filtrado</li>
+                <li>Si está permitido, el proxy reenvía la solicitud al servidor destino</li>
+                <li>El servidor destino responde al proxy</li>
+                <li>El proxy puede almacenar la respuesta en caché</li>
+                <li>El proxy reenvía la respuesta al cliente</li>
+            </ol>
+        </section>
+
+        <section class="content-section">
+            <h2>Funciones Principales Detalladas</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Control de Acceso</h3>
+                    <ul>
+                        <li>Restricción por direcciones IP</li>
+                        <li>Filtrado por dominios y URLs</li>
+                        <li>Control por horarios</li>
+                        <li>Autenticación de usuarios</li>
+                        <li>Políticas de uso aceptable</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Sistema de Caché</h3>
+                    <ul>
+                        <li>Almacenamiento local de contenido</li>
+                        <li>Reducción de latencia</li>
+                        <li>Ahorro de ancho de banda</li>
+                        <li>Políticas de refresco</li>
+                        <li>Gestión de recursos</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Filtrado de Contenido</h3>
+                    <ul>
+                        <li>Bloqueo de publicidad</li>
+                        <li>Filtrado de malware</li>
+                        <li>Control de contenido inapropiado</li>
+                        <li>Inspección de SSL</li>
+                        <li>Análisis de tráfico</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Seguridad y Privacidad</h3>
+                    <ul>
+                        <li>Ocultamiento de IP</li>
+                        <li>Encriptación de tráfico</li>
+                        <li>Prevención de ataques</li>
+                        <li>Logging y auditoría</li>
+                        <li>Control de acceso remoto</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Casos de Uso Específicos</h2>
+
+            <div class="use-case">
+                <h3>Entorno Empresarial</h3>
                 <ul>
-                    <li>Control de acceso a contenidos</li>
-                    <li>Almacenamiento en caché</li>
-                    <li>Anonimización de conexiones</li>
+                    <li>Control del uso de Internet por parte de los empleados</li>
+                    <li>Optimización del ancho de banda</li>
+                    <li>Registro de actividad web</li>
+                    <li>Protección contra amenazas web</li>
+                    <li>Cumplimiento de políticas corporativas</li>
+                </ul>
+            </div>
+
+            <div class="use-case">
+                <h3>Instituciones Educativas</h3>
+                <ul>
+                    <li>Filtrado de contenido inapropiado</li>
+                    <li>Control de acceso por horarios</li>
+                    <li>Optimización de recursos educativos</li>
+                    <li>Monitoreo de uso de Internet</li>
+                    <li>Gestión de ancho de banda</li>
+                </ul>
+            </div>
+
+            <div class="use-case">
+                <h3>Proveedores de Servicios de Internet</h3>
+                <ul>
+                    <li>Caché de contenido popular</li>
                     <li>Balanceo de carga</li>
+                    <li>Optimización de tráfico</li>
+                    <li>Servicios de valor agregado</li>
+                    <li>Control de acceso a servicios</li>
                 </ul>
             </div>
         </section>
 
         <section class="content-section">
-            <h2>Instalación de Squid Proxy</h2>
-            <div class="configuration-steps">
-                <h3>Pasos de Instalación en Ubuntu/Debian</h3>
-                <ol>
-                    <li>Actualizar repositorios:
-                        <div class="command-example">sudo apt update</div>
-                    </li>
-                    <li>Instalar Squid:
-                        <div class="command-example">sudo apt install squid</div>
-                    </li>
-                    <li>Verificar estado:
-                        <div class="command-example">sudo systemctl status squid</div>
-                    </li>
-                </ol>
-            </div>
+            <h2>Beneficios y Ventajas</h2>
 
-            <div class="code-block"><pre>
-                <span class="comment"># Configuración básica de Squid (/etc/squid/squid.conf)</span>
-                
-http_port 3128
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Rendimiento</h3>
+                    <ul>
+                        <li>Menor tiempo de respuesta</li>
+                        <li>Optimización de ancho de banda</li>
+                        <li>Distribución de carga</li>
+                        <li>Mejor experiencia de usuario</li>
+                    </ul>
+                </div>
 
-<span class="comment"># ACL para red local</span>
-acl localnet src 192.168.1.0/24
+                <div class="feature-card">
+                    <h3>Seguridad</h3>
+                    <ul>
+                        <li>Protección contra amenazas</li>
+                        <li>Control de acceso</li>
+                        <li>Monitoreo de tráfico</li>
+                        <li>Prevención de fugas de datos</li>
+                    </ul>
+                </div>
 
-<span class="comment"># ACL para sitios permitidos</span>
-acl whitelist dstdomain "/etc/squid/whitelist.txt"
+                <div class="feature-card">
+                    <h3>Administrativos</h3>
+                    <ul>
+                        <li>Control centralizado</li>
+                        <li>Políticas de uso</li>
+                        <li>Reportes y estadísticas</li>
+                        <li>Gestión de recursos</li>
+                    </ul>
+                </div>
 
-<span class="comment"># ACL para sitios prohibidos</span>
-acl blacklist dstdomain "/etc/squid/blacklist.txt"
-
-<span class="comment"># Reglas de acceso</span>
-http_access deny blacklist
-http_access allow localnet whitelist
-http_access deny all
-</pre> </div>
-        </section>
-
-        <section class="content-section">
-            <h2>Configuración de Caché</h2>
-            <div class="code-block"><pre>
-<span class="comment"># Configuración de caché en Squid</span>
-cache_dir ufs /var/spool/squid 10000 16 256
-maximum_object_size 100 MB
-cache_mem 512 MB
-
-<span class="comment"># Políticas de caché</span>
-refresh_pattern ^ftp:           1440    20%     10080
-refresh_pattern ^gopher:        1440    0%      1440
-refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
-refresh_pattern .               0       20%     4320
-</pre></div>
-
-            <div class="alert alert-info">
-                <h4>Nota sobre Caché:</h4>
-                <p>La configuración de caché debe ajustarse según los recursos del servidor y el tráfico esperado.</p>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2>Autenticación de Usuarios</h2>
-            <div class="code-block"><pre>
-<span class="comment"># Configuración de autenticación básica</span>
-auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
-auth_param basic children 5
-auth_param basic realm Proxy Authentication Required
-auth_param basic credentialsttl 2 hours
-
-<span class="comment"># ACL para usuarios autenticados</span>
-acl authenticated proxy_auth REQUIRED
-
-<span class="comment"># Regla de acceso para usuarios autenticados</span>
-http_access allow authenticated
-</pre></div>
-
-            <div class="configuration-steps">
-                <h3>Crear usuario para autenticación:</h3>
-                <div class="command-example">sudo htpasswd -c /etc/squid/passwd usuario1</div>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2>Configuración de Logs</h2>
-            <div class="code-block"><pre>
-<span class="comment"># Configuración de logs</span>
-access_log /var/log/squid/access.log squid
-cache_log /var/log/squid/cache.log
-cache_store_log /var/log/squid/store.log
-
-<span class="comment"># Formato personalizado de logs</span>
-logformat combined %>a %[ui %[un [%tl] "%rm %ru HTTP/%rv" %>Hs %<st "%{Referer}>h" "%{User-Agent}>h"
-</pre></div>
-        </section>
-
-        <section class="content-section">
-            <h2>Configuración de Cliente</h2>
-            <div class="configuration-steps">
-                <h3>Windows:</h3>
-                <ol>
-                    <li>Abrir Configuración de Red</li>
-                    <li>Configuración de Proxy Manual:
-                        <ul>
-                            <li>Dirección: IP_DEL_SERVIDOR</li>
-                            <li>Puerto: 3128</li>
-                        </ul>
-                    </li>
-                </ol>
-
-                <h3>Linux (Terminal):</h3>
-                <div class="code-block"><pre>
-export http_proxy="http://IP_DEL_SERVIDOR:3128"
-export https_proxy="http://IP_DEL_SERVIDOR:3128"
-</pre></div>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2>Monitorización y Mantenimiento</h2>
-            <div class="feature-list">
-                <div class="feature-item">
-                    <h3>Comandos útiles</h3>
-                    <div class="command-example">
-# Verificar sintaxis de configuración
-squid -k parse
-
-# Recargar configuración
-squid -k reconfigure
-
-# Rotar logs
-squid -k rotate
-
-# Limpiar caché
-squid -k shutdown
-rm -rf /var/spool/squid/*
-squid -z
-service squid start
-                    </div>
+                <div class="feature-card">
+                    <h3>Económicos</h3>
+                    <ul>
+                        <li>Reducción de costos de ancho de banda</li>
+                        <li>Optimización de recursos</li>
+                        <li>Mayor eficiencia operativa</li>
+                        <li>ROI medible</li>
+                    </ul>
                 </div>
             </div>
+        </section>
 
-            <div class="alert alert-warning">
-                <h4>Recomendaciones de Seguridad:</h4>
+        <section class="content-section">
+            <h2>Consideraciones de Implementación</h2>
+            
+            <div class="info-box">
+                <h3>Factores Clave</h3>
                 <ul>
-                    <li>Mantener Squid actualizado</li>
-                    <li>Revisar logs regularmente</li>
-                    <li>Implementar límites de ancho de banda</li>
-                    <li>Configurar correctamente los permisos de archivos</li>
+                    <li>Escalabilidad y rendimiento</li>
+                    <li>Requisitos de seguridad</li>
+                    <li>Necesidades de la organización</li>
+                    <li>Presupuesto y recursos disponibles</li>
+                    <li>Cumplimiento normativo</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>Mejores Prácticas</h3>
+                <ul>
+                    <li>Planificación detallada</li>
+                    <li>Pruebas exhaustivas</li>
+                    <li>Documentación completa</li>
+                    <li>Capacitación del personal</li>
+                    <li>Monitoreo continuo</li>
                 </ul>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>Servidores Proxy: Configuración y Gestión Avanzada<</p>
+        <p>Servidores Proxy: Configuración y Gestión Avanzada</p>
     </footer>
 </body>
 </html>
