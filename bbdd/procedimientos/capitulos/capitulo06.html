@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>6. Instrucciones condicionales - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>6. Instrucciones condicionales</h1>
+
+        <section>
+            <h2>6.1 IF-THEN-ELSE</h2>
+            <p>Igual en su funcionamiento que otros lenguajes de programación. Ejecuta la acción cuya expresión (condición) es cierta (de no ser cierta ninguna entonces ejecuta la acción asociada a la sentencia ELSE).</p>
+
+            <h3>Sintaxis:</h3>
+            <div class="codigo">
+                <pre>
+IF search_condition THEN statement_list
+[ELSEIF search_condition THEN statement_list] ...
+[ELSE statement_list]
+END IF</pre>
+            </div>
+
+            <h3>Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_if $$
+CREATE PROCEDURE ejemplo_if()
+BEGIN
+    DECLARE numero INT DEFAULT 7;
+    IF numero > 5 THEN
+        SELECT 'El número es mayor que 5';
+    ELSEIF numero = 5 THEN
+        SELECT 'El número es igual a 5';
+    ELSE
+        SELECT 'El número es menor que 5';
+    END IF;
+END $$
+DELIMITER ;</pre>
+            </div>
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </section>
+
+        <section>
+            <h2>6.2 CASE</h2>
+            <p>Similar a la sentencia condicional IF anterior. Todo lo que se puede expresar con la sentencia IF se puede expresar con la sentencia CASE. Esta última se suele utilizar cuando el número de expresiones o condiciones a evaluar es elevado y por tanto la lectura del código se hace más fácil y agradable.</p>
+            
+            <p>Existen dos formas de utilizar CASE si lo que se evalúa es una expresión o una condición:</p>
+
+            <h3>1ra forma:</h3>
+            <div class="codigo">
+                <pre>
+CASE case_value
+    WHEN when_value THEN statement_list
+    [WHEN when_value THEN statement_list] ...
+    [ELSE statement_list]
+END CASE</pre>
+            </div>
+
+            <h3>Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_case1 $$
+CREATE PROCEDURE ejemplo_case1()
+BEGIN
+    DECLARE numero INT DEFAULT 2;
+    CASE numero
+        WHEN 1 THEN SELECT 'Uno';
+        WHEN 2 THEN SELECT 'Dos';
+        WHEN 3 THEN SELECT 'Tres';
+        ELSE SELECT 'Otro número';
+    END CASE;
+END $$
+DELIMITER ;</pre>
+            </div>
+
+            <h3>2da forma:</h3>
+            <div class="codigo">
+                <pre>
+CASE
+    WHEN search_condition THEN statement_list
+    [WHEN search_condition THEN statement_list] ...
+    [ELSE statement_list]
+END CASE</pre>
+            </div>
+
+            <h3>Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_case2 $$
+CREATE PROCEDURE ejemplo_case2()
+BEGIN
+    DECLARE numero INT DEFAULT 7;
+    CASE
+        WHEN numero > 5 THEN SELECT 'Mayor que 5';
+        WHEN numero = 5 THEN SELECT 'Igual a 5';
+        ELSE SELECT 'Menor que 5';
+    END CASE;
+END $$
+DELIMITER ;</pre>
+            </div>
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo05.html" class="anterior">← Anterior: 5. Parámetros</a>
+            <a href="capitulo07.html" class="siguiente">Siguiente: 7. Instrucciones repetitivas o bucles →</a>
+        </div>
+    </div>
+</body>
+</html>
