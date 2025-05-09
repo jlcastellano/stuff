@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicios - Procedimientos Almacenados en MySQL</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .ejercicio {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .solucion {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+        .mostrar-solucion {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .mostrar-solucion:hover {
+            background-color: #0056b3;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejercicios de Procedimientos Almacenados en MySQL</h1>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 1</h3>
+        <p>Crear un procedimiento almacenado que reciba un número como parámetro y muestre la tabla de multiplicar de ese número hasta el 10.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 2</h3>
+        <p>Crear un procedimiento almacenado que calcule el factorial de un número utilizando un bucle REPEAT. El resultado debe almacenarse en un parámetro de salida.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 3</h3>
+        <p>Desarrollar un procedimiento que reciba un número y determine si es primo o no utilizando un bucle WHILE. Debe devolver 1 si es primo y 0 si no lo es mediante un parámetro OUT.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 4</h3>
+        <p>Crear un procedimiento que utilice variables de usuario para almacenar la suma y el promedio de los números del 1 al N, donde N es un parámetro de entrada.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 5</h3>
+        <p>Desarrollar un procedimiento que utilice un bucle LOOP para generar la serie Fibonacci hasta el término N (parámetro de entrada) y almacene el resultado en una variable de usuario.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 6</h3>
+        <p>Crear un procedimiento que utilice un CASE para clasificar un número (parámetro de entrada) en "Pequeño" (0-50), "Mediano" (51-100) o "Grande" (>100) y devuelva la clasificación en un parámetro de salida.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 7</h3>
+        <p>Desarrollar un procedimiento que utilice bloques anidados para calcular la suma de los cuadrados de los números del 1 al N (parámetro de entrada) que sean múltiplos de 3 o 5.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 8</h3>
+        <p>Crear un procedimiento que combine IF y WHILE para encontrar el primer número perfecto mayor que un número dado (parámetro de entrada). Un número perfecto es aquel que es igual a la suma de sus divisores propios.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 9</h3>
+        <p>Desarrollar un procedimiento que utilice REPEAT para generar una cadena que contenga los primeros N (parámetro de entrada) números en orden inverso, separados por comas.</p>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 10</h3>
+        <p>Crear un procedimiento que utilice un bucle anidado para generar una tabla de multiplicar completa del 1 al N (parámetro de entrada), almacenando el resultado en una variable de usuario como una cadena con saltos de línea.</p>
+    </div>
+
+    <script>
+        document.querySelectorAll('.mostrar-solucion').forEach(button => {
+            button.addEventListener('click', () => {
+                const solucion = button.nextElementSibling;
+                if (solucion.style.display === 'none') {
+                    solucion.style.display = 'block';
+                    button.textContent = 'Ocultar Solución';
+                } else {
+                    solucion.style.display = 'none';
+                    button.textContent = 'Ver Solución';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

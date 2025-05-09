@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicios - Procedimientos Almacenados en MySQL</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .ejercicio {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .solucion {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+        .mostrar-solucion {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .mostrar-solucion:hover {
+            background-color: #0056b3;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejercicios de Procedimientos Almacenados en MySQL</h1>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 1</h3>
+        <p>Crear un procedimiento almacenado que reciba un número como parámetro y muestre la tabla de multiplicar de ese número hasta el 10.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE tabla_multiplicar(IN numero INT)
+BEGIN
+    DECLARE contador INT DEFAULT 1;
+    WHILE contador <= 10 DO
+        SELECT CONCAT(numero, ' x ', contador, ' = ', numero * contador);
+        SET contador = contador + 1;
+    END WHILE;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 2</h3>
+        <p>Crear un procedimiento almacenado que calcule el factorial de un número utilizando un bucle REPEAT. El resultado debe almacenarse en un parámetro de salida.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE factorial(IN numero INT, OUT resultado BIGINT)
+BEGIN
+    DECLARE contador INT;
+    SET contador = numero;
+    SET resultado = 1;
+    REPEAT
+        SET resultado = resultado * contador;
+        SET contador = contador - 1;
+    UNTIL contador <= 1
+    END REPEAT;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 3</h3>
+        <p>Desarrollar un procedimiento que reciba un número y determine si es primo o no utilizando un bucle WHILE. Debe devolver 1 si es primo y 0 si no lo es mediante un parámetro OUT.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE es_primo(IN numero INT, OUT resultado INT)
+BEGIN
+    DECLARE divisor INT DEFAULT 2;
+    DECLARE es_primo INT DEFAULT 1;
+    
+    WHILE divisor <= numero/2 AND es_primo = 1 DO
+        IF numero % divisor = 0 THEN
+            SET es_primo = 0;
+        END IF;
+        SET divisor = divisor + 1;
+    END WHILE;
+    
+    SET resultado = es_primo;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 4</h3>
+        <p>Crear un procedimiento que utilice variables de usuario para almacenar la suma y el promedio de los números del 1 al N, donde N es un parámetro de entrada.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE calcular_suma_promedio(IN n INT)
+BEGIN
+    DECLARE contador INT DEFAULT 1;
+    SET @suma = 0;
+    
+    WHILE contador <= n DO
+        SET @suma = @suma + contador;
+        SET contador = contador + 1;
+    END WHILE;
+    
+    SET @promedio = @suma / n;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 5</h3>
+        <p>Desarrollar un procedimiento que utilice un bucle LOOP para generar la serie Fibonacci hasta el término N (parámetro de entrada) y almacene el resultado en una variable de usuario.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE fibonacci(IN n INT)
+BEGIN
+    DECLARE i INT DEFAULT 3;
+    DECLARE a INT DEFAULT 0;
+    DECLARE b INT DEFAULT 1;
+    
+    SET @resultado = '0,1';
+    
+    bucle: LOOP
+        IF i > n THEN
+            LEAVE bucle;
+        END IF;
+        SET @resultado = CONCAT(@resultado, ',', a + b);
+        SET b = a + b;
+        SET a = b - a;
+        SET i = i + 1;
+    END LOOP;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 6</h3>
+        <p>Crear un procedimiento que utilice un CASE para clasificar un número (parámetro de entrada) en "Pequeño" (0-50), "Mediano" (51-100) o "Grande" (>100) y devuelva la clasificación en un parámetro de salida.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE clasificar_numero(IN numero INT, OUT clasificacion VARCHAR(10))
+BEGIN
+    CASE
+        WHEN numero <= 50 THEN SET clasificacion = 'Pequeño';
+        WHEN numero <= 100 THEN SET clasificacion = 'Mediano';
+        ELSE SET clasificacion = 'Grande';
+    END CASE;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 7</h3>
+        <p>Desarrollar un procedimiento que utilice bloques anidados para calcular la suma de los cuadrados de los números del 1 al N (parámetro de entrada) que sean múltiplos de 3 o 5.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE suma_cuadrados_especiales(IN n INT)
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    SET @suma = 0;
+    
+    numeros: BEGIN
+        bucle: LOOP
+            IF i > n THEN
+                LEAVE bucle;
+            END IF;
+            
+            IF i % 3 = 0 OR i % 5 = 0 THEN
+                BEGIN
+                    SET @suma = @suma + (i * i);
+                END;
+            END IF;
+            
+            SET i = i + 1;
+            ITERATE bucle;
+        END LOOP bucle;
+    END numeros;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 8</h3>
+        <p>Crear un procedimiento que combine IF y WHILE para encontrar el primer número perfecto mayor que un número dado (parámetro de entrada). Un número perfecto es aquel que es igual a la suma de sus divisores propios.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE encontrar_numero_perfecto(IN inicio INT, OUT numero_perfecto INT)
+BEGIN
+    DECLARE num INT DEFAULT inicio + 1;
+    DECLARE suma_divisores INT;
+    DECLARE divisor INT;
+    
+    bucle_exterior: WHILE num <= 10000 DO
+        SET suma_divisores = 1;
+        SET divisor = 2;
+        
+        WHILE divisor <= num/2 DO
+            IF num % divisor = 0 THEN
+                SET suma_divisores = suma_divisores + divisor;
+            END IF;
+            SET divisor = divisor + 1;
+        END WHILE;
+        
+        IF suma_divisores = num THEN
+            SET numero_perfecto = num;
+            LEAVE bucle_exterior;
+        END IF;
+        
+        SET num = num + 1;
+    END WHILE;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 9</h3>
+        <p>Desarrollar un procedimiento que utilice REPEAT para generar una cadena que contenga los primeros N (parámetro de entrada) números en orden inverso, separados por comas.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE generar_secuencia_inversa(IN n INT)
+BEGIN
+    SET @resultado = '';
+    
+    REPEAT
+        SET @resultado = CONCAT_WS(',', n, @resultado);
+        SET n = n - 1;
+    UNTIL n < 1
+    END REPEAT;
+    
+    SET @resultado = TRIM(TRAILING ',' FROM @resultado);
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 10</h3>
+        <p>Crear un procedimiento que utilice un bucle anidado para generar una tabla de multiplicar completa del 1 al N (parámetro de entrada), almacenando el resultado en una variable de usuario como una cadena con saltos de línea.</p>
+        <button class="mostrar-solucion" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            Ver/Ocultar Solución
+        </button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+CREATE PROCEDURE tabla_multiplicar_completa(IN n INT)
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    DECLARE j INT DEFAULT 1;
+    SET @resultado = '';
+    
+    bucle_externo: LOOP
+        IF i > n THEN
+            LEAVE bucle_externo;
+        END IF;
+        
+        SET j = 1;
+        bucle_interno: LOOP
+            IF j > n THEN
+                SET @resultado = CONCAT(@resultado, '\n');
+                LEAVE bucle_interno;
+            END IF;
+            
+            SET @resultado = CONCAT(@resultado, i, 'x', j, '=', i*j, ' ');
+            SET j = j + 1;
+        END LOOP bucle_interno;
+        
+        SET i = i + 1;
+    END LOOP bucle_externo;
+END $$
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.mostrar-solucion').forEach(button => {
+            button.addEventListener('click', () => {
+                const solucion = button.nextElementSibling;
+                if (solucion.style.display === 'none') {
+                    solucion.style.display = 'block';
+                    button.textContent = 'Ocultar Solución';
+                } else {
+                    solucion.style.display = 'none';
+                    button.textContent = 'Ver Solución';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
