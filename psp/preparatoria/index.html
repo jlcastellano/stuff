@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programación de Servicios y Procesos - DAM</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+        }
+        #menu-frame {
+            width: 300px;
+            height: 100%;
+            border: none;
+            border-right: 1px solid #ccc;
+        }
+        #content-frame {
+            flex: 1;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="menu-frame" src="menu/sidebar.html"></iframe>
+    <iframe id="content-frame" name="contenido" src="capitulos/presentacion.html"></iframe>
+
+    <script>
+        // Script para manejar la navegación entre frames
+        document.addEventListener('DOMContentLoaded', function() {
+            // Asegurarse que los enlaces del menú se abran en el frame de contenido
+            const menuFrame = document.getElementById('menu-frame');
+            menuFrame.onload = function() {
+                const links = menuFrame.contentDocument.getElementsByTagName('a');
+                for(let link of links) {
+                    link.target = 'contenido';
+                }
+            };
+        });
+    </script>
+</body>
+</html>

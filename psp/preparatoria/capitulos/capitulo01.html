@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programación de Procesos - PSP</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>1. Programación de Procesos</h1>
+
+
+        <section id="1.1">
+            <h2>Programas y Procesos</h2>
+            <p>Un programa es un conjunto de instrucciones mientras que un proceso es un programa en ejecución. Cada proceso tiene:</p>
+            <ul>
+                <li>Código ejecutable</li>
+                <li>Datos</li>
+                <li>Pila</li>
+                <li>Contador de programa</li>
+                <li>Recursos del sistema asignados</li>
+            </ul>
+
+            <div class="code-block">
+                <h4>Ejemplo: Crear y ejecutar un proceso en Java</h4>
+                <pre><code>
+public class ProcesoSimple {
+    public static void main(String[] args) {
+        try {
+            // Crear proceso
+            ProcessBuilder pb = new ProcessBuilder("notepad.exe");
+            Process p = pb.start();
+            
+            // Esperar a que termine
+            int estado = p.waitFor();
+            System.out.println("El proceso terminó con estado: " + estado);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="1.2">
+            <h2>Multitarea</h2>
+            <p>La multitarea permite la ejecución simultánea (real o aparente) de varios procesos. Tipos:</p>
+            <ul>
+                <li>Multitarea cooperativa</li>
+                <li>Multitarea apropiativa</li>
+            </ul>
+
+            <div class="code-block">
+                <h4>Ejemplo: Ejecutar varios procesos</h4>
+                <pre><code>
+public class MultiProceso {
+    public static void main(String[] args) {
+        try {
+            // Crear varios procesos
+            ProcessBuilder pb1 = new ProcessBuilder("calc.exe");
+            ProcessBuilder pb2 = new ProcessBuilder("notepad.exe");
+            
+            Process p1 = pb1.start();
+            Process p2 = pb2.start();
+            
+            // Esperar a que terminen
+            p1.waitFor();
+            p2.waitFor();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="1.9">
+            <h2>Concurrencia en Java</h2>
+            <p>Java proporciona varias clases para trabajar con procesos:</p>
+            <ul>
+                <li>Runtime: Clase histórica para manejo de procesos</li>
+                <li>Process: Representa un proceso en ejecución</li>
+                <li>ProcessBuilder: Constructor moderno de procesos</li>
+            </ul>
+
+            <div class="code-block">
+                <h4>Ejemplo: ProcessBuilder con redirección</h4>
+                <pre><code>
+public class ProcesoConIO {
+    public static void main(String[] args) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "dir");
+            
+            // Redirigir salida a un archivo
+            pb.redirectOutput(new File("salida.txt"));
+            
+            // Iniciar proceso
+            Process p = pb.start();
+            
+            // Esperar finalización
+            p.waitFor();
+            
+            System.out.println("Directorio listado en salida.txt");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <div class="resumen">
+            <h2>Resumen</h2>
+            <ul>
+                <li>Un proceso es un programa en ejecución</li>
+                <li>Java permite crear y gestionar procesos mediante ProcessBuilder</li>
+                <li>Se pueden redirigir entrada/salida de procesos</li>
+                <li>La multitarea permite ejecutar varios procesos</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

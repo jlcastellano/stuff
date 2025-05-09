@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programación de Hilos - PSP</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>2. Programación de Hilos</h1>
+
+
+        <section id="2.1">
+            <h2>Programación de hilos en Java</h2>
+            <p>Los hilos son unidades más ligeras que los procesos y comparten recursos dentro del mismo proceso. En Java podemos crear hilos de dos formas:</p>
+
+            <div class="code-block">
+                <h4>Ejemplo 1: Extendiendo Thread</h4>
+                <pre><code>
+public class MiHilo extends Thread {
+    @Override
+    public void run() {
+        for(int i = 0; i < 5; i++) {
+            System.out.println("Hilo " + getName() + ": " + i);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        MiHilo hilo1 = new MiHilo();
+        MiHilo hilo2 = new MiHilo();
+        
+        hilo1.start();
+        hilo2.start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <h4>Ejemplo 2: Implementando Runnable</h4>
+                <pre><code>
+public class MiRunnable implements Runnable {
+    @Override
+    public void run() {
+        for(int i = 0; i < 5; i++) {
+            System.out.println("Runnable: " + i);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Thread hilo1 = new Thread(new MiRunnable());
+        Thread hilo2 = new Thread(new MiRunnable());
+        
+        hilo1.start();
+        hilo2.start();
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="2.4">
+            <h2>Sincronización de hilos</h2>
+            <p>La sincronización es necesaria cuando varios hilos acceden a recursos compartidos.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Sincronización con synchronized</h4>
+                <pre><code>
+public class Contador {
+    private int valor = 0;
+    
+    public synchronized void incrementar() {
+        valor++;
+    }
+    
+    public synchronized int getValor() {
+        return valor;
+    }
+}
+
+public class HiloContador extends Thread {
+    private Contador contador;
+    
+    public HiloContador(Contador c) {
+        this.contador = c;
+    }
+    
+    @Override
+    public void run() {
+        for(int i = 0; i < 1000; i++) {
+            contador.incrementar();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <div class="resumen">
+            <h2>Resumen</h2>
+            <ul>
+                <li>Los hilos permiten concurrencia dentro de un proceso</li>
+                <li>Se pueden crear extendiendo Thread o implementando Runnable</li>
+                <li>La sincronización es necesaria para recursos compartidos</li>
+                <li>Java ofrece mecanismos de alto nivel para gestión de hilos</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

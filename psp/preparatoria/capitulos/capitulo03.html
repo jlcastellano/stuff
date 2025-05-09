@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comunicaciones en Red - PSP</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>3. Comunicaciones en Red</h1>
+
+        <section id="3.2">
+            <h2>Modelo TCP/IP</h2>
+            <p>El modelo TCP/IP es la base de Internet y define cuatro capas:</p>
+            <ul>
+                <li>Capa de Acceso a Red</li>
+                <li>Capa de Internet (IP)</li>
+                <li>Capa de Transporte (TCP/UDP)</li>
+                <li>Capa de Aplicación</li>
+            </ul>
+
+            <div class="concepto-clave">
+                <h4>Direcciones IP y Puertos</h4>
+                <p>Una conexión se identifica por:</p>
+                <ul>
+                    <li>Dirección IP: identifica el host</li>
+                    <li>Puerto: identifica la aplicación</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="3.8">
+            <h2>Sockets UDP</h2>
+            <p>UDP es un protocolo no orientado a conexión, útil para comunicaciones rápidas sin garantía de entrega.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Servidor UDP</h4>
+                <pre><code>
+public class ServidorUDP {
+    public static void main(String[] args) {
+        try {
+            DatagramSocket socket = new DatagramSocket(9876);
+            byte[] buffer = new byte[1024];
+            
+            while (true) {
+                DatagramPacket paquete = new DatagramPacket(buffer, buffer.length);
+                socket.receive(paquete);
+                
+                String mensaje = new String(paquete.getData(), 0, paquete.getLength());
+                System.out.println("Mensaje recibido: " + mensaje);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <h4>Ejemplo: Cliente UDP</h4>
+                <pre><code>
+public class ClienteUDP {
+    public static void main(String[] args) {
+        try {
+            DatagramSocket socket = new DatagramSocket();
+            InetAddress direccion = InetAddress.getByName("localhost");
+            String mensaje = "Hola Servidor UDP";
+            
+            byte[] buffer = mensaje.getBytes();
+            DatagramPacket paquete = new DatagramPacket(
+                buffer, buffer.length, direccion, 9876);
+            
+            socket.send(paquete);
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="3.9">
+            <h2>Sockets TCP</h2>
+            <p>TCP es un protocolo orientado a conexión que garantiza la entrega ordenada de datos.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Servidor TCP</h4>
+                <pre><code>
+public class ServidorTCP {
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(9876)) {
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                
+                BufferedReader entrada = new BufferedReader(
+                    new InputStreamReader(clientSocket.getInputStream()));
+                PrintWriter salida = new PrintWriter(
+                    clientSocket.getOutputStream(), true);
+                
+                String mensaje = entrada.readLine();
+                System.out.println("Mensaje recibido: " + mensaje);
+                
+                salida.println("Mensaje recibido correctamente");
+                clientSocket.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <h4>Ejemplo: Cliente TCP</h4>
+                <pre><code>
+public class ClienteTCP {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("localhost", 9876)) {
+            PrintWriter salida = new PrintWriter(
+                socket.getOutputStream(), true);
+            BufferedReader entrada = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+            
+            salida.println("Hola Servidor TCP");
+            String respuesta = entrada.readLine();
+            System.out.println("Respuesta del servidor: " + respuesta);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <div class="resumen">
+            <h2>Resumen</h2>
+            <ul>
+                <li>TCP/IP es el modelo fundamental para comunicaciones en red</li>
+                <li>UDP es útil para comunicaciones rápidas sin garantías</li>
+                <li>TCP garantiza la entrega ordenada de datos</li>
+                <li>Los sockets son la base para programar comunicaciones en red</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

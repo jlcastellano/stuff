@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programación Segura - PSP</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>5. Programación Segura</h1>
+
+        <section id="5.1">
+            <h2>Criptografía Básica</h2>
+            <p>La criptografía es fundamental para garantizar la seguridad de las aplicaciones.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Cifrado Simple</h4>
+                <pre><code>
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+public class CifradoSimple {
+    public static void main(String[] args) throws Exception {
+        // Generar clave
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(128);
+        SecretKey secretKey = keyGen.generateKey();
+
+        // Crear cifrador
+        Cipher cipher = Cipher.getInstance("AES");
+        
+        // Cifrar
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        String textoOriginal = "Texto secreto";
+        byte[] textoCifrado = cipher.doFinal(textoOriginal.getBytes());
+
+        // Descifrar
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] textoDescifrado = cipher.doFinal(textoCifrado);
+        
+        System.out.println(new String(textoDescifrado));
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="5.4">
+            <h2>Certificados Digitales</h2>
+            <p>Los certificados digitales permiten verificar la identidad y autenticidad.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Manejo de Certificados</h4>
+                <pre><code>
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.io.FileInputStream;
+
+public class ManejoCertificados {
+    public static void main(String[] args) throws Exception {
+        // Cargar certificado
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        FileInputStream fis = new FileInputStream("certificado.cer");
+        X509Certificate cert = (X509Certificate) cf.generateCertificate(fis);
+
+        // Mostrar información
+        System.out.println("Emisor: " + cert.getIssuerDN());
+        System.out.println("Sujeto: " + cert.getSubjectDN());
+        System.out.println("Válido desde: " + cert.getNotBefore());
+        System.out.println("Válido hasta: " + cert.getNotAfter());
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="5.7">
+            <h2>Comunicaciones Seguras</h2>
+            <p>Implementación de conexiones seguras usando SSL/TLS.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Servidor HTTPS</h4>
+                <pre><code>
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+
+public class ServidorHTTPS {
+    public static void main(String[] args) {
+        try {
+            // Configurar propiedades
+            System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
+            System.setProperty("javax.net.ssl.keyStorePassword", "password");
+
+            // Crear socket seguro
+            SSLServerSocketFactory ssf = (SSLServerSocketFactory) 
+                SSLServerSocketFactory.getDefault();
+            SSLServerSocket servidor = (SSLServerSocket) 
+                ssf.createServerSocket(443);
+
+            while (true) {
+                SSLSocket cliente = (SSLSocket) servidor.accept();
+                // Manejar conexión segura
+                // ...
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <div class="resumen">
+            <h2>Resumen</h2>
+            <ul>
+                <li>La seguridad es fundamental en el desarrollo de aplicaciones</li>
+                <li>El cifrado protege la información sensible</li>
+                <li>Los certificados garantizan la autenticidad</li>
+                <li>SSL/TLS aseguran las comunicaciones</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

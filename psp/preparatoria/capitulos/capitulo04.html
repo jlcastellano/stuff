@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Servicios en Red - PSP</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>4. Servicios en Red</h1>
+
+        <section id="4.3">
+            <h2>TELNET</h2>
+            <p>TELNET es un protocolo de red que permite la conexión remota a un host para manejar sus recursos.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Cliente Telnet en Java</h4>
+                <pre><code>
+import java.io.*;
+import java.net.*;
+
+public class ClienteTelnet {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("servidor.ejemplo.com", 23)) {
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+            
+            // Enviar comandos
+            out.println("comando");
+            
+            // Leer respuesta
+            String respuesta;
+            while ((respuesta = in.readLine()) != null) {
+                System.out.println(respuesta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="4.5">
+            <h2>FTP</h2>
+            <p>El Protocolo de Transferencia de Archivos (FTP) permite la transferencia de archivos entre sistemas.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Cliente FTP usando Apache Commons Net</h4>
+                <pre><code>
+import org.apache.commons.net.ftp.FTPClient;
+
+public class ClienteFTP {
+    public static void main(String[] args) {
+        FTPClient cliente = new FTPClient();
+        try {
+            cliente.connect("ftp.ejemplo.com");
+            cliente.login("usuario", "password");
+            
+            // Subir archivo
+            FileInputStream fis = new FileInputStream("archivo.txt");
+            cliente.storeFile("archivo.txt", fis);
+            
+            // Descargar archivo
+            FileOutputStream fos = new FileOutputStream("descarga.txt");
+            cliente.retrieveFile("remoto.txt", fos);
+            
+            cliente.logout();
+            cliente.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="4.6">
+            <h2>Correo electrónico</h2>
+            <p>Implementación de clientes de correo usando los protocolos SMTP, POP3 e IMAP.</p>
+
+            <div class="code-block">
+                <h4>Ejemplo: Enviar correo con JavaMail</h4>
+                <pre><code>
+import javax.mail.*;
+import javax.mail.internet.*;
+
+public class EnviarCorreo {
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("usuario@gmail.com", "password");
+            }
+        });
+
+        try {
+            Message mensaje = new MimeMessage(session);
+            mensaje.setFrom(new InternetAddress("remitente@ejemplo.com"));
+            mensaje.setRecipients(Message.RecipientType.TO, 
+                InternetAddress.parse("destinatario@ejemplo.com"));
+            mensaje.setSubject("Asunto del correo");
+            mensaje.setText("Contenido del correo");
+
+            Transport.send(mensaje);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+        </section>
+        <div class="resumen">
+            <h2>Resumen</h2>
+            <ul>
+                <li>Los servicios de red son fundamentales en aplicaciones distribuidas</li>
+                <li>TELNET permite la administración remota</li>
+                <li>FTP facilita la transferencia de archivos</li>
+                <li>El correo electrónico utiliza varios protocolos (SMTP, POP3, IMAP)</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
