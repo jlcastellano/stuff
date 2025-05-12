@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f0f2f5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid #e1e4e8;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #1a5f7a;
+            color: white;
+            font-weight: 600;
+        }
+
+        td:first-child {
+            background-color: #2a7da1;
+            color: white;
+            font-weight: 600;
+            width: 150px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #f1f4f7;
+        }
+        
+        caption {
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #1a5f7a;
+            text-align: left;
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .interfaz {
+            color: #e74c3c;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .metodo {
+            color: #2980b9;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .evento {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        @media screen and (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+
+            td:first-child {
+                width: 100px;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #1a5f7a;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #546e7a;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Componentes Swing Java</h1>
+        <p>Eventos y Métodos de Implementación</p>
+    </div>
+
+    <!-- JButton -->
+    <table>
+        <caption>🔘 JButton</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>JButton</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+    </table>
+
+    <!-- JTextField -->
+    <table>
+        <caption>📝 JTextField</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="3">JTextField</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">DocumentEvent</td>
+            <td class="metodo">insertUpdate(DocumentEvent e)<br>
+                removeUpdate(DocumentEvent e)<br>
+                changedUpdate(DocumentEvent e)</td>
+            <td class="interfaz">DocumentListener</td>
+        </tr>
+        <tr>
+            <td class="evento">CaretEvent</td>
+            <td class="metodo">caretUpdate(CaretEvent e)</td>
+            <td class="interfaz">CaretListener</td>
+        </tr>
+    </table>
+
+    <!-- JTextArea -->
+    <table>
+        <caption>📄 JTextArea</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JTextArea</td>
+            <td class="evento">DocumentEvent</td>
+            <td class="metodo">insertUpdate(DocumentEvent e)<br>
+                removeUpdate(DocumentEvent e)<br>
+                changedUpdate(DocumentEvent e)</td>
+            <td class="interfaz">DocumentListener</td>
+        </tr>
+        <tr>
+            <td class="evento">CaretEvent</td>
+            <td class="metodo">caretUpdate(CaretEvent e)</td>
+            <td class="interfaz">CaretListener</td>
+        </tr>
+    </table>
+
+    <!-- JCheckBox -->
+    <table>
+        <caption>☑️ JCheckBox</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JCheckBox</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">ItemEvent</td>
+            <td class="metodo">itemStateChanged(ItemEvent e)</td>
+            <td class="interfaz">ItemListener</td>
+        </tr>
+    </table>
+
+    <!-- JRadioButton -->
+    <table>
+        <caption>⚪ JRadioButton</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JRadioButton</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">ItemEvent</td>
+            <td class="metodo">itemStateChanged(ItemEvent e)</td>
+            <td class="interfaz">ItemListener</td>
+        </tr>
+    </table>
+
+    <!-- JComboBox -->
+    <table>
+        <caption>📊 JComboBox</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JComboBox</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">ItemEvent</td>
+            <td class="metodo">itemStateChanged(ItemEvent e)</td>
+            <td class="interfaz">ItemListener</td>
+        </tr>
+    </table>
+
+    <!-- JList -->
+    <table>
+        <caption>📋 JList</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JList</td>
+            <td class="evento">ListSelectionEvent</td>
+            <td class="metodo">valueChanged(ListSelectionEvent e)</td>
+            <td class="interfaz">ListSelectionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">MouseEvent</td>
+            <td class="metodo">mouseClicked(MouseEvent e)</td>
+            <td class="interfaz">MouseListener</td>
+        </tr>
+    </table>
+
+    <!-- JSlider -->
+    <table>
+        <caption>📏 JSlider</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>JSlider</td>
+            <td class="evento">ChangeEvent</td>
+            <td class="metodo">stateChanged(ChangeEvent e)</td>
+            <td class="interfaz">ChangeListener</td>
+        </tr>
+    </table>
+
+    <!-- JSpinner -->
+    <table>
+        <caption>🔄 JSpinner</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>JSpinner</td>
+            <td class="evento">ChangeEvent</td>
+            <td class="metodo">stateChanged(ChangeEvent e)</td>
+            <td class="interfaz">ChangeListener</td>
+        </tr>
+    </table>
+
+    <!-- JTable -->
+    <table>
+        <caption>📊 JTable</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JTable</td>
+            <td class="evento">ListSelectionEvent</td>
+            <td class="metodo">valueChanged(ListSelectionEvent e)</td>
+            <td class="interfaz">ListSelectionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">TableModelEvent</td>
+            <td class="metodo">tableChanged(TableModelEvent e)</td>
+            <td class="interfaz">TableModelListener</td>
+        </tr>
+    </table>
+
+    <!-- JTree -->
+    <table>
+        <caption>🌳 JTree</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">JTree</td>
+            <td class="evento">TreeSelectionEvent</td>
+            <td class="metodo">valueChanged(TreeSelectionEvent e)</td>
+            <td class="interfaz">TreeSelectionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">TreeExpansionEvent</td>
+            <td class="metodo">treeExpanded(TreeExpansionEvent e)<br>
+                treeCollapsed(TreeExpansionEvent e)</td>
+            <td class="interfaz">TreeExpansionListener</td>
+        </tr>
+    </table>
+
+    <!-- JMenuBar y JMenuItem -->
+    <table>
+        <caption>📑 JMenuBar y JMenuItem</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>JMenuItem</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+    </table>
+
+    <!-- JTabbedPane -->
+    <table>
+        <caption>📑 JTabbedPane</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>JTabbedPane</td>
+            <td class="evento">ChangeEvent</td>
+            <td class="metodo">stateChanged(ChangeEvent e)</td>
+            <td class="interfaz">ChangeListener</td>
+        </tr>
+    </table>
+
+    <!-- JFrame -->
+    <table>
+        <caption>🪟 JFrame</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>JFrame</td>
+            <td class="evento">WindowEvent</td>
+            <td class="metodo">windowClosing(WindowEvent e)<br>
+                windowOpened(WindowEvent e)<br>
+                windowClosed(WindowEvent e)<br>
+                windowIconified(WindowEvent e)<br>
+                windowDeiconified(WindowEvent e)<br>
+                windowActivated(WindowEvent e)<br>
+                windowDeactivated(WindowEvent e)</td>
+            <td class="interfaz">WindowListener</td>
+        </tr>
+    </table>
+
+    <!-- Eventos Comunes -->
+    <table>
+        <caption>🖱️ Eventos Comunes</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="4">Cualquier Componente</td>
+            <td class="evento">MouseEvent</td>
+            <td class="metodo">mouseClicked(MouseEvent e)<br>
+                mousePressed(MouseEvent e)<br>
+                mouseReleased(MouseEvent e)<br>
+                mouseEntered(MouseEvent e)<br>
+                mouseExited(MouseEvent e)</td>
+            <td class="interfaz">MouseListener</td>
+        </tr>
+        <tr>
+            <td class="evento">MouseEvent</td>
+            <td class="metodo">mouseDragged(MouseEvent e)<br>
+                mouseMoved(MouseEvent e)</td>
+            <td class="interfaz">MouseMotionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">KeyEvent</td>
+            <td class="metodo">keyTyped(KeyEvent e)<br>
+                keyPressed(KeyEvent e)<br>
+                keyReleased(KeyEvent e)</td>
+            <td class="interfaz">KeyListener</td>
+        </tr>
+        <tr>
+            <td class="evento">FocusEvent</td>
+            <td class="metodo">focusGained(FocusEvent e)<br>
+                focusLost(FocusEvent e)</td>
+            <td class="interfaz">FocusListener</td>
+        </tr>
+    </table>
+
+</body>
+</html>
