@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f0f2f5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid #e1e4e8;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+
+        td:first-child {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+            width: 150px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #f1f4f7;
+        }
+        
+        caption {
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: left;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .component-icon {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .interfaz {
+            color: #e74c3c;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .metodo {
+            color: #2980b9;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .evento {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        @media screen and (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+
+            td:first-child {
+                width: 100px;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Componentes AWT Java</h1>
+        <p>Eventos y Métodos de Implementación</p>
+    </div>
+
+    <!-- Button Component -->
+    <table>
+        <caption>🔘 Button</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>Button</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+    </table>
+
+    <!-- TextField Component -->
+    <table>
+        <caption>📝 TextField</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">TextField</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">TextEvent</td>
+            <td class="metodo">textValueChanged(TextEvent e)</td>
+            <td class="interfaz">TextListener</td>
+        </tr>
+    </table>
+
+    <!-- TextArea Component -->
+    <table>
+        <caption>📄 TextArea</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>TextArea</td>
+            <td class="evento">TextEvent</td>
+            <td class="metodo">textValueChanged(TextEvent e)</td>
+            <td class="interfaz">TextListener</td>
+        </tr>
+    </table>
+
+    <!-- Checkbox Component -->
+    <table>
+        <caption>☑️ Checkbox</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>Checkbox</td>
+            <td class="evento">ItemEvent</td>
+            <td class="metodo">itemStateChanged(ItemEvent e)</td>
+            <td class="interfaz">ItemListener</td>
+        </tr>
+    </table>
+
+    <!-- Choice Component -->
+    <table>
+        <caption>📊 Choice</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>Choice</td>
+            <td class="evento">ItemEvent</td>
+            <td class="metodo">itemStateChanged(ItemEvent e)</td>
+            <td class="interfaz">ItemListener</td>
+        </tr>
+    </table>
+
+    <!-- List Component -->
+    <table>
+        <caption>📋 List</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">List</td>
+            <td class="evento">ActionEvent</td>
+            <td class="metodo">actionPerformed(ActionEvent e)</td>
+            <td class="interfaz">ActionListener</td>
+        </tr>
+        <tr>
+            <td class="evento">ItemEvent</td>
+            <td class="metodo">itemStateChanged(ItemEvent e)</td>
+            <td class="interfaz">ItemListener</td>
+        </tr>
+    </table>
+
+    <!-- ScrollBar Component -->
+    <table>
+        <caption>⬇️ ScrollBar</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>ScrollBar</td>
+            <td class="evento">AdjustmentEvent</td>
+            <td class="metodo">adjustmentValueChanged(AdjustmentEvent e)</td>
+            <td class="interfaz">AdjustmentListener</td>
+        </tr>
+    </table>
+
+    <!-- Window Component -->
+    <table>
+        <caption>🪟 Window</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>Window</td>
+            <td class="evento">WindowEvent</td>
+            <td class="metodo">
+                windowOpened(WindowEvent e)<br>
+                windowClosing(WindowEvent e)<br>
+                windowClosed(WindowEvent e)<br>
+                windowIconified(WindowEvent e)<br>
+                windowDeiconified(WindowEvent e)<br>
+                windowActivated(WindowEvent e)<br>
+                windowDeactivated(WindowEvent e)
+            </td>
+            <td class="interfaz">WindowListener</td>
+        </tr>
+    </table>
+
+    <!-- Mouse Events -->
+    <table>
+        <caption>🖱️ Mouse Events (Común)</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td rowspan="2">Cualquier Componente</td>
+            <td class="evento">MouseEvent</td>
+            <td class="metodo">
+                mouseClicked(MouseEvent e)<br>
+                mousePressed(MouseEvent e)<br>
+                mouseReleased(MouseEvent e)<br>
+                mouseEntered(MouseEvent e)<br>
+                mouseExited(MouseEvent e)
+            </td>
+            <td class="interfaz">MouseListener</td>
+        </tr>
+        <tr>
+            <td class="evento">MouseEvent</td>
+            <td class="metodo">
+                mouseDragged(MouseEvent e)<br>
+                mouseMoved(MouseEvent e)
+            </td>
+            <td class="interfaz">MouseMotionListener</td>
+        </tr>
+    </table>
+
+    <!-- Key Events -->
+    <table>
+        <caption>⌨️ Key Events (Común)</caption>
+        <tr>
+            <th>Componente</th>
+            <th>Evento</th>
+            <th>Método a Implementar</th>
+            <th>Interfaz</th>
+        </tr>
+        <tr>
+            <td>Cualquier Componente</td>
+            <td class="evento">KeyEvent</td>
+            <td class="metodo">
+                keyTyped(KeyEvent e)<br>
+                keyPressed(KeyEvent e)<br>
+                keyReleased(KeyEvent e)
+            </td>
+            <td class="interfaz">KeyListener</td>
+        </tr>
+    </table>
+
+</body>
+</html>
