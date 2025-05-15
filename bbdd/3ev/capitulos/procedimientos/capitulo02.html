@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>2. Procedimientos almacenados - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>2. Procedimientos almacenados</h1>
+
+        <section>
+            <p>La orden SQL que permite crear un procedimiento almacenado es CREATE PROCEDURE.</p>
+            <p>Para crear un procedimiento o función el usuario debe disponer del privilegio CREATE ROUTINE y el de ALTER ROUTINE para modificarlo o borrarlo; este último privilegio se asigna automáticamente al creador del procedimiento o función. Para poder ejecutar un procedimiento o función debe disponerse del privilegio EXECUTE.</p>
+            <p>Un procedimiento se crea dentro de una base de datos concreta.</p>
+        </section>
+
+        <section>
+            <h2>Sintaxis general:</h2>
+            <div class="codigo">
+                <pre>
+CREATE
+[DEFINER = { user | CURRENT_USER }]PROCEDURE sp_name ([proc_parameter[,...]])
+[characteristic ...] routine_body
+
+proc_parameter:
+[ IN | OUT | INOUT ] param_name type
+
+func_parameter:
+param_name type
+
+type:
+Any valid MySQL data type
+
+characteristic:
+COMMENT 'string'
+| LANGUAGE SQL
+| [NOT] DETERMINISTIC
+| { CONTAINS SQL | NO SQL | READS SQL DATA | MODIFIES SQL DATA }
+| SQL SECURITY { DEFINER | INVOKER }
+
+routine_body: Valid SQL routine statement</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Ejemplo:</h2>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo1 $$
+CREATE PROCEDURE ejemplo1 ()
+BEGIN
+SELECT 'Mi primer programa en MySQL';
+END $$
+DELIMITER ;</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Breve explicación:</h2>
+            <p>MySQL utiliza el carácter ";" para finalizar cada sentencia SQL. Como dentro del cuerpo del procedimiento las instrucciones van separadas por ";" (5ª línea) para distinguirlas de las sentencias SQL necesitamos utilizar otro carácter delimitador (en la 1ª línea se habilita y en la última se vuelve a dejar el que estaba). La sentencia DROP PROCEDURE…. borra el procedimiento si este estuviera previamente creado (de no ponerlo daría error si estuviera creado); en la 3ª línea se crea dicho procedimiento. La 4ª línea indica el comienzo del cuerpo del procedimiento que finaliza en la penúltima línea.</p>
+            <p>Para ejecutar un procedimiento habría que llamarlo: CALL ejemplo1();</p>
+            <p>De tal forma, que cuando un procedimiento se llama, se ejecutan todas las órdenes SQL del mismo.</p>
+        </section>
+
+        <section>
+            <p>La orden SQL que permite ver la información de los procedimientos almacenados es: SHOW PROCEDURE STATUS.</p>
+            <p>Por ejemplo, para ver la información de los procedimientos almacenados de la base de datos 'jardineria':</p>
+            <div class="codigo">
+                <pre>SHOW PROCEDURE STATUS WHERE Db = 'jardineria';</pre>
+            </div>
+        </section>
+
+        <section>
+            <p>La orden SQL que permite borrar un procedimiento es DROP PROCEDURE.</p>
+            <p>Indicar que podemos incluir una cláusula IF EXISTS para indicar que solamente en caso de que exista, borre el procedimiento. Esto es muy útil cuando tenemos un bloque de sentencias, ya que si no ponemos el IF, si el procedimiento no existe daría un error y se dejarían de ejecutar las sentencias.</p>
+            <div class="codigo">
+                <pre>DROP PROCEDURE IF EXISTS ejemplo1;</pre>
+            </div>
+        </section>
+
+        <section>
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo01.html" class="anterior">← Anterior: 1. Introducción</a>
+            <a href="capitulo03.html" class="siguiente">Siguiente: 3. Variables locales →</a>
+        </div>
+    </div>
+</body>
+</html>

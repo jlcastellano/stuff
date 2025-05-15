@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Manejo de errores en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Manejo de errores</h1>
+
+        <section class="introduccion">
+            <p>En general, si una sentencia SQL falla dentro de un programa almacenado se produce una situación de error, se interrumpe la ejecución del programa en ese punto y finaliza salvo en el caso de que el programa que falla hubiera sido llamado por otro; en ese caso la ejecución continua por el programa que llamó a este programa que ha causado el error; ocurriría lo mismo si en lugar de un programa que es llamado desde otro programa nos encontráramos con un bloque interno dentro de otro bloque más externo; si se produjera error en el bloque anidado interno, la ejecución del programa se interrumpiría en el bloque interno para continuar por el externo.</p>
+            
+            <p>Como hemos visto anteriormente, este comportamiento se puede controlar definiendo los manejadores de errores o handlers.</p>
+
+            <p>Un handler es un bloque de instrucciones SQL que se ejecuta cuando se verifica una condición tras una excepción (error) generada por el servidor.</p>
+        </section>
+
+        <section class="sintaxis">
+            <h2>Sintaxis</h2>
+            <div class="codigo">
+                <pre><code>DECLARE {CONTINUE | EXIT | UNDO} HANDLER FOR {SQLSTATE sqlstate_code | MySQL error code | nombre_condición}
+    instrucciones_del_manejador</code></pre>
+            </div>
+            <p class="nota-importante">Deben declararse después de las declaraciones de variables y cursores.</p>
+        </section>
+
+        <section class="tipos-manejadores">
+            <h2>Tipos de Manejadores</h2>
+            <p>El manejador puede ser de tres tipos, pero uno de ellos (UNDO) no está implementado en MySQL, así que veremos los dos tipos que sí están soportados:</p>
+            <ul>
+                <li><strong>CONTINUE:</strong> La excepción o error generado no interrumpe el código del procedimiento. La ejecución del programa continúa.</li>
+                <li><strong>EXIT:</strong> Se pone fin al bloque de instrucciones o programa en el que se genera la excepción. Si el error se produce en un programa, el programa que causa el error finaliza, devolviendo el control al programa que le llamó. Si se produce en un bloque interno, entonces el control de la ejecución pasa al externo.</li>
+            </ul>
+        </section>
+
+        <section class="ejemplos">
+            <h2>Ejemplos de situaciones de error</h2>
+
+            <h3>Sin tratar el error de clave primaria repetida</h3>
+            <div class="codigo">
+                <pre><code>DELIMITER $$
+
+CREATE PROCEDURE error1(IN p_id INT, IN p_nombre VARCHAR(50))
+BEGIN
+    INSERT INTO alumnos(id, nombre)
+    VALUES (p_id, p_nombre);
+END $$
+
+DELIMITER ;</code></pre>
+            </div>
+            <p>Si, por ejemplo, intentamos meter dos veces el mismo alumno, aparecerá un error con número de error (1062) y una descripción ("entrada duplicada") advirtiendonos de tal situación; evidentemente no se realiza la inserción y la ejecución del programa se detiene y finaliza (pues no retorna a ningún otro programa ya que no hay ningún otro que lo llamó).</p>
+
+            <h3>Tratando el error de clave primaria repetida</h3>
+            <div class="codigo">
+                <pre><code>DELIMITER $$
+
+CREATE PROCEDURE error2(IN p_id INT, IN p_nombre VARCHAR(50))
+BEGIN
+    DECLARE v_error INT DEFAULT 0;
+    
+    DECLARE CONTINUE HANDLER FOR 1062 
+        SET v_error = 1;
+    
+    INSERT INTO alumnos(id, nombre)
+    VALUES (p_id, p_nombre);
+    
+    IF v_error = 1 THEN
+        SELECT CONCAT('Error: El alumno con ID ', p_id, ' ya existe') AS mensaje;
+    ELSE
+        SELECT 'Alumno insertado correctamente' AS mensaje;
+    END IF;
+END $$
+
+DELIMITER ;</code></pre>
+            </div>
+        </section>
+
+        <section class="condiciones-manejador">
+            <h2>Condiciones del Manejador</h2>
+            <p>La condición de error del manejador puede expresarse de 3 formas:</p>
+
+            <h3>1. MySQL error code</h3>
+            <p>Número de error de MySQL, propio de MySQL, que dispone de un conjunto particular de números de error.</p>
+            <div class="codigo">
+                <pre><code>DECLARE CONTINUE HANDLER FOR 1062
+SET v_clave_repetida=1;</code></pre>
+            </div>
+            <p>El número de error 1062 está asociado en MySQL al intento de almacenar un registro de clave duplicada.</p>
+
+            <h3>2. SQLSTATE sqlstate_code</h3>
+            <p>Código SQLSTATE estándar ANSI, a diferencia del anterior, SQLSTATE no es definido por MySQL sino que es un estándar y por tanto el mismo error tiene asociado el mismo SQLSTATE independientemente del gestor de bases de datos utilizado: MySQL, Oracle, DB2, Microsoft SQL Server.</p>
+            <div class="codigo">
+                <pre><code>DECLARE CONTINUE HANDLER FOR SQLSTATE '23000'
+SET v_clave_repetida=1;</code></pre>
+            </div>
+            <p>SQLSTATE 23000 está asociado al error de clave duplicada.</p>
+
+            <h3>3. nombre_condición</h3>
+            <p>Condiciones de error con nombre, predefinidas de MySQL:</p>
+            <ul>
+                <li><strong>SQLWARNING:</strong> es un subconjunto de los códigos SQLSTATE, representando todos los códigos que empiezan por 01.</li>
+                <li><strong>NOT FOUND:</strong> es un subconjunto de los códigos SQLSTATE, representando todos los códigos que comienzan por 02.</li>
+                <li><strong>SQLEXCEPTION:</strong> es un subconjunto de los códigos SQLSTATE, representando todos los códigos que no comienzan ni por 01 ni por 02.</li>
+            </ul>
+        </section>
+
+        <section class="ejemplo-practico">
+            <h2>Ejemplo de Uso</h2>
+            <div class="codigo-ejemplo">
+                <pre><code>CALL error2(6, 'Raquel M. Carrera');</code></pre>
+            </div>
+            <p class="nota">Nota: imaginamos que esa alumna ya existe.</p>
+            <div class="resultado">
+                <p>Producirá la siguiente salida:</p>
+                <pre><code>+----------------------------------------+
+| mensaje                                 |
++----------------------------------------+
+| Error: El alumno con ID 6 ya existe    |
++----------------------------------------+</code></pre>
+            </div>
+            <p class="explicacion">Resaltar que el error ha sido tratado y por tanto no finaliza la ejecución del programa en el momento en que se produce y si hubiera más líneas de código detrás de la línea 9, éstas se ejecutarían debido al tipo de manejador, CONTINUE; esto no ocurriría si el error no fuera tratado como hemos comprobado en el procedimiento error1 anterior.</p>
+        </section>
+    </div>
+
+
+  <style>
+        .codigo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            color: black;
+        }
+
+        .nota-importante {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .nota-final {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        pre code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</body>
+</html>

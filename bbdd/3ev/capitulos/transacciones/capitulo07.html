@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>7. Cómo realizar transacciones con procedimientos almacenados - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>7. Cómo realizar transacciones con procedimientos almacenados</h1>
+
+        <section class="introduccion">
+            <p>Podemos utilizar el manejo de errores para decidir si hacemos ROLLBACK de una transacción en un Store Procedure. En el siguiente ejemplo vamos a capturar los errores que se produzcan de tipo SQLEXCEPTION.</p>
+        </section>
+
+        <section class="ejemplo-procedimiento">
+            <h2>Ejemplo de Procedimiento Almacenado con Transacción</h2>
+            
+            <div class="codigo-ejemplo">
+                <pre><code>DELIMITER $$
+
+CREATE PROCEDURE transaccion_en_mysql(usuario_id INT, libro_id INT)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION  -- OCURRE UN ERROR
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+    -- Sentencias SQL
+    INSERT INTO prestamos(id_libro, id_usuario) VALUES(libro_id, usuario_id);
+    UPDATE libros SET stock = stock - 1 WHERE id_libro = libro_id;
+    COMMIT;
+END $$
+
+DELIMITER ;</code></pre>
+            </div>
+
+            <div class="explicacion">
+                <h3>Análisis del Código</h3>
+                <ul>
+                    <li><strong>DECLARE EXIT HANDLER FOR SQLEXCEPTION</strong>: Define qué hacer cuando ocurre un error SQL</li>
+                    <li><strong>BEGIN ROLLBACK; END</strong>: En caso de error, se deshacen todos los cambios</li>
+                    <li><strong>START TRANSACTION</strong>: Inicia la transacción</li>
+                    <li><strong>Sentencias SQL</strong>: Realiza las operaciones necesarias</li>
+                    <li><strong>COMMIT</strong>: Confirma los cambios si todo fue exitoso</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="funcionamiento">
+            <h2>¿Cómo funciona?</h2>
+            <div class="info-card">
+                <h3>Proceso del Procedimiento</h3>
+                <ol>
+                    <li>Se reciben los parámetros de entrada (usuario_id y libro_id)</li>
+                    <li>Se establece el manejador de errores</li>
+                    <li>Se inicia la transacción</li>
+                    <li>Se realiza el préstamo (INSERT)</li>
+                    <li>Se actualiza el stock (UPDATE)</li>
+                    <li>Si todo va bien, se hace COMMIT</li>
+                    <li>Si hay error, se ejecuta el ROLLBACK automáticamente</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="mejores-practicas">
+            <h2>Mejores Prácticas</h2>
+            <div class="practica-card">
+                <ul>
+                    <li>Siempre incluir manejo de errores en procedimientos con transacciones</li>
+                    <li>Mantener las transacciones lo más cortas posible</li>
+                    <li>Asegurarse de que todas las operaciones sean necesarias</li>
+                    <li>Considerar el impacto en el rendimiento al usar transacciones en procedimientos almacenados</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo06.html" class="anterior">← Anterior: 6. Niveles de aislamiento</a>
+        </div>
+    </div>
+
+    <style>
+        .codigo-ejemplo {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .explicacion {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .info-card {
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .practica-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #fff3cd;
+        }
+
+        .practica-card ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .practica-card li {
+            margin: 10px 0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</body>
+</html>

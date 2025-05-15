@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>10. Almacenar en variables el valor de una fila de una tabla - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>10. Almacenar en variables el valor de una fila de una tabla</h1>
+
+        <section>
+            <p>No sólo las instrucciones SQL de definición y manipulación de datos (DDL y DML) pueden intercalarse en los procedimientos almacenados, la recuperación de los datos almacenados en la base de datos permitirá su posterior proceso o tratamiento.</p>
+
+            <h2>Sintaxis:</h2>
+            <div class="codigo">
+                <pre>SELECT ... INTO var_list FROM nombre_tabla</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Ejemplo:</h2>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_select_into $$
+CREATE PROCEDURE ejemplo_select_into()
+BEGIN
+    DECLARE v_id INT;
+    DECLARE v_alumno VARCHAR(50);
+    
+    SELECT id, alumno 
+    INTO v_id, v_alumno
+    FROM alumnos 
+    WHERE id = 1;
+    
+    SELECT v_id, v_alumno;
+END $$
+DELIMITER ;</pre>
+            </div>
+
+            <p>El ejemplo anterior almacena una fila entera de una tabla llamada "alumnos" en las variables declaradas en las líneas 6 y 7, mostrando su contenido en la línea 12. En la línea 8 se señalan las columnas a recuperar (en este caso las dos) y en la línea 9 se indica dónde (variables) se guardarán los valores de dichas columnas según el orden en que aparecen (el valor de la columna id se guardará en la variable v_id, el de la columna alumno en la variable v_alumno).</p>
+        </section>
+
+        <section>
+            <h2>Consideraciones importantes:</h2>
+
+            <h3>1. Consulta que devuelve una fila</h3>
+            <p>En el anterior ejemplo no ha habido ningún problema de ejecución pues cada una de las dos variables almacena sólo un ítem (el de la correspondiente columna), pues la consulta sólo devuelve una fila.</p>
+
+            <h3>2. Consulta que devuelve múltiples filas</h3>
+            <p>¿Qué ocurriría si la consulta devolviera más de una fila? Pues que te encontrarás en la parte inferior de la pantalla de resultado con un error recordándote que no se puede obtener como resultado de la ejecución de una instrucción SELECT … INTO más de una fila. Dicho error provoca que la ejecución del procedimiento finalice y no continúe por lo que las siguientes instrucciones a la que provocó el error (SELECT… INTO) no se ejecutarán (en este caso solo una, la instrucción que visualiza las dos variables).</p>
+
+            <h3>3. Consulta que no devuelve resultados</h3>
+            <p>¿Qué ocurriría si no devolviera ningún valor la instrucción SELECT? A diferencia de otros lenguajes de programación de bases de datos no provocaría situación de error severa similar a la del ejemplo anterior. Este ejemplo finalizaría mostrando los contenidos de las variables v_id y v_alumno, nulo, puesto que no existe el alumno de id 100 y por tanto la sentencia SQL no recupera ninguna fila.</p>
+
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_select_into_sin_resultados $$
+CREATE PROCEDURE ejemplo_select_into_sin_resultados()
+BEGIN
+    DECLARE v_id INT;
+    DECLARE v_alumno VARCHAR(50);
+    
+    SELECT id, alumno 
+    INTO v_id, v_alumno
+    FROM alumnos 
+    WHERE id = 100;
+    
+    SELECT v_id, v_alumno;
+END $$
+DELIMITER ;</pre>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo09.html" class="anterior">← Anterior: 9. Bucles anidados</a>
+        </div>
+    </div>
+</body>
+</html>

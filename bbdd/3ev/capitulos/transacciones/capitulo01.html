@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>1. Definición de Transacción - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>1. Definición de Transacción</h1>
+
+        <section>
+            <p>En nuestro día a día realizamos tareas que afectan a varias tablas a la vez, incluso se pueden alterar 10, 20 e incluso 100 tablas en un mismo proceso. No es tarea fácil tener bien ordenadas las sentencias de un mismo proceso y sabiendo que basta con que una de ellas falle para que todo el proceso falle.</p>
+            
+            <p>Por eso los SGBD aportan una herramienta que se llama transacción. Podríamos definir una <strong>transacción SQL</strong> como un mecanismo que nos permite agrupar "n" sentencias SQL en una sola, de manera que se ejecutan todas o no se ejecuta ninguna. Es decir, se ejecutan formando una unidad lógica de trabajo (LUW del inglés Logic Unit of Work), en forma indivisible o atómica.</p>
+
+            <p>Una transacción SQL finaliza con un <code>COMMIT</code>, para aceptar todos los cambios que la transacción ha realizado en la base de datos (todas las sentencias han tenido éxito), o un <code>ROLLBACK</code> para deshacerlos (alguna de las sentencias ha fallado).</p>
+        </section>
+
+        <section>
+            <h2>Sintaxis de una transacción:</h2>
+            <div class="codigo">
+                <pre>
+START TRANSACTION
+[transaction_characteristic [, transaction_characteristic] ...]
+
+transaction_characteristic: {
+    WITH CONSISTENT SNAPSHOT
+    | READ WRITE
+    | READ ONLY
+}
+
+BEGIN [WORK]
+COMMIT [WORK] [AND [NO] CHAIN] [[NO] RELEASE]
+ROLLBACK [WORK] [AND [NO] CHAIN] [[NO] RELEASE]
+SET autocommit = {0 | 1}</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Ejemplo:</h2>
+            <div class="codigo">
+                <pre>
+START TRANSACTION;
+SELECT @A:=SUM(salary) FROM table1 WHERE type=1;
+UPDATE table2 SET summary=@A WHERE type=1;
+COMMIT;</pre>
+            </div>
+
+            <h3>Explicación:</h3>
+            <p>Cuando se escribe <code>START TRANSACTION</code> le decimos al SGBD que a partir de ahora todas las sentencias se ejecuten como una sola y así, si lo deseamos, podremos (o no) deshacer todos los cambios.</p>
+            
+            <p>Se modificaría de forma permanente mi BBDD con la orden <code>COMMIT</code>, por lo tanto se terminaría la transacción y ya no se podrían deshacer los cambios. O se revierten los cambios con la orden <code>ROLLBACK</code>, la transacción termina y se vuelve al estado anterior justo antes de que comenzara la transacción.</p>
+
+            <div class="note-block">
+                <p><strong>En resumidas cuentas:</strong></p>
+                <ol>
+                    <li>Se empieza la transacción</li>
+                    <li>Se ejecutan todas las sentencias</li>
+                    <li>Si todo ha ido correctamente: <code>COMMIT</code></li>
+                    <li>Si falla algo: <code>ROLLBACK</code></li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo00.html" class="anterior">← Anterior: 0. Introducción</a>
+            <a href="capitulo02.html" class="siguiente">Siguiente: 2. Propiedades ACID →</a>
+        </div>
+    </div>
+</body>
+</html>

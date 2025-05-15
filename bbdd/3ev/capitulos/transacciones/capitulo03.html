@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>3. AUTOCOMMIT - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>3. AUTOCOMMIT</h1>
+
+        <section class="intro">
+            <p>Algunos Sistemas Gestores de Bases de Datos, como MySQL (si trabajamos con el motor InnoDB) tienen activada por defecto la variable AUTOCOMMIT. Esto quiere decir que automáticamente se aceptan todos los cambios realizados después de la ejecución de una sentencia SQL y no es posible deshacerlos.</p>
+        </section>
+
+        <section class="configuracion">
+            <h2>Configuración de AUTOCOMMIT</h2>
+            <p>Aunque la variable AUTOCOMMIT está activada por defecto al inicio de una sesión SQL, podemos configurarlo para indicar si queremos trabajar con:</p>
+            <ul>
+                <li><strong>Transacciones implícitas</strong> (no es posible deshacer cambios, AUTOCOMMIT = 1)</li>
+                <li><strong>Transacciones explícitas</strong> (se pueden deshacer, AUTOCOMMIT = 0)</li>
+            </ul>
+
+            <div class="codigo-ejemplo">
+                <h3>Comandos básicos de AUTOCOMMIT</h3>
+                <pre><code>
+-- Consultar el valor actual
+SELECT @@AUTOCOMMIT;
+
+-- Desactivar AUTOCOMMIT
+SET AUTOCOMMIT = 0;
+
+-- Activar AUTOCOMMIT
+SET AUTOCOMMIT = 1;
+                </code></pre>
+            </div>
+
+            <div class="nota-importante">
+                <p><strong>Nota:</strong> Para poder trabajar con transacciones en MySQL es necesario utilizar InnoDB.</p>
+            </div>
+        </section>
+
+        <section class="start-transaction">
+            <h2>Uso con START TRANSACTION</h2>
+            <p>Si se quiere deshabilitar el modo autocommit para una serie única de comandos, es cuando se usa el comando START TRANSACTION.</p>
+            <p>Con START TRANSACTION, autocommit permanece deshabilitado hasta el final de la transacción con COMMIT o ROLLBACK. El modo autocommit vuelve a su estado previo.</p>
+        </section>
+
+        <section id="no-deshacer">
+            <h2>3.1 Sentencias que no se pueden deshacer</h2>
+            <p>Algunos comandos no pueden deshacerse. En general, esto incluye comandos del lenguaje de definición de datos (DDL), tales como los que crean y borran bases de datos, los que crean, borran o alteran tablas o rutinas almacenadas.</p>
+
+            <div class="warning-block">
+                <h3>Comandos que terminan una transacción implícitamente:</h3>
+                <pre><code>ALTER TABLE, CREATE TABLE, CREATE INDEX, CREATE DATATABLE, 
+DROP DATABASE, DROP INDEX, DROP TABLE, RENAME TABLE, 
+SET AUTOCOMMIT=1, START TRANSACTION, TRUNCATE TABLE, etc.</code></pre>
+            </div>
+
+            <div class="advertencia">
+                <p><strong>¡Importante!</strong> Aunque puedas utilizar estas sentencias en las transacciones, es bueno que no incluyas tales comandos. Si inserta una sentencia en una transacción que no puede deshacerse, y luego un comando posterior falla, el efecto global de la transacción no puede deshacerse mediante un comando ROLLBACK.</p>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo02.html" class="anterior">← Anterior: 2. Propiedades ACID</a>
+            <a href="capitulo04.html" class="siguiente">Siguiente: 4. Ejemplo de START TRANSACTION, COMMIT y ROLLBACK →</a>
+        </div>
+    </div>
+
+    <style>
+        .warning-block {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .advertencia {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .nota-importante {
+            background-color: #e2e3e5;
+            border-left: 4px solid #383d41;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .codigo-ejemplo {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .codigo-ejemplo pre {
+            margin: 0;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Transacciones con Manejo de errores en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Transacciones con Manejo de errores en MySQL</h1>
+
+        <section class="introduccion">
+            <p>Podemos utilizar el manejo de errores para decidir si hacemos ROLLBACK de una transacción. En el siguiente ejemplo vamos a capturar los errores que se produzcan de tipo SQLEXCEPTION y SQLWARNING.</p>
+        </section>
+
+        <section class="ejemplo-multiple-handlers">
+            <h2>Ejemplo con Múltiples Manejadores</h2>
+            <div class="codigo">
+                <pre><code>DELIMITER $$
+
+CREATE PROCEDURE transaccion_en_mysql()
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN -- ERROR
+        ROLLBACK;
+    END;
+
+    DECLARE EXIT HANDLER FOR SQLWARNING
+    BEGIN -- WARNING
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+    -- Sentencias SQL
+    COMMIT;
+END $$
+
+DELIMITER ;</code></pre>
+            </div>
+        </section>
+
+        <section class="ejemplo-handler-combinado">
+            <h2>Manejador Común para Múltiples Errores</h2>
+            <p>En lugar de tener un manejador para cada tipo de error, podemos tener uno común para todos los casos.</p>
+            
+            <div class="codigo">
+                <pre><code>DELIMITER $$
+
+CREATE PROCEDURE transaccion_en_mysql()
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
+    BEGIN -- ERROR, WARNING
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+    -- Sentencias SQL
+    COMMIT;
+END $$
+
+DELIMITER ;</code></pre>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .codigo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            color: black;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+
+        pre code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+    </style>
+</body>
+</html>

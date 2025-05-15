@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>4. Ejemplo de START TRANSACTION, COMMIT y ROLLBACK - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>4. Ejemplo de START TRANSACTION, COMMIT y ROLLBACK</h1>
+
+        <section class="ejemplo-completo">
+            <div class="codigo-ejemplo">
+                <pre><code>
+DROP DATABASE IF EXISTS test;
+CREATE DATABASE test CHARACTER SET utf8mb4;
+USE test;
+
+CREATE TABLE cliente (
+    id INT UNSIGNED PRIMARY KEY,
+    nombre CHAR (20)
+);
+
+START TRANSACTION;
+INSERT INTO cliente VALUES (1, 'Pepe');
+COMMIT;</code></pre>
+            </div>
+
+            <div class="pregunta-respuesta">
+                <h3>1. ¿Qué devolverá esta consulta?</h3>
+                <pre><code>SELECT * FROM cliente;</code></pre>
+                <div class="respuesta">
+                    <p>Devolverá un registro con:</p>
+                    <ul>
+                        <li>id: 1</li>
+                        <li>nombre: 'Pepe'</li>
+                    </ul>
+                    <p>Ya que la transacción se ha confirmado con COMMIT.</p>
+                </div>
+            </div>
+
+            <div class="codigo-ejemplo">
+                <pre><code>
+SET AUTOCOMMIT=0;
+INSERT INTO cliente VALUES (2, 'Maria');
+INSERT INTO cliente VALUES (20, 'Juan');
+DELETE FROM cliente WHERE nombre = 'Pepe';</code></pre>
+            </div>
+
+            <div class="pregunta-respuesta">
+                <h3>2. ¿Qué devolverá esta consulta?</h3>
+                <pre><code>SELECT * FROM cliente;</code></pre>
+                <div class="respuesta">
+                    <p>Devolverá dos registros:</p>
+                    <ul>
+                        <li>id: 2, nombre: 'Maria'</li>
+                        <li>id: 20, nombre: 'Juan'</li>
+                    </ul>
+                    <p>Pepe ya no aparece porque ha sido eliminado con el DELETE.</p>
+                </div>
+            </div>
+
+            <div class="codigo-ejemplo">
+                <pre><code>ROLLBACK;</code></pre>
+            </div>
+
+            <div class="pregunta-respuesta">
+                <h3>3. ¿Qué devolverá esta consulta?</h3>
+                <pre><code>SELECT * FROM cliente;</code></pre>
+                <div class="respuesta">
+                    <p>Devolverá un registro con:</p>
+                    <ul>
+                        <li>id: 1, nombre: 'Pepe'</li>
+                    </ul>
+                    <p>Al hacer ROLLBACK, se deshacen todos los cambios de la última transacción (la inserción de Maria y Juan, y el borrado de Pepe), volviendo al estado después del primer COMMIT.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="nota-importante">
+            <h3>Puntos clave del ejemplo:</h3>
+            <ul>
+                <li>El primer COMMIT confirma la inserción de Pepe de forma permanente</li>
+                <li>Al desactivar AUTOCOMMIT (SET AUTOCOMMIT=0), los cambios posteriores forman parte de una transacción</li>
+                <li>El ROLLBACK final deshace todos los cambios de la última transacción</li>
+                <li>Solo se pueden deshacer los cambios que no han sido confirmados con COMMIT</li>
+            </ul>
+        </div>
+
+        <div class="navegacion">
+            <a href="capitulo03.html" class="anterior">← Anterior: 3. AUTOCOMMIT</a>
+            <a href="capitulo05.html" class="siguiente">Siguiente: 5. Acceso concurrente a los datos →</a>
+        </div>
+    </div>
+
+    <style>
+        .codigo-ejemplo {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .pregunta-respuesta {
+            border-left: 4px solid #007bff;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .respuesta {
+            background-color: #e9ecef;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .nota-importante {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .nota-importante h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+    </style>
+</body>
+</html>

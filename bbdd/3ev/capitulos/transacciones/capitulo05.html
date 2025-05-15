@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>5. Acceso concurrente a los datos - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>5. Acceso concurrente a los datos</h1>
+
+        <section class="introduccion">
+            <p>Las transacciones son delicadas de gestionar, ya que presentan problemas relacionados con los accesos concurrentes.</p>
+        </section>
+
+        <section class="problemas-concurrencia">
+            <h2>Problemas de Acceso Concurrente</h2>
+            <p>Cuando dos transacciones distintas intentan acceder concurrentemente a los mismos datos pueden ocurrir los siguientes problemas:</p>
+
+            <div class="problema-card">
+                <h3>Dirty Read (Lectura sucia)</h3>
+                <div class="problema-descripcion">
+                    <p>Una transacción A consulta información escrita por otra transacción B que aún no ha sido confirmada. Si la transacción B acaba en un ROLLBACK, la transacción A estaría manejando información incorrecta.</p>
+                    <div class="ejemplo">
+                        <h4>Ejemplo:</h4>
+                        <ol>
+                            <li>Transacción B modifica datos</li>
+                            <li>Transacción A lee esos datos (aún no confirmados)</li>
+                            <li>Transacción B hace ROLLBACK</li>
+                            <li>Transacción A tiene datos inválidos</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problema-card">
+                <h3>Nonrepeateable Read (Lectura No Repetible)</h3>
+                <div class="problema-descripcion">
+                    <p>Una transacción A consulta un valor dos veces y obtiene distinto resultado, ya que dicho dato ha sido modificado por una transacción B en el intervalo entre ambas consultas.</p>
+                    <div class="ejemplo">
+                        <h4>Ejemplo:</h4>
+                        <ol>
+                            <li>Transacción A lee un dato</li>
+                            <li>Transacción B modifica y confirma ese dato</li>
+                            <li>Transacción A lee el mismo dato y obtiene un valor diferente</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problema-card">
+                <h3>Phantom Read (Lectura fantasma)</h3>
+                <div class="problema-descripcion">
+                    <p>Este error ocurre cuando una transacción A lee unos datos que no existían cuando se inició la transacción. Otra transacción B los ha insertado o modificado.</p>
+                    <div class="ejemplo">
+                        <h4>Ejemplo:</h4>
+                        <ol>
+                            <li>Transacción A lee un conjunto de registros</li>
+                            <li>Transacción B inserta nuevos registros</li>
+                            <li>Transacción A vuelve a leer y encuentra registros que antes no existían</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="deadlock">
+            <h2>El problema del Deadlock</h2>
+            <div class="warning-box">
+                <p>Como se vio anteriormente, la solución a este tipo de problemas pasa por implementar políticas de bloqueo, pero estas, a su vez, causan otros problemas. El más habitual es el deadlock, situación en la que dos transacciones quedan bloqueadas indefinidamente, ya que ambas intentan acceder a datos bloqueados por la otra transacción.</p>
+                <p>En ese caso, el SGBD debe implementar algoritmos de detección de deadlocks, forzando el ROLLBACK de una de las transacciones comprometidas.</p>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo04.html" class="anterior">← Anterior: 4. Ejemplo de START TRANSACTION, COMMIT y ROLLBACK</a>
+            <a href="capitulo06.html" class="siguiente">Siguiente: 6. Niveles de aislamiento →</a>
+        </div>
+    </div>
+
+    <style>
+        .problema-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .problema-card h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .ejemplo {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .ejemplo ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .ejemplo li {
+            margin: 5px 0;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>2. Propiedades ACID - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>2. Propiedades ACID</h1>
+
+        <section>
+            <p>Las propiedades ACID garantizan que las transacciones se puedan realizar en una base de datos de forma confiable. Decimos que un Sistema Gestor de Bases de Datos es ACID compliant cuando permite realizar transacciones.</p>
+            
+            <p>ACID es un acrónimo de Atomicity, Consistency, Isolation y Durability.</p>
+        </section>
+
+        <section>
+            <h2>Las cuatro propiedades ACID</h2>
+            
+            <div class="property-card">
+                <h3>Atomicidad (Atomicity)</h3>
+                <p>Esta propiedad quiere decir que una transacción es indivisible, o se ejecutan todas las sentencias o no se ejecuta ninguna.</p>
+            </div>
+
+            <div class="property-card">
+                <h3>Consistencia (Consistency)</h3>
+                <p>Esta propiedad asegura que después de una transacción la base de datos estará en un estado válido y consistente.</p>
+            </div>
+
+            <div class="property-card">
+                <h3>Aislamiento (Isolation)</h3>
+                <p>Esta propiedad garantiza que cada transacción está aislada del resto de transacciones y que el acceso a los datos se hará de forma exclusiva. Por ejemplo, si una transacción que quiere acceder de forma concurrente a los datos que están siendo utilizados por otra transacción, no podrá hacerlo hasta que la primera haya terminado.</p>
+            </div>
+
+            <div class="property-card">
+                <h3>Durabilidad (Durability)</h3>
+                <p>Esta propiedad quiere decir que los cambios que realiza una transacción sobre la base de datos son permanentes.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="important-block">
+                <h3>Punto Clave</h3>
+                <p>Un Sistema Gestor de Bases de Datos debe cumplir con todas estas propiedades para ser considerado ACID compliant y garantizar la integridad de las transacciones.</p>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo01.html" class="anterior">← Anterior: 1. Definición de Transacción</a>
+            <a href="capitulo03.html" class="siguiente">Siguiente: 3. AUTOCOMMIT →</a>
+        </div>
+    </div>
+
+    <style>
+        .property-card {
+            background-color: white;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .property-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+    </style>
+</body>
+</html>

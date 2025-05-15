@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>9. Bucles anidados - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>9. Bucles anidados</h1>
+
+        <section>
+            <p>Consiste en utilizar comandos de repetición dentro de otros.</p>
+
+            <h2>Ejemplo de utilización:</h2>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_bucles_anidados $$
+CREATE PROCEDURE ejemplo_bucles_anidados()
+BEGIN
+    DECLARE i INT;
+    DECLARE j INT;
+    SET i = 1;
+    bucle1: LOOP
+        IF i > 2 THEN
+            LEAVE bucle1;
+        END IF;
+        SET j = 1;
+        bucle2: LOOP
+            IF j > 2 THEN
+                LEAVE bucle2;
+            END IF;
+            SELECT CONCAT('i-j: ', i, '-', j);
+            SET j = j + 1;
+        END LOOP bucle2;
+        SET i = i + 1;
+    END LOOP bucle1;
+END $$
+DELIMITER ;</pre>
+            </div>
+
+            <p>Al ejecutar el ejemplo anterior se visualizarán los valores i-j: 1-1, 1-2, 2-1, 2-2</p>
+        </section>
+
+        <section>
+            <p>Como se ha indicado en el apartado anterior de bloques de instrucciones, es importante etiquetar el comienzo y final del bucle no solo por la instrucción LEAVE o ITERATE sino por claridad en el seguimiento del código.</p>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo08.html" class="anterior">← Anterior: 8. Bloques de instrucciones</a>
+            <a href="capitulo10.html" class="siguiente">Siguiente: 10. Almacenar en variables el valor de una fila de una tabla →</a>
+        </div>
+    </div>
+</body>
+</html>

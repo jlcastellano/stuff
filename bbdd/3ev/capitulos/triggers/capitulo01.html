@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Triggers en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Triggers en MySQL</h1>
+
+        <section class="introduccion">
+            <p>Los triggers, también llamados desencadenadores o disparadores, son programas almacenados que están asociados a una tabla y se ejecutan ("disparan") automáticamente en respuesta a algún evento que ocurre en dicha tabla.</p>
+
+            <h2>Eventos en MySQL</h2>
+            <ul>
+                <li><strong>INSERT:</strong> El trigger se activa cuando se inserta una nueva fila sobre la tabla asociada.</li>
+                <li><strong>UPDATE:</strong> El trigger se activa cuando se actualiza una fila sobre la tabla asociada.</li>
+                <li><strong>DELETE:</strong> El trigger se activa cuando se elimina una fila sobre la tabla asociada.</li>
+            </ul>
+
+            <p class="nota-importante">Suponen un mecanismo para asegurar la integridad de los datos. Se emplean también como un método para realizar operaciones de auditoría sobre la base de datos. No hay que abusar de su utilización pues ello puede traer consigo una sobrecarga del sistema y por tanto un bajo rendimiento del mismo.</p>
+        </section>
+
+        <section class="sintaxis">
+            <h2>Sintaxis</h2>
+            <div class="codigo">
+                <pre><code>CREATE [DEFINER = { user | CURRENT_USER }] TRIGGER trigger_name 
+    { BEFORE | AFTER } { UPDATE | INSERT | DELETE } 
+    ON tbl_name 
+    FOR EACH ROW
+BEGIN
+    Cuerpo del trigger
+END</code></pre>
+            </div>
+
+            <p>Para poder crear triggers, se necesita el privilegio TRIGGER. Se pueden crear solamente sobre tablas, no sobre vistas.</p>
+
+            <h3>Aspectos importantes:</h3>
+            <ul>
+                <li><strong>BEFORE | AFTER:</strong> Señala cuando se ejecuta el trigger, antes (before) o después (after) de la instrucción DML que lo provocó.</li>
+                <li><strong>UPDATE | INSERT | DELETE:</strong> Define la operación DML asociada al trigger.</li>
+                <li><strong>ON tabla:</strong> Define la tabla asociada al trigger.</li>
+                <li><strong>FOR EACH ROW:</strong> Indica que el trigger se ejecutará por cada fila de la tabla afectada por la operación DML.</li>
+                <li><strong>Cuerpo del trigger:</strong> El conjunto de instrucciones que forman este programa almacenado. Si son más de una irán en un bloque BEGIN … END.</li>
+            </ul>
+        </section>
+
+        <section class="referencias-columnas">
+            <h2>Referencias a las columnas afectadas</h2>
+            <p>Dentro del cuerpo del trigger se puede hacer referencia a los valores de las columnas que están siendo modificadas con una sentencia DML usando los objetos NEW y OLD:</p>
+            <ul>
+                <li><strong>OLD.columna:</strong> Valor de la columna antes de ser modificado</li>
+                <li><strong>NEW.columna:</strong> Nuevo valor de la columna después de la modificación</li>
+            </ul>
+            <p class="nota">Dentro de un trigger de tipo BEFORE, puede cambiarse el nuevo valor (NEW) mediante una sentencia de asignación SET.</p>
+        </section>
+
+        <section class="borrado-triggers">
+            <h2>Borrado de Triggers</h2>
+            <div class="codigo">
+                <pre><code>DROP TRIGGER nombre_trigger;</code></pre>
+            </div>
+        </section>
+
+        <section class="usos-triggers">
+            <h2>Usos de los Triggers</h2>
+
+            <h3>1. Copias o réplicas de datos</h3>
+            <p>Finalidad: Mantener sincronizada una copia de seguridad de unos datos.</p>
+            <div class="codigo">
+                <pre><code>CREATE TABLE alumnos_replica (
+    id INT PRIMARY KEY,
+    alumno VARCHAR(30)
+) ENGINE=innodb;</code></pre>
+            </div>
+
+            <h3>2. Auditoría</h3>
+            <p>Finalidad: Auditar las operaciones que se realizan sobre una tabla.</p>
+            <div class="codigo">
+                <pre><code>CREATE TABLE audita (mensaje VARCHAR(200));</code></pre>
+            </div>
+
+            <h3>3. Validación de datos</h3>
+            <p>Ejemplos de control de entrada de datos:</p>
+            <ul>
+                <li>El valor de una columna no debe ser negativo y estar comprendido entre 1 y 80.</li>
+                <li>Un empleado que no sea vendedor no puede tener comisión.</li>
+                <li>Un usuario de una Biblioteca tiene que tener más de 16 años.</li>
+            </ul>
+        </section>
+
+        <section class="importante">
+            <h2>IMPORTANTE</h2>
+            <p>Un aspecto importantísimo a tener en cuenta es el comportamiento como bloque de la combinación operación DML + trigger asociado. Si el trigger falla, entonces falla la operación DML que intenta modificar la tabla de la base de datos.</p>
+            <div class="codigo">
+                <pre><code>SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT = 'El nuevo socio no puede ser menor de 16 años';</code></pre>
+            </div>
+        </section>
+
+        <section class="ejemplo-completo">
+            <h2>Ejemplo Completo</h2>
+            <div class="codigo">
+                <pre><code>-- Paso 1
+DROP DATABASE IF EXISTS test;
+CREATE DATABASE test;
+USE test;
+
+-- Paso 2
+CREATE TABLE alumnos (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido1 VARCHAR(50) NOT NULL,
+    apellido2 VARCHAR(50),
+    nota FLOAT
+);
+
+-- Paso 3
+DELIMITER $$
+DROP TRIGGER IF EXISTS trigger_check_nota_before_insert $$
+CREATE TRIGGER trigger_check_nota_before_insert 
+BEFORE INSERT ON alumnos 
+FOR EACH ROW
+BEGIN
+    IF NEW.nota < 0 THEN
+        set NEW.nota = 0;
+    ELSEIF NEW.nota > 10 THEN
+        set NEW.nota = 10;
+    END IF;
+END $$
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS trigger_check_nota_before_update$$
+CREATE TRIGGER trigger_check_nota_before_update 
+BEFORE UPDATE ON alumnos 
+FOR EACH ROW
+BEGIN
+    IF NEW.nota < 0 THEN
+        set NEW.nota = 0;
+    ELSEIF NEW.nota > 10 THEN
+        set NEW.nota = 10;
+    END IF;
+END $$
+
+-- Paso 4
+DELIMITER ;
+INSERT INTO alumnos VALUES (1, 'Pepe', 'López', 'López', -1);
+INSERT INTO alumnos VALUES (2, 'María', 'Sánchez', 'Sánchez', 11);
+INSERT INTO alumnos VALUES (3, 'Juan', 'Pérez', 'Pérez', 8.5);
+
+-- Paso 5
+SELECT * FROM alumnos;
+
+-- Paso 6
+UPDATE alumnos SET nota = -4 WHERE id = 3;
+UPDATE alumnos SET nota = 14 WHERE id = 3;
+UPDATE alumnos SET nota = 9.5 WHERE id = 3;
+
+-- Paso 7
+SELECT * FROM alumnos;</code></pre>
+            </div>
+        </section>
+    </div>
+
+ <style>
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .codigo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            color: black;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+
+        pre code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>8. Bloques de instrucciones - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>8. Bloques de instrucciones</h1>
+
+        <section>
+            <p>Hasta ahora hemos estado trabajando con procedimientos con un solo bloque de instrucciones, comenzando con la sentencia BEGIN y terminando con la sentencia END:</p>
+            
+            <div class="codigo">
+                <pre>
+CREATE {PROCEDURE | FUNCTION |TRIGGER} nombre_del_programa
+BEGIN
+    Instrucciones
+END;</pre>
+            </div>
+
+            <p>Este es el caso más sencillo pero muchos programas almacenados MySQL contienen varios bloques agrupando un conjunto de instrucciones y comenzando cada uno de ellos con la instrucción BEGIN y finalizando con la END.</p>
+        </section>
+
+        <section>
+            <p>Con la estructura de bloques se consigue reunir las instrucciones en agrupaciones lógicas que realizan una determinada función, como por ejemplo los bloques de los manejadores de errores que veremos más adelante.</p>
+
+            <p>También se consigue delimitar el ámbito de las variables, declarándose y definiéndose dentro de un bloque interno, de este modo no son visibles fuera de él. En cambio una variable externa al bloque interno será accesible también desde dentro de este último. En el caso en que la variable externa al bloque y la interna tuvieran el mismo nombre, dentro del bloque interno se estará referenciando a la variable interna.</p>
+        </section>
+
+        <section>
+            <h2>Un bloque no solo agrupa instrucciones sino también otros elementos que se tratan en este curso como:</h2>
+            <ol>
+                <li>Declaración de variables y condiciones.</li>
+                <li>Declaración de cursores.</li>
+                <li>Declaración de manejadores de error.</li>
+                <li>Código de programa.</li>
+            </ol>
+
+            <p>En el momento de declararse, para evitar mensajes de error, debe seguirse el orden anterior, comenzando en primer lugar por la declaración de variables.</p>
+        </section>
+
+        <section>
+            <p>Como ocurre con otros lenguajes de programación, los bloques pueden etiquetarse. Esta forma de actuar garantiza una fácil lectura del procedimiento y por tanto de su mantenimiento y permite abandonar el bloque antes de que este concluya si así fuera necesario (sentencia LEAVE).</p>
+
+            <h2>Sintaxis:</h2>
+            <div class="codigo">
+                <pre>
+[etiqueta:] BEGIN
+    Declaración de variables y condiciones.
+    Declaración de cursores.
+    Declaración de manejadores de error.
+    Código de programa.
+END [etiqueta];</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Ejemplos de aplicación:</h2>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_bloques $$
+CREATE PROCEDURE ejemplo_bloques()
+BEGIN
+    DECLARE x INT;
+    SET x = 1;
+    
+    bloque1: BEGIN
+        DECLARE x INT;
+        SET x = 2;
+        SELECT x;  -- Mostrará 2
+    END bloque1;
+    
+    SELECT x;  -- Mostrará 1
+END $$
+DELIMITER ;</pre>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo07.html" class="anterior">← Anterior: 7. Instrucciones repetitivas o bucles</a>
+            <a href="capitulo09.html" class="siguiente">Siguiente: 9. Bucles anidados →</a>
+        </div>
+    </div>
+</body>
+</html>

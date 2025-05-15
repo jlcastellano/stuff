@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>6. Niveles de aislamiento - DCL: Concurrencia y Transacciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>6. Niveles de aislamiento</h1>
+
+        <section class="introduccion">
+            <p>Para evitar que sucedan los problemas de acceso concurrente que hemos comentado en el punto anterior podemos establecer diferentes niveles de aislamiento.</p>
+        </section>
+
+        <section class="niveles">
+            <div class="nivel-card read-uncommited">
+                <h2>Read Uncommited</h2>
+                <div class="nivel-content">
+                    <p>En este nivel no se realiza ningún bloqueo, por lo tanto, permite que sucedan los tres problemas.</p>
+                    <div class="problemas-permitidos">
+                        <h4>Problemas permitidos:</h4>
+                        <ul>
+                            <li>Dirty Read</li>
+                            <li>Non-repeatable Read</li>
+                            <li>Phantom Read</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nivel-card read-commited">
+                <h2>Read Commited</h2>
+                <div class="nivel-content">
+                    <p>En este caso los datos leídos por una transacción pueden ser modificados por otras transacciones, por lo tanto, se pueden dar los problemas Phantom Read y Non Repeateable Read.</p>
+                    <div class="problemas-permitidos">
+                        <h4>Problemas permitidos:</h4>
+                        <ul>
+                            <li>Non-repeatable Read</li>
+                            <li>Phantom Read</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nivel-card repeatable-read">
+                <h2>Repeateable Read</h2>
+                <div class="nivel-content">
+                    <p>En este nivel ningún registro leído con un SELECT puede ser modificado en otra transacción, por lo tanto, sólo puede suceder el problema del Phantom Read.</p>
+                    <div class="problemas-permitidos">
+                        <h4>Problemas permitidos:</h4>
+                        <ul>
+                            <li>Phantom Read</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nivel-card serializable">
+                <h2>Serializable</h2>
+                <div class="nivel-content">
+                    <p>En este caso las transacciones se ejecutan unas detrás de otras, sin que exista la posibilidad de concurrencia.</p>
+                    <div class="problemas-permitidos">
+                        <h4>Problemas permitidos:</h4>
+                        <ul>
+                            <li>Ninguno</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="nota-importante">
+            <div class="info-box">
+                <h3>Nota sobre InnoDB</h3>
+                <p>El nivel de aislamiento que utiliza InnoDB por defecto es Repeateable Read.</p>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo05.html" class="anterior">← Anterior: 5. Acceso concurrente a los datos</a>
+            <a href="capitulo07.html" class="siguiente">Siguiente: 7. Cómo realizar transacciones con procedimientos almacenados →</a>
+        </div>
+    </div>
+
+    <style>
+        .nivel-card {
+            background-color: #fff;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+
+        .read-uncommited { border-left-color: #dc3545; }
+        .read-commited { border-left-color: #ffc107; }
+        .repeatable-read { border-left-color: #28a745; }
+        .serializable { border-left-color: #007bff; }
+
+        .nivel-content {
+            margin-top: 10px;
+        }
+
+        .problemas-permitidos {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .info-box {
+            background-color: #e2e3e5;
+            border: 1px solid #d6d8db;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .info-box h3 {
+            color: #383d41;
+            margin-top: 0;
+        }
+    </style>
+</body>
+</html>

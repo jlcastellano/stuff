@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Funciones en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Funciones en MySQL</h1>
+
+        <section class="sintaxis">
+            <h2>Sintaxis de Creación de Funciones</h2>
+            <div class="codigo">
+                <pre><code>CREATE
+[DEFINER = { user | CURRENT_USER }]
+FUNCTION sp_name ([func_parameter[,...]])
+RETURNS type
+[characteristic ...] routine_body
+
+proc_parameter:
+[ IN | OUT | INOUT ] param_name type
+
+func_parameter:
+param_name type
+
+type:
+Any valid MySQL data type
+
+characteristic:
+COMMENT 'string'
+| LANGUAGE SQL
+| [NOT] DETERMINISTIC
+| { CONTAINS SQL | NO SQL | READS SQL DATA | MODIFIES SQL DATA }
+| SQL SECURITY { DEFINER | INVOKER }
+
+routine_body:
+Valid SQL routine statement</code></pre>
+            </div>
+        </section>
+
+        <section class="introduccion">
+            <p>Como se ha visto en el tema de procedimientos, las funciones almacenadas son similares a los procedimientos salvo que sólo devuelven un valor. Por tanto gran parte de lo que se ha expuesto en el apartado de procedimientos es válido aquí. Los permisos que hay que poseer para crear funciones se han expuesto en el apartado de procedimientos. La devolución del valor se produce utilizando la cláusula RETURN y no mediante variables OUT o INOUT.</p>
+            
+            <p>La ventaja que presentan las funciones es que pueden ser utilizadas dentro de instrucciones SQL y por tanto aumentan considerablemente las capacidades de este lenguaje.</p>
+        </section>
+
+        <section class="consideraciones">
+            <h2>Cosas a tener en cuenta a la hora de utilizar funciones:</h2>
+            <ul>
+                <li>La cláusula RETURNS es obligatoria e indica el tipo de dato que devuelve la función.</li>
+                <li>No se pueden utilizar los parámetros IN, OUT, INOUT. Todos los parámetros pasados a la función se definen implícitamente del tipo IN.</li>
+                <li>Dentro del cuerpo de la función debe aparecer por lo menos una instrucción RETURN, que devuelve el resultado de la función al programa llamado y finaliza su ejecución. Si la ejecución de la función llega al final de la misma sin haber encontrado una instrucción RETURN, causaría un error.</li>
+            </ul>
+        </section>
+
+        <section class="ejemplos">
+            <h2>Ejemplos de funciones</h2>
+            
+            <div class="ejemplo">
+                <h3>Ejemplo 1: Conversión de Pesetas a Euros</h3>
+                    <div class="codigo">
+        <pre><code>DELIMITER $$
+
+CREATE FUNCTION funcion1(pesetas DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+BEGIN
+    DECLARE euros DECIMAL(10,2);
+    SET euros = pesetas/166.386;
+    RETURN euros;
+END $$
+
+DELIMITER ;</code></pre>
+    </div>
+                <p>La función "funcion1" devuelve en euros las pesetas que se le pasan como argumento.</p>
+                <h4>Llamada a la función:</h4>
+                <div class="codigo">
+                    <pre><code>mysql> SELECT test.funcion1(10000);
++----------------------+
+| test.funcion1(10000) |
++----------------------+
+| 60.10                |
++----------------------+
+1 row in set, 1 warning (0.00 sec)</code></pre>
+                </div>
+
+                <h4>Usando una variable:</h4>
+                <div class="codigo">
+                    <pre><code>mysql> SET @v_euros=test.funcion1(10000);
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> SELECT @v_euros;
++----------+
+| @v_euros |
++----------+
+| 60.10    |
++----------+
+1 row in set (0.00 sec)</code></pre>
+                </div>
+            </div>
+
+            <div class="ejemplo">
+                <h3>Ejemplo 2: Conversión Bidireccional</h3>
+                    <div class="codigo">
+        <pre><code>DELIMITER $$
+
+CREATE FUNCTION funcion2(tipo INT, cantidad DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+BEGIN
+    DECLARE resultado DECIMAL(10,2);
+    IF tipo = 1 THEN
+        SET resultado = cantidad/166.386;
+    ELSE
+        SET resultado = cantidad*166.386;
+    END IF;
+    RETURN resultado;
+END $$
+
+DELIMITER ;</code></pre>
+    </div>
+                <p>En el siguiente ejemplo la función realiza la conversión de pesetas a euros y viceversa. Si el primer argumento es un 1 entonces convertirá a euros, si es un 2 convertirá a pesetas:</p>
+                <h4>Llamada a la función:</h4>
+                <div class="codigo">
+                    <pre><code>mysql> SELECT test.funcion2(2, 6);
++---------------------+
+| test.funcion2(2, 6) |
++---------------------+
+| 998.32             |
++---------------------+
+1 row in set, 1 warning (0.00 sec)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="gestion">
+            <h2>Gestión de Funciones</h2>
+            
+            <h3>Mostrar Información de Funciones</h3>
+            <p>La orden SQL que permite ver la información de las funciones que existen en una BBDD es: SHOW FUNCTION STATUS.</p>
+            <div class="codigo">
+                <pre><code>SHOW FUNCTION STATUS WHERE Db = 'jardineria';</code></pre>
+            </div>
+
+            <h3>Borrar Funciones</h3>
+            <p>La orden SQL que permite borrar un procedimiento es DROP FUNCTION.</p>
+            <p>Indicar que podemos incluir una cláusula IF EXISTS para indicar que solamente en caso de que exista, borre la función. Esto es muy útil cuando tenemos un bloque de sentencias, ya que si no ponemos el IF, si la función no existe daría un error y se dejarían de ejecutar las sentencias.</p>
+            <div class="codigo">
+                <pre><code>DROP FUNCTION IF EXISTS ejemplo1;</code></pre>
+            </div>
+        </section>
+
+        <div class="documentacion">
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </div>
+    </div>
+
+    <style>
+        .codigo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            color:black;
+        }
+
+        .ejemplo {
+            background-color: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .consideraciones ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .consideraciones li {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .consideraciones li:before {
+            content: "•";
+            color: #007bff;
+            position: absolute;
+            left: 0;
+        }
+
+        .documentacion {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 30px;
+        }
+
+        pre code {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>4. Variables de usuario - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>4. Variables de usuario</h1>
+
+        <section>
+            <p>Un tipo especial de variables son las variables de usuario ya que pueden ser manipuladas dentro y fuera de los programas almacenados. Son una característica de MySQL desde la versión 3.</p>
+            <p>Este tipo de variables no necesitan declaración y van precedidas del carácter @. Son de un tipo de datos variant y pueden almacenar texto, fechas y números.</p>
+            <p>Su alcance es de una sesión y por tanto son accesibles desde cualquier programa que se ejecuta durante esa sesión, lo que las asemeja al concepto de variables globales</p>
+        </section>
+
+        <section>
+            <h2>Ejemplo de utilización:</h2>
+            <p>En las siguientes líneas se crea una variable de usuario de nombre v1, se inicializa a 20 y a continuación se llama (CALL) al programa "variables3" que lo que hace es doblar el valor de la variable como se puede comprobar tanto en las líneas de procedimiento como en la ventana de ejecución desde la línea de comandos de MySQL:</p>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS variables3 $$
+CREATE PROCEDURE variables3()
+BEGIN
+    SET @v1 = @v1 * 2;
+END $$
+DELIMITER ;
+
+mysql> USE TEST
+Database changed
+mysql> SET @v1=20;
+Query OK, 0 rows affected (0.00 sec)
+mysql> CALL variables3();
+Query OK, 0 rows affected (0.00 sec)
+mysql> SELECT @v1;
++------+
+| @v1 |
++------+
+| 40 |
++------+
+1 row in set (0.00 sec)</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Otro ejemplo:</h2>
+            <p>Probando los dos procedimientos anteriores:</p>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS variables4 $$
+CREATE PROCEDURE variables4()
+BEGIN
+    SET @v1 = 'Raquel y Mario Carrera';
+    SELECT @v1;
+END $$
+DELIMITER ;
+
+mysql> USE TEST
+Database changed
+mysql> CALL variables4();
++------------------------+
+| @v1 |
++------------------------+
+| Raquel y Mario Carrera |
++------------------------+
+1 row in set (0.00 sec)
+Query OK, 0 rows affected (0.02 sec)</pre>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo03.html" class="anterior">← Anterior: 3. Variables locales</a>
+            <a href="capitulo05.html" class="siguiente">Siguiente: 5. Parámetros →</a>
+        </div>
+    </div>
+</body>
+</html>

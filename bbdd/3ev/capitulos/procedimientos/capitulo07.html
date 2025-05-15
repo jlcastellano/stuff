@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>7. Instrucciones repetitivas o bucles - Procedimientos Almacenados en MySQL</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>7. Instrucciones repetitivas o bucles</h1>
+
+        <section>
+            <h2>7.1 LOOP</h2>
+            <p>Todas las instrucciones comprendidas entre las palabras reservadas LOOP Y END LOOP (bucle), se ejecutan un número de veces hasta que la ejecución del bucle se encuentra con la instrucción: LEAVE label</p>
+
+            <h3>Sintaxis:</h3>
+            <div class="codigo">
+                <pre>
+[begin_label:] LOOP
+    statement_list
+END LOOP [end_label]</pre>
+            </div>
+
+            <h3>Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+CREATE PROCEDURE doiterate(p1 INT)
+BEGIN
+    label1: LOOP
+        SET p1 = p1 + 1;
+        IF p1 < 10 THEN
+            ITERATE label1;
+        END IF;
+        LEAVE label1;
+    END LOOP label1;
+    SET @x = p1;
+END;</pre>
+            </div>
+
+            <h3>Otro Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_bucle_loop$$
+CREATE PROCEDURE ejemplo_bucle_loop(IN tope INT, OUT suma INT)
+BEGIN
+    DECLARE contador INT;
+    SET contador = 1;
+    SET suma = 0;
+    bucle: LOOP
+        IF contador > tope THEN
+            LEAVE bucle;
+        END IF;
+        SET suma = suma + contador;
+        SET contador = contador + 1;
+    END LOOP;
+END
+$$
+DELIMITER ;
+
+CALL ejemplo_bucle_loop(10, @resultado);
+SELECT @resultado;</pre>
+            </div>
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </section>
+
+        <section>
+            <h2>7.2 REPEAT</h2>
+            <p>Las instrucciones se ejecutarán hasta que sea cierta la expresión. Por lo menos el conjunto de instrucciones se ejecuta una vez pues la evaluación de la expresión se hace posterior a la ejecución de las instrucciones. La sentencia LEAVE también puede utilizarse.</p>
+
+            <h3>Sintaxis:</h3>
+            <div class="codigo">
+                <pre>
+[begin_label:] REPEAT
+    statement_list
+UNTIL search_condition
+END REPEAT [end_label]</pre>
+            </div>
+
+            <h3>Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_bucle_repeat$$
+CREATE PROCEDURE ejemplo_bucle_repeat(IN tope INT, OUT suma INT)
+BEGIN
+    DECLARE contador INT;
+    SET contador = 1;
+    SET suma = 0;
+    REPEAT
+        SET suma = suma + contador;
+        SET contador = contador + 1;
+    UNTIL contador > tope
+    END REPEAT;
+END
+$$
+DELIMITER ;
+
+CALL ejemplo_bucle_repeat(10, @resultado);
+SELECT @resultado;</pre>
+            </div>
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </section>
+
+        <section>
+            <h2>7.3 WHILE</h2>
+            <p>Ejecuta el conjunto de instrucciones mientras sea cierta la expresión.</p>
+
+            <h3>Sintaxis:</h3>
+            <div class="codigo">
+                <pre>
+[begin_label:] WHILE search_condition DO
+    statement_list
+END WHILE [end_label]</pre>
+            </div>
+
+            <h3>Ejemplo:</h3>
+            <div class="codigo">
+                <pre>
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ejemplo_bucle_while$$
+CREATE PROCEDURE ejemplo_bucle_while(IN tope INT, OUT suma INT)
+BEGIN
+    DECLARE contador INT;
+    SET contador = 1;
+    SET suma = 0;
+    WHILE contador <= tope DO
+        SET suma = suma + contador;
+        SET contador = contador + 1;
+    END WHILE;
+END
+$$
+DELIMITER ;
+
+CALL ejemplo_bucle_while(10, @resultado);
+SELECT @resultado;</pre>
+            </div>
+            <p>Puede encontrar más información en la documentación oficial de MySQL.</p>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo06.html" class="anterior">← Anterior: 6. Instrucciones condicionales</a>
+            <a href="capitulo08.html" class="siguiente">Siguiente: 8. Bloques de instrucciones →</a>
+        </div>
+    </div>
+</body>
+</html>
