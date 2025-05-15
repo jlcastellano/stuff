@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicios - Funciones en MySQL</title>
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+    }
+
+    h1 {
+        color: #333;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+    .ejercicio {
+        margin-bottom: 30px;
+        padding: 25px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .ejercicio h3 {
+        color: #007bff;
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .ejercicio p {
+        color: #444;
+        margin-bottom: 15px;
+    }
+
+    .ejercicio ul {
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    .ejercicio li {
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    code {
+        background-color: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #d63384;
+        font-size: 0.9em;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .solucion {
+        display: none;
+        margin-top: 15px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+
+    .solucion pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #212529;
+        background-color: transparent;
+    }
+
+    /* Estilos para hacer el contenido responsive */
+    @media (max-width: 768px) {
+        body {
+            padding: 15px;
+        }
+
+        .ejercicio {
+            padding: 15px;
+        }
+
+        pre {
+            font-size: 12px;
+        }
+    }
+</style>
+</head>
+<body>
+    <h1>Ejercicios de Funciones en MySQL</h1>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 1 - Calificación Numérica a Texto</h3>
+        <p>Crear una función llamada <code>convertir_calificacion</code> que reciba una nota numérica (0-10) y devuelva su equivalente en texto según la siguiente escala:</p>
+        <ul>
+            <li>0-4.99: "Suspenso"</li>
+            <li>5-6.99: "Aprobado"</li>
+            <li>7-8.99: "Notable"</li>
+            <li>9-10: "Sobresaliente"</li>
+        </ul>
+<button onclick="toggleSolucion(this)">Ver Solución</button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+
+CREATE FUNCTION convertir_calificacion(nota DECIMAL(4,2))
+RETURNS VARCHAR(20)
+BEGIN
+    DECLARE calificacion VARCHAR(20);
+    
+    CASE
+        WHEN nota < 5 THEN SET calificacion = 'Suspenso';
+        WHEN nota < 7 THEN SET calificacion = 'Aprobado';
+        WHEN nota < 9 THEN SET calificacion = 'Notable';
+        ELSE SET calificacion = 'Sobresaliente';
+    END CASE;
+    
+    RETURN calificacion;
+END $$
+
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 2 - Conversor de Medidas</h3>
+        <p>Crear una función llamada <code>convertir_medida</code> que reciba tres parámetros:</p>
+        <ul>
+            <li>valor (DECIMAL)</li>
+            <li>unidad_origen (VARCHAR(2)) - 'km', 'm', 'cm'</li>
+            <li>unidad_destino (VARCHAR(2)) - 'km', 'm', 'cm'</li>
+        </ul>
+        <p>La función debe convertir el valor entre las diferentes unidades de medida.</p>
+<button onclick="toggleSolucion(this)">Ver Solución</button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+
+CREATE FUNCTION convertir_medida(
+    valor DECIMAL(10,2),
+    unidad_origen VARCHAR(2),
+    unidad_destino VARCHAR(2)
+)
+RETURNS DECIMAL(10,2)
+BEGIN
+    DECLARE resultado DECIMAL(10,2);
+    
+    -- Primero convertimos todo a metros
+    CASE unidad_origen
+        WHEN 'km' THEN SET resultado = valor * 1000;
+        WHEN 'm' THEN SET resultado = valor;
+        WHEN 'cm' THEN SET resultado = valor / 100;
+    END CASE;
+    
+    -- Luego convertimos de metros a la unidad destino
+    CASE unidad_destino
+        WHEN 'km' THEN SET resultado = resultado / 1000;
+        WHEN 'm' THEN SET resultado = resultado;
+        WHEN 'cm' THEN SET resultado = resultado * 100;
+    END CASE;
+    
+    RETURN resultado;
+END $$
+
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 3 - Calculadora de Edad</h3>
+        <p>Crear una función llamada <code>calcular_edad</code> que reciba una fecha de nacimiento y devuelva la edad actual en años. La función debe manejar fechas inválidas retornando NULL.</p>
+<button onclick="toggleSolucion(this)">Ver Solución</button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+
+CREATE FUNCTION calcular_edad(fecha_nacimiento DATE)
+RETURNS INT
+BEGIN
+    DECLARE edad INT;
+    
+    IF fecha_nacimiento IS NULL OR fecha_nacimiento > CURDATE() THEN
+        RETURN NULL;
+    END IF;
+    
+    SET edad = YEAR(CURDATE()) - YEAR(fecha_nacimiento);
+    
+    IF DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(fecha_nacimiento, '%m%d') THEN
+        SET edad = edad - 1;
+    END IF;
+    
+    RETURN edad;
+END $$
+
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 4 - Generador de Contraseñas</h3>
+        <p>Crear una función llamada <code>generar_password</code> que reciba dos parámetros:</p>
+        <ul>
+            <li>longitud (INT) - longitud deseada de la contraseña</li>
+            <li>nivel_seguridad (INT) - 1 (solo letras), 2 (letras y números), 3 (letras, números y símbolos)</li>
+        </ul>
+        <p>La función debe devolver una contraseña aleatoria según los parámetros especificados.</p>
+<button onclick="toggleSolucion(this)">Ver Solución</button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+
+CREATE FUNCTION generar_password(longitud INT, nivel_seguridad INT)
+RETURNS VARCHAR(50)
+BEGIN
+    DECLARE charset VARCHAR(100);
+    DECLARE resultado VARCHAR(50);
+    DECLARE i INT DEFAULT 1;
+    
+    CASE nivel_seguridad
+        WHEN 1 THEN SET charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        WHEN 2 THEN SET charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        ELSE SET charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    END CASE;
+    
+    SET resultado = '';
+    
+    WHILE i <= longitud DO
+        SET resultado = CONCAT(resultado, SUBSTRING(charset, FLOOR(1 + RAND() * LENGTH(charset)), 1));
+        SET i = i + 1;
+    END WHILE;
+    
+    RETURN resultado;
+END $$
+
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 5 - Formato de Número Telefónico</h3>
+        <p>Crear una función llamada <code>formatear_telefono</code> que reciba un número de teléfono (como cadena) y un código de país, y lo devuelva formateado según el patrón: +[código_país] (XXX) XXX-XXXX</p>
+<button onclick="toggleSolucion(this)">Ver Solución</button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+
+CREATE FUNCTION formatear_telefono(numero VARCHAR(20), codigo_pais INT)
+RETURNS VARCHAR(20)
+BEGIN
+    DECLARE numero_limpio VARCHAR(10);
+    
+    -- Eliminar caracteres no numéricos
+    SET numero_limpio = REGEXP_REPLACE(numero, '[^0-9]', '');
+    
+    -- Verificar longitud
+    IF LENGTH(numero_limpio) != 10 THEN
+        RETURN NULL;
+    END IF;
+    
+    RETURN CONCAT(
+        '+', codigo_pais, ' ',
+        '(', SUBSTRING(numero_limpio, 1, 3), ') ',
+        SUBSTRING(numero_limpio, 4, 3), '-',
+        SUBSTRING(numero_limpio, 7)
+    );
+END $$
+
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <div class="ejercicio">
+        <h3>Ejercicio 6 - Calculadora de IMC con Clasificación</h3>
+        <p>Crear una función llamada <code>calcular_imc_clasificacion</code> que reciba el peso (en kg) y la altura (en metros) de una persona y devuelva una cadena con el IMC calculado y su clasificación según la OMS:</p>
+        <ul>
+            <li>< 18.5: "Bajo peso"</li>
+            <li>18.5-24.9: "Normal"</li>
+            <li>25-29.9: "Sobrepeso"</li>
+            <li>≥ 30: "Obesidad"</li>
+        </ul>
+<button onclick="toggleSolucion(this)">Ver Solución</button>
+        <div class="solucion">
+            <pre>
+DELIMITER $$
+
+CREATE FUNCTION calcular_imc_clasificacion(peso DECIMAL(5,2), altura DECIMAL(3,2))
+RETURNS VARCHAR(50)
+BEGIN
+    DECLARE imc DECIMAL(4,2);
+    DECLARE clasificacion VARCHAR(20);
+    
+    IF peso <= 0 OR altura <= 0 THEN
+        RETURN NULL;
+    END IF;
+    
+    SET imc = peso / (altura * altura);
+    
+    CASE
+        WHEN imc < 18.5 THEN SET clasificacion = 'Bajo peso';
+        WHEN imc < 25 THEN SET clasificacion = 'Normal';
+        WHEN imc < 30 THEN SET clasificacion = 'Sobrepeso';
+        ELSE SET clasificacion = 'Obesidad';
+    END CASE;
+    
+    RETURN CONCAT('IMC: ', ROUND(imc, 2), ' - ', clasificacion);
+END $$
+
+DELIMITER ;</pre>
+        </div>
+    </div>
+
+    <script>
+        function toggleSolucion(button) {
+            const solucion = button.nextElementSibling;
+            if (solucion.style.display === "none" || solucion.style.display === "") {
+                solucion.style.display = "block";
+                button.textContent = "Ocultar Solución";
+            } else {
+                solucion.style.display = "none";
+                button.textContent = "Ver Solución";
+            }
+        }
+    </script>
+</body>
+</html>
