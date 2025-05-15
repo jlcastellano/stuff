@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layouts en Swing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        .layout-section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .diagram {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestores de Layout en Swing</h1>
+
+        <div class="layout-section">
+            <h2>1. FlowLayout</h2>
+            <p>Organiza los componentes en una línea, creando nuevas líneas cuando es necesario.</p>
+            
+            <div class="code-block">
+                <pre>
+JPanel panel = new JPanel(new FlowLayout());
+// FlowLayout.LEFT, FlowLayout.CENTER, FlowLayout.RIGHT
+panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // hgap=10, vgap=10
+panel.add(new JButton("Botón 1"));
+panel.add(new JButton("Botón 2"));
+panel.add(new JButton("Botón 3"));</pre>
+            </div>
+
+            <div class="diagram"><pre>
+                [Botón 1] [Botón 2] [Botón 3]
+                // Si no hay espacio:
+                [Botón 1] [Botón 2]
+                [Botón 3]</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>2. BorderLayout</h2>
+            <p>Divide el contenedor en cinco áreas: Norte, Sur, Este, Oeste y Centro.</p>
+            
+            <div class="code-block">
+                <pre>
+JFrame frame = new JFrame();
+frame.setLayout(new BorderLayout(5, 5)); // hgap=5, vgap=5
+frame.add(new JButton("Norte"), BorderLayout.NORTH);
+frame.add(new JButton("Sur"), BorderLayout.SOUTH);
+frame.add(new JButton("Este"), BorderLayout.EAST);
+frame.add(new JButton("Oeste"), BorderLayout.WEST);
+frame.add(new JButton("Centro"), BorderLayout.CENTER);</pre>
+            </div>
+
+            <div class="diagram"><pre>
+                     [    Norte    ]
+                [Oeste][Centro][Este]
+                     [    Sur     ]</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>3. GridLayout</h2>
+            <p>Organiza los componentes en una cuadrícula de filas y columnas del mismo tamaño.</p>
+            
+            <div class="code-block">
+                <pre>
+JPanel panel = new JPanel(new GridLayout(2, 3, 5, 5)); // 2 filas, 3 columnas, hgap=5, vgap=5
+for (int i = 1; i <= 6; i++) {
+    panel.add(new JButton("Botón " + i));
+}</pre>
+            </div>
+
+            <div class="diagram"><pre>
+                [Botón 1][Botón 2][Botón 3]
+                [Botón 4][Botón 5][Botón 6]</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>4. GridBagLayout</h2>
+            <p>El layout más flexible pero complejo. Permite control preciso sobre la posición y tamaño de los componentes.</p>
+            
+            <div class="code-block">
+                <pre>
+JPanel panel = new JPanel(new GridBagLayout());
+GridBagConstraints gbc = new GridBagConstraints();
+
+// Ejemplo de configuración de constraints
+gbc.gridx = 0; // columna
+gbc.gridy = 0; // fila
+gbc.gridwidth = 2; // ocupa 2 columnas
+gbc.gridheight = 1; // ocupa 1 fila
+gbc.weightx = 1.0; // expansión horizontal
+gbc.weighty = 0.0; // expansión vertical
+gbc.fill = GridBagConstraints.HORIZONTAL;
+gbc.insets = new Insets(5,5,5,5); // márgenes
+
+panel.add(new JButton("Botón"), gbc);</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>5. BoxLayout</h2>
+            <p>Organiza los componentes en una sola fila o columna.</p>
+            
+            <div class="code-block">
+                <pre>
+// Vertical
+JPanel panel = new JPanel();
+panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+// O usando Box
+Box verticalBox = Box.createVerticalBox();
+verticalBox.add(new JButton("Arriba"));
+verticalBox.add(Box.createVerticalStrut(10)); // espacio
+verticalBox.add(new JButton("Abajo"));</pre>
+            </div>
+
+            <div class="diagram"><pre>
+                [Arriba]
+                [Abajo]</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>6. CardLayout</h2>
+            <p>Permite mostrar un componente a la vez, como un mazo de cartas.</p>
+            
+            <div class="code-block">
+                <pre>
+CardLayout cards = new CardLayout();
+JPanel panel = new JPanel(cards);
+
+panel.add(new JButton("Card 1"), "CARD1");
+panel.add(new JButton("Card 2"), "CARD2");
+
+// Cambiar entre cards
+cards.show(panel, "CARD1");
+cards.next(panel);
+cards.previous(panel);</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>7. SpringLayout</h2>
+            <p>Permite definir relaciones entre los bordes de los componentes.</p>
+            
+            <div class="code-block">
+                <pre>
+JPanel panel = new JPanel(new SpringLayout());
+JLabel label = new JLabel("Nombre:");
+JTextField textField = new JTextField(20);
+
+panel.add(label);
+panel.add(textField);
+
+SpringLayout layout = (SpringLayout)panel.getLayout();
+layout.putConstraint(SpringLayout.WEST, label, 5, SpringLayout.WEST, panel);
+layout.putConstraint(SpringLayout.NORTH, label, 5, SpringLayout.NORTH, panel);
+layout.putConstraint(SpringLayout.WEST, textField, 5, SpringLayout.EAST, label);
+layout.putConstraint(SpringLayout.NORTH, textField, 5, SpringLayout.NORTH, panel);</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>8. GroupLayout</h2>
+            <p>Permite definir layouts complejos mediante grupos horizontales y verticales.</p>
+            
+            <div class="code-block">
+                <pre>
+JPanel panel = new JPanel();
+GroupLayout layout = new GroupLayout(panel);
+panel.setLayout(layout);
+
+JLabel label = new JLabel("Usuario:");
+JTextField textField = new JTextField();
+
+layout.setHorizontalGroup(
+    layout.createSequentialGroup()
+        .addComponent(label)
+        .addGap(5)
+        .addComponent(textField)
+);
+
+layout.setVerticalGroup(
+    layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(label)
+        .addComponent(textField)
+);</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>Ejemplo Práctico Combinando Layouts</h2>
+            
+            <div class="code-block">
+                <pre>
+public class EjemploLayouts extends JFrame {
+    public EjemploLayouts() {
+        setTitle("Ejemplo de Layouts");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Panel principal con BorderLayout
+        setLayout(new BorderLayout(5, 5));
+        
+        // Panel superior con FlowLayout
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JButton("Nuevo"));
+        topPanel.add(new JButton("Abrir"));
+        topPanel.add(new JButton("Guardar"));
+        add(topPanel, BorderLayout.NORTH);
+        
+        // Panel central con GridLayout
+        JPanel centerPanel = new JPanel(new GridLayout(2, 2, 5, 5));
+        centerPanel.add(new JButton("1"));
+        centerPanel.add(new JButton("2"));
+        centerPanel.add(new JButton("3"));
+        centerPanel.add(new JButton("4"));
+        add(centerPanel, BorderLayout.CENTER);
+        
+        // Panel derecho con BoxLayout
+        Box rightPanel = Box.createVerticalBox();
+        rightPanel.add(new JButton("Opción 1"));
+        rightPanel.add(Box.createVerticalStrut(5));
+        rightPanel.add(new JButton("Opción 2"));
+        rightPanel.add(Box.createVerticalStrut(5));
+        rightPanel.add(new JButton("Opción 3"));
+        add(rightPanel, BorderLayout.EAST);
+        
+        // Panel inferior con FlowLayout
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(new JButton("Aceptar"));
+        bottomPanel.add(new JButton("Cancelar"));
+        add(bottomPanel, BorderLayout.SOUTH);
+        
+        pack();
+        setLocationRelativeTo(null);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new EjemploLayouts().setVisible(true);
+        });
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="layout-section">
+            <h2>Consejos y Mejores Prácticas</h2>
+            <ul>
+                <li>Usar el layout apropiado para cada situación</li>
+                <li>Combinar diferentes layouts para crear interfaces complejas</li>
+                <li>Utilizar espaciadores (struts y glue) para mejorar la distribución</li>
+                <li>Considerar el comportamiento de redimensionamiento</li>
+                <li>Mantener la consistencia en los márgenes y espaciado</li>
+                <li>Usar BoxLayout o GridBagLayout para layouts complejos</li>
+                <li>Probar la interfaz con diferentes tamaños de ventana</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

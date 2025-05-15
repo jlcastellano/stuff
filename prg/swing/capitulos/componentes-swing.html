@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes Swing en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        .component-group {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .example {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Componentes Swing en Java</h1>
+
+        <div class="component-group">
+            <h2>1. Componentes de Texto</h2>
+
+            <h3>JTextField</h3>
+            <p>Campo de texto de una sola línea.</p>
+            <div class="code-block">
+                <pre>
+JTextField textField = new JTextField(20); // 20 columnas
+textField.setText("Texto inicial");
+textField.setEditable(true);</pre>
+            </div>
+
+            <h3>JTextArea</h3>
+            <p>Campo de texto multilínea.</p>
+            <div class="code-block">
+                <pre>
+JTextArea textArea = new JTextArea(5, 20); // 5 filas, 20 columnas
+textArea.setLineWrap(true);
+textArea.setWrapStyleWord(true);</pre>
+            </div>
+
+            <h3>JPasswordField</h3>
+            <p>Campo para contraseñas.</p>
+            <div class="code-block">
+                <pre>
+JPasswordField passwordField = new JPasswordField(20);
+passwordField.setEchoChar('*');</pre>
+            </div>
+
+            <h3>JEditorPane</h3>
+            <p>Editor de texto con formato.</p>
+            <div class="code-block">
+                <pre>
+JEditorPane editorPane = new JEditorPane();
+editorPane.setContentType("text/html");
+editorPane.setText("<html><body>Texto con <b>formato</b></body></html>");</pre>
+            </div>
+        </div>
+
+        <div class="component-group">
+            <h2>2. Componentes de Selección</h2>
+
+            <h3>JButton</h3>
+            <p>Botón clásico.</p>
+            <div class="code-block">
+                <pre>
+JButton button = new JButton("Clic aquí");
+button.addActionListener(e -> System.out.println("Botón presionado"));</pre>
+            </div>
+
+            <h3>JToggleButton</h3>
+            <p>Botón con dos estados.</p>
+            <div class="code-block">
+                <pre>
+JToggleButton toggleButton = new JToggleButton("Toggle");
+toggleButton.addActionListener(e -> {
+    boolean selected = toggleButton.isSelected();
+    System.out.println("Estado: " + selected);
+});</pre>
+            </div>
+
+            <h3>JCheckBox</h3>
+            <p>Casilla de verificación.</p>
+            <div class="code-block">
+                <pre>
+JCheckBox checkBox = new JCheckBox("Activar opción");
+checkBox.setSelected(true);</pre>
+            </div>
+
+            <h3>JRadioButton</h3>
+            <p>Botón de radio para selección única.</p>
+            <div class="code-block">
+                <pre>
+ButtonGroup group = new ButtonGroup();
+JRadioButton radio1 = new JRadioButton("Opción 1");
+JRadioButton radio2 = new JRadioButton("Opción 2");
+group.add(radio1);
+group.add(radio2);</pre>
+            </div>
+        </div>
+
+        <div class="component-group">
+            <h2>3. Componentes de Listado</h2>
+
+            <h3>JComboBox</h3>
+            <p>Lista desplegable.</p>
+            <div class="code-block">
+                <pre>
+String[] opciones = {"Opción 1", "Opción 2", "Opción 3"};
+JComboBox<String> comboBox = new JComboBox<>(opciones);</pre>
+            </div>
+
+            <h3>JList</h3>
+            <p>Lista de selección.</p>
+            <div class="code-block">
+                <pre>
+String[] elementos = {"Item 1", "Item 2", "Item 3"};
+JList<String> list = new JList<>(elementos);
+list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</pre>
+            </div>
+
+            <h3>JSpinner</h3>
+            <p>Selector numérico.</p>
+            <div class="code-block">
+                <pre>
+JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+spinner.addChangeListener(e -> System.out.println("Valor: " + spinner.getValue()));</pre>
+            </div>
+        </div>
+
+        <div class="component-group">
+            <h2>4. Componentes de Diálogo</h2>
+
+            <h3>JFileChooser</h3>
+            <p>Selector de archivos.</p>
+            <div class="code-block">
+                <pre>
+JFileChooser fileChooser = new JFileChooser();
+fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+int result = fileChooser.showOpenDialog(null);
+if (result == JFileChooser.APPROVE_OPTION) {
+    File selectedFile = fileChooser.getSelectedFile();
+}</pre>
+            </div>
+
+            <h3>JColorChooser</h3>
+            <p>Selector de colores.</p>
+            <div class="code-block">
+                <pre>
+Color color = JColorChooser.showDialog(null, "Seleccione un color", Color.WHITE);</pre>
+            </div>
+
+            <h3>JOptionPane</h3>
+            <p>Diálogos de mensaje y entrada.</p>
+            <div class="code-block">
+                <pre>
+// Mensaje de información
+JOptionPane.showMessageDialog(null, "Información", "Título", JOptionPane.INFORMATION_MESSAGE);
+
+// Diálogo de confirmación
+int option = JOptionPane.showConfirmDialog(null, "¿Está seguro?");
+
+// Diálogo de entrada
+String input = JOptionPane.showInputDialog("Ingrese un valor:");</pre>
+            </div>
+        </div>
+
+        <div class="component-group">
+            <h2>5. Componentes de Visualización</h2>
+
+            <h3>JLabel</h3>
+            <p>Etiqueta de texto o imagen.</p>
+            <div class="code-block">
+                <pre>
+JLabel label = new JLabel("Texto");
+label.setIcon(new ImageIcon("imagen.png"));</pre>
+            </div>
+
+            <h3>JProgressBar</h3>
+            <p>Barra de progreso.</p>
+            <div class="code-block">
+                <pre>
+JProgressBar progressBar = new JProgressBar(0, 100);
+progressBar.setValue(50);
+progressBar.setStringPainted(true);</pre>
+            </div>
+
+            <h3>JSlider</h3>
+            <p>Control deslizante.</p>
+            <div class="code-block">
+                <pre>
+JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+slider.setMajorTickSpacing(20);
+slider.setMinorTickSpacing(5);
+slider.setPaintTicks(true);
+slider.setPaintLabels(true);</pre>
+            </div>
+        </div>
+
+        <div class="component-group">
+            <h2>6. Componentes de Tabla</h2>
+
+            <h3>JTable</h3>
+            <p>Tabla de datos.</p>
+            <div class="code-block">
+                <pre>
+String[] columnNames = {"Nombre", "Edad", "Ciudad"};
+Object[][] data = {
+    {"Juan", 25, "Madrid"},
+    {"Ana", 30, "Barcelona"}
+};
+JTable table = new JTable(data, columnNames);
+JScrollPane scrollPane = new JScrollPane(table);</pre>
+            </div>
+
+            <h3>JTree</h3>
+            <p>Árbol jerárquico.</p>
+            <div class="code-block">
+                <pre>
+DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+DefaultMutableTreeNode child = new DefaultMutableTreeNode("Child");
+root.add(child);
+JTree tree = new JTree(root);</pre>
+            </div>
+        </div>
+
+        <div class="component-group">
+            <h2>7. Componentes de Menú</h2>
+
+            <h3>JMenuBar</h3>
+            <p>Barra de menú.</p>
+            <div class="code-block">
+                <pre>
+JMenuBar menuBar = new JMenuBar();
+JMenu fileMenu = new JMenu("Archivo");
+JMenuItem openItem = new JMenuItem("Abrir");
+fileMenu.add(openItem);
+menuBar.add(fileMenu);</pre>
+            </div>
+
+            <h3>JPopupMenu</h3>
+            <p>Menú contextual.</p>
+            <div class="code-block">
+                <pre>
+JPopupMenu popup = new JPopupMenu();
+JMenuItem cutItem = new JMenuItem("Cortar");
+popup.add(cutItem);
+
+// Mostrar en evento de clic derecho
+component.addMouseListener(new MouseAdapter() {
+    public void mouseReleased(MouseEvent e) {
+        if (e.isPopupTrigger()) {
+            popup.show(e.getComponent(), e.getX(), e.getY());
+        }
+    }
+});</pre>
+            </div>
+        </div>
+
+        <h2>Ejemplo Completo de Aplicación</h2>
+        <div class="example">
+            <pre>
+import javax.swing.*;
+import java.awt.*;
+
+public class EjemploComponentes extends JFrame {
+    public EjemploComponentes() {
+        setTitle("Demo de Componentes Swing");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Panel principal
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Barra de menú
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Archivo");
+        fileMenu.add(new JMenuItem("Nuevo"));
+        fileMenu.add(new JMenuItem("Abrir"));
+        fileMenu.add(new JMenuItem("Guardar"));
+        menuBar.add(fileMenu);
+        setJMenuBar(menuBar);
+        
+        // Panel izquierdo
+        JPanel leftPanel = new JPanel(new GridLayout(0, 1, 5, 5));
+        leftPanel.add(new JLabel("Nombre:"));
+        leftPanel.add(new JTextField(20));
+        leftPanel.add(new JLabel("Contraseña:"));
+        leftPanel.add(new JPasswordField(20));
+        leftPanel.add(new JCheckBox("Recordar datos"));
+        leftPanel.add(new JButton("Enviar"));
+        
+        // Panel derecho
+        JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
+        String[] columnNames = {"Nombre", "Edad"};
+        Object[][] data = {{"Juan", 25}, {"Ana", 30}};
+        JTable table = new JTable(data, columnNames);
+        rightPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+        
+        // Panel inferior
+        JPanel bottomPanel = new JPanel(new FlowLayout());
+        bottomPanel.add(new JProgressBar(0, 100));
+        bottomPanel.add(new JButton("Cancelar"));
+        
+        // Agregar todo al panel principal
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(rightPanel, BorderLayout.CENTER);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        
+        setContentPane(mainPanel);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new EjemploComponentes().setVisible(true);
+        });
+    }
+}</pre>
+        </div>
+
+        <h2>Mejores Prácticas</h2>
+        <ul>
+            <li>Usar SwingUtilities.invokeLater() para crear y modificar componentes</li>
+            <li>Implementar listeners para manejar eventos</li>
+            <li>Utilizar layouts apropiados</li>
+            <li>Mantener una estructura organizada de componentes</li>
+            <li>Validar entrada de usuario</li>
+            <li>Proporcionar retroalimentación visual al usuario</li>
+            <li>Considerar la accesibilidad</li>
+        </ul>
+    </div>
+</body>
+</html>

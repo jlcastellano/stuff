@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contenedores Swing en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+        }
+
+        .example {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contenedores Swing en Java</h1>
+
+        <h2>1. JFrame</h2>
+        <p>Es la ventana principal de una aplicación Swing. Puede contener otros componentes y contenedores.</p>
+        <div class="code-block">
+            <pre>
+JFrame frame = new JFrame("Mi Aplicación");
+frame.setSize(400, 300);
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.setVisible(true);</pre>
+        </div>
+
+        <h2>2. JPanel</h2>
+        <p>Un contenedor ligero que puede agrupar y organizar otros componentes.</p>
+        <div class="code-block">
+            <pre>
+JPanel panel = new JPanel();
+panel.setLayout(new FlowLayout());
+panel.add(new JButton("Botón 1"));
+panel.add(new JButton("Botón 2"));</pre>
+        </div>
+
+        <h2>3. JScrollPane</h2>
+        <p>Proporciona barras de desplazamiento para componentes que pueden ser más grandes que el área visible.</p>
+        <div class="code-block">
+            <pre>
+JTextArea textArea = new JTextArea(20, 30);
+JScrollPane scrollPane = new JScrollPane(textArea);</pre>
+        </div>
+
+        <h2>4. JSplitPane</h2>
+        <p>Divide el espacio en dos áreas ajustables mediante una barra divisoria.</p>
+        <div class="code-block">
+            <pre>
+JPanel leftPanel = new JPanel();
+JPanel rightPanel = new JPanel();
+JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);</pre>
+        </div>
+
+        <h2>5. JTabbedPane</h2>
+        <p>Permite organizar componentes en pestañas.</p>
+        <div class="code-block">
+            <pre>
+JTabbedPane tabbedPane = new JTabbedPane();
+tabbedPane.addTab("Pestaña 1", new JPanel());
+tabbedPane.addTab("Pestaña 2", new JPanel());</pre>
+        </div>
+
+        <h2>6. JToolBar</h2>
+        <p>Barra de herramientas que puede contener botones y otros componentes.</p>
+        <div class="code-block">
+            <pre>
+JToolBar toolBar = new JToolBar();
+toolBar.add(new JButton("Nuevo"));
+toolBar.add(new JButton("Abrir"));</pre>
+        </div>
+
+        <h2>7. JInternalFrame</h2>
+        <p>Ventanas que se pueden usar dentro de un JDesktopPane para crear aplicaciones MDI (Multiple Document Interface).</p>
+        <div class="code-block">
+            <pre>
+JDesktopPane desktop = new JDesktopPane();
+JInternalFrame iframe = new JInternalFrame("Ventana Interna", true, true, true, true);
+iframe.setSize(200, 200);
+iframe.setVisible(true);
+desktop.add(iframe);</pre>
+        </div>
+
+        <h2>Ejemplo Completo</h2>
+        <div class="example">
+            <pre>
+import javax.swing.*;
+import java.awt.*;
+
+public class EjemploContenedores extends JFrame {
+    public EjemploContenedores() {
+        setTitle("Ejemplo de Contenedores");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Crear panel principal
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        
+        // Crear barra de herramientas
+        JToolBar toolBar = new JToolBar();
+        toolBar.add(new JButton("Nuevo"));
+        toolBar.add(new JButton("Abrir"));
+        mainPanel.add(toolBar, BorderLayout.NORTH);
+        
+        // Crear panel con pestañas
+        JTabbedPane tabbedPane = new JTabbedPane();
+        
+        // Primera pestaña con split pane
+        JSplitPane splitPane = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,
+            new JScrollPane(new JTextArea()),
+            new JScrollPane(new JList<String>())
+        );
+        tabbedPane.addTab("Editor", splitPane);
+        
+        // Segunda pestaña
+        tabbedPane.addTab("Configuración", new JPanel());
+        
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        
+        setContentPane(mainPanel);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new EjemploContenedores().setVisible(true);
+        });
+    }
+}</pre>
+        </div>
+
+        <h2>Consideraciones Importantes</h2>
+        <ul>
+            <li>Todos los contenedores Swing heredan de java.awt.Container</li>
+            <li>Los contenedores pueden anidar otros contenedores</li>
+            <li>Cada contenedor puede tener su propio LayoutManager</li>
+            <li>Los contenedores ligeros (como JPanel) son más eficientes que los pesados (como JFrame)</li>
+        </ul>
+
+        <h2>Mejores Prácticas</h2>
+        <ul>
+            <li>Usar SwingUtilities.invokeLater() para crear y modificar componentes Swing</li>
+            <li>Establecer siempre una operación por defecto para el cierre de JFrame</li>
+            <li>Utilizar layouts apropiados en lugar de posicionamiento absoluto</li>
+            <li>Considerar la jerarquía de contenedores al diseñar la interfaz</li>
+            <li>Mantener una estructura lógica y organizada de los contenedores</li>
+        </ul>
+    </div>
+</body>
+</html>

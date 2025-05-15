@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos en Swing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        .event-section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .example {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Eventos en Swing</h1>
+
+        <div class="event-section">
+            <h2>1. ActionListener</h2>
+            <p>Para eventos de acción simple como clics en botones o selección de menús.</p>
+            
+            <div class="code-block">
+                <pre>
+JButton button = new JButton("Clic");
+button.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Botón presionado");
+    }
+});
+
+// Usando lambda
+button.addActionListener(e -> System.out.println("Botón presionado"));</pre>
+            </div>
+
+            <h3>Componentes que lo utilizan:</h3>
+            <ul>
+                <li>JButton</li>
+                <li>JMenuItem</li>
+                <li>JTextField</li>
+                <li>JComboBox</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>2. MouseListener</h2>
+            <p>Para eventos relacionados con el ratón.</p>
+            
+            <div class="code-block">
+                <pre>
+component.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Clic en: " + e.getX() + "," + e.getY());
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("Ratón entró");
+    }
+    
+    @Override
+    public void mouseExited(MouseEvent e) {
+        System.out.println("Ratón salió");
+    }
+});</pre>
+            </div>
+
+            <h3>Eventos disponibles:</h3>
+            <ul>
+                <li>mouseClicked</li>
+                <li>mousePressed</li>
+                <li>mouseReleased</li>
+                <li>mouseEntered</li>
+                <li>mouseExited</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>3. KeyListener</h2>
+            <p>Para eventos de teclado.</p>
+            
+            <div class="code-block">
+                <pre>
+textField.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            System.out.println("Enter presionado");
+        }
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        if (!Character.isDigit(c)) {
+            e.consume(); // Ignora caracteres no numéricos
+        }
+    }
+});</pre>
+            </div>
+
+            <h3>Eventos disponibles:</h3>
+            <ul>
+                <li>keyPressed</li>
+                <li>keyReleased</li>
+                <li>keyTyped</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>4. ItemListener</h2>
+            <p>Para componentes que pueden cambiar su estado de selección.</p>
+            
+            <div class="code-block">
+                <pre>
+JCheckBox checkBox = new JCheckBox("Opción");
+checkBox.addItemListener(new ItemListener() {
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        boolean selected = (e.getStateChange() == ItemEvent.SELECTED);
+        System.out.println("Seleccionado: " + selected);
+    }
+});</pre>
+            </div>
+
+            <h3>Componentes que lo utilizan:</h3>
+            <ul>
+                <li>JCheckBox</li>
+                <li>JRadioButton</li>
+                <li>JComboBox</li>
+                <li>JToggleButton</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>5. DocumentListener</h2>
+            <p>Para monitorear cambios en componentes de texto.</p>
+            
+            <div class="code-block">
+                <pre>
+JTextField textField = new JTextField();
+textField.getDocument().addDocumentListener(new DocumentListener() {
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        updateText();
+    }
+    
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        updateText();
+    }
+    
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        updateText();
+    }
+    
+    private void updateText() {
+        System.out.println("Texto actual: " + textField.getText());
+    }
+});</pre>
+            </div>
+
+            <h3>Componentes que lo utilizan:</h3>
+            <ul>
+                <li>JTextField</li>
+                <li>JTextArea</li>
+                <li>JEditorPane</li>
+                <li>JTextPane</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>6. WindowListener</h2>
+            <p>Para eventos relacionados con la ventana.</p>
+            
+            <div class="code-block">
+                <pre>
+frame.addWindowListener(new WindowAdapter() {
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("Ventana cerrándose");
+    }
+    
+    @Override
+    public void windowActivated(WindowEvent e) {
+        System.out.println("Ventana activada");
+    }
+});</pre>
+            </div>
+
+            <h3>Eventos disponibles:</h3>
+            <ul>
+                <li>windowOpened</li>
+                <li>windowClosing</li>
+                <li>windowClosed</li>
+                <li>windowIconified</li>
+                <li>windowDeiconified</li>
+                <li>windowActivated</li>
+                <li>windowDeactivated</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>7. ListSelectionListener</h2>
+            <p>Para eventos de selección en listas y tablas.</p>
+            
+            <div class="code-block">
+                <pre>
+JList<String> list = new JList<>(new String[]{"Item 1", "Item 2"});
+list.addListSelectionListener(new ListSelectionListener() {
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) {
+            System.out.println("Selección: " + list.getSelectedValue());
+        }
+    }
+});</pre>
+            </div>
+
+            <h3>Componentes que lo utilizan:</h3>
+            <ul>
+                <li>JList</li>
+                <li>JTable</li>
+            </ul>
+        </div>
+
+        <div class="event-section">
+            <h2>8. FocusListener</h2>
+            <p>Para eventos de foco en componentes.</p>
+            
+            <div class="code-block">
+                <pre>
+component.addFocusListener(new FocusAdapter() {
+    @Override
+    public void focusGained(FocusEvent e) {
+        System.out.println("Componente ganó el foco");
+    }
+    
+    @Override
+    public void focusLost(FocusEvent e) {
+        System.out.println("Componente perdió el foco");
+    }
+});</pre>
+            </div>
+        </div>
+
+        <div class="event-section">
+            <h2>Ejemplo Completo de Manejo de Eventos</h2>
+            
+            <div class="example">
+                <pre>
+public class EjemploEventos extends JFrame {
+    public EjemploEventos() {
+        setTitle("Demo de Eventos");
+        setLayout(new FlowLayout());
+        
+        JTextField textField = new JTextField(20);
+        JButton button = new JButton("Enviar");
+        JLabel label = new JLabel("Resultado: ");
+        
+        // ActionListener para el botón
+        button.addActionListener(e -> {
+            label.setText("Resultado: " + textField.getText());
+        });
+        
+        // KeyListener para el campo de texto
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    button.doClick();
+                }
+            }
+        });
+        
+        // DocumentListener para el campo de texto
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) { updateLabel(); }
+            public void removeUpdate(DocumentEvent e) { updateLabel(); }
+            public void insertUpdate(DocumentEvent e) { updateLabel(); }
+            
+            private void updateLabel() {
+                label.setText("Escribiendo: " + textField.getText());
+            }
+        });
+        
+        add(textField);
+        add(button);
+        add(label);
+        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new EjemploEventos().setVisible(true);
+        });
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="event-section">
+            <h2>Mejores Prácticas</h2>
+            <ul>
+                <li>Usar clases Adapter cuando no se necesiten todos los métodos del listener</li>
+                <li>Evitar operaciones largas en los manejadores de eventos</li>
+                <li>Mantener el código de los listeners organizado y modular</li>
+                <li>Remover los listeners cuando ya no sean necesarios</li>
+                <li>Validar los eventos antes de procesarlos</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIManager en Swing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .example {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UIManager en Swing</h1>
+
+        <div class="section">
+            <h2>1. Introducción al UIManager</h2>
+            <p>UIManager es una clase que permite personalizar la apariencia y el comportamiento de los componentes Swing a nivel global de la aplicación.</p>
+            
+            <div class="code-block">
+                <pre>
+// Establecer Look and Feel
+UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+// Actualizar componentes existentes
+SwingUtilities.updateComponentTreeUI(frame);</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Look and Feel Disponibles</h2>
+            <p>Swing proporciona varios Look and Feel predefinidos:</p>
+            
+            <div class="code-block">
+                <pre>
+// Metal (Look and Feel por defecto)
+UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+
+// Nimbus
+UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+
+// Sistema Operativo
+UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+// Motif
+UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. Personalización de Colores y Fuentes</h2>
+            <p>Modificación de propiedades específicas de los componentes.</p>
+            
+            <div class="code-block">
+                <pre>
+// Cambiar color de fondo de botones
+UIManager.put("Button.background", new Color(100, 149, 237));
+
+// Cambiar fuente de etiquetas
+UIManager.put("Label.font", new Font("Arial", Font.BOLD, 12));
+
+// Cambiar color de selección
+UIManager.put("TextField.selectionBackground", Color.ORANGE);
+UIManager.put("TextField.selectionForeground", Color.WHITE);</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>4. Gestión de Defaults</h2>
+            <p>Acceso y modificación de valores por defecto.</p>
+            
+            <div class="code-block">
+                <pre>
+// Obtener valores actuales
+Color buttonColor = UIManager.getColor("Button.background");
+Font labelFont = UIManager.getFont("Label.font");
+
+// Establecer múltiples defaults
+UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+defaults.put("Panel.background", Color.WHITE);
+defaults.put("Panel.font", new Font("SansSerif", Font.PLAIN, 12));</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. Manejo de Errores</h2>
+            <p>Gestión de excepciones al cambiar Look and Feel.</p>
+            
+            <div class="code-block">
+                <pre>
+try {
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+} catch (ClassNotFoundException | InstantiationException |
+         IllegalAccessException | UnsupportedLookAndFeelException e) {
+    e.printStackTrace();
+}</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>6. Ejemplo Completo de Personalización</h2>
+            
+            <div class="example">
+                <pre>
+public class EjemploUIManager extends JFrame {
+    public EjemploUIManager() {
+        try {
+            // Establecer Look and Feel Nimbus
+            UIManager.setLookAndFeel(
+                "javax.swing.plaf.nimbus.NimbusLookAndFeel"
+            );
+            
+            // Personalizar componentes
+            UIManager.put("Button.background", new Color(70, 130, 180));
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Panel.background", new Color(240, 240, 240));
+            UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
+            
+            // Crear interfaz
+            setTitle("Ejemplo UIManager");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(3, 1, 10, 10));
+            panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            
+            JLabel label = new JLabel("Ejemplo de UIManager");
+            JTextField textField = new JTextField("Campo de texto");
+            JButton button = new JButton("Botón personalizado");
+            
+            panel.add(label);
+            panel.add(textField);
+            panel.add(button);
+            
+            add(panel);
+            pack();
+            setLocationRelativeTo(null);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new EjemploUIManager().setVisible(true);
+        });
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>7. Propiedades Comunes de UIManager</h2>
+            <ul>
+                <li>Button.background</li>
+                <li>Button.foreground</li>
+                <li>Panel.background</li>
+                <li>Label.font</li>
+                <li>TextField.background</li>
+                <li>MenuItem.acceleratorFont</li>
+                <li>OptionPane.messageFont</li>
+                <li>Menu.selectionBackground</li>
+                <li>Table.gridColor</li>
+                <li>ToolTip.background</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>8. Mejores Prácticas</h2>
+            <ul>
+                <li>Establecer el Look and Feel al inicio de la aplicación</li>
+                <li>Usar SwingUtilities.invokeLater() para cambios en la UI</li>
+                <li>Mantener consistencia en el diseño</li>
+                <li>Probar la aplicación en diferentes sistemas operativos</li>
+                <li>Documentar las personalizaciones realizadas</li>
+                <li>Considerar la accesibilidad al personalizar colores</li>
+                <li>Crear temas reutilizables para la aplicación</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>9. Consideraciones de Rendimiento</h2>
+            <ul>
+                <li>Realizar cambios de Look and Feel antes de crear componentes</li>
+                <li>Agrupar múltiples cambios de propiedades</li>
+                <li>Evitar cambios frecuentes durante la ejecución</li>
+                <li>Utilizar SwingUtilities.updateComponentTreeUI() con moderación</li>
+                <li>Considerar el impacto en memoria de las personalizaciones</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
