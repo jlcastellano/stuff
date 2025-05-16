@@ -79,317 +79,37 @@
         <h3>Ejercicio 1 - Lista de Estudiantes</h3>
         <p>Crear un procedimiento almacenado que use un cursor para mostrar una lista numerada de todos los estudiantes ordenados alfabéticamente por apellido. El formato de salida debe ser: "1. Apellido, Nombre".</p>
         <p class="nota-importante">Usar la tabla: estudiantes(id, nombre, apellido)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE PROCEDURE listar_estudiantes()
-BEGIN
-    DECLARE v_nombre VARCHAR(50);
-    DECLARE v_apellido VARCHAR(50);
-    DECLARE v_contador INT DEFAULT 0;
-    DECLARE v_fin INT DEFAULT 0;
-    
-    DECLARE cur_estudiantes CURSOR FOR 
-        SELECT nombre, apellido 
-        FROM estudiantes 
-        ORDER BY apellido, nombre;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = 1;
-    
-    OPEN cur_estudiantes;
-    
-    lista: LOOP
-        FETCH cur_estudiantes INTO v_nombre, v_apellido;
-        IF v_fin = 1 THEN
-            LEAVE lista;
-        END IF;
-        SET v_contador = v_contador + 1;
-        SELECT CONCAT(v_contador, '. ', v_apellido, ', ', v_nombre);
-    END LOOP lista;
-    
-    CLOSE cur_estudiantes;
-END $$
-
-DELIMITER ;</pre>
-        </div>
     </div>
 
     <div class="ejercicio">
         <h3>Ejercicio 2 - Actualización de Promedios</h3>
         <p>Crear un procedimiento que use un cursor para actualizar el promedio de cada estudiante basado en sus calificaciones individuales.</p>
         <p class="nota-importante">Usar las tablas: estudiantes(id, nombre, promedio) y calificaciones(estudiante_id, nota)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE PROCEDURE actualizar_promedios()
-BEGIN
-    DECLARE v_id INT;
-    DECLARE v_promedio DECIMAL(4,2);
-    DECLARE v_fin INT DEFAULT 0;
-    
-    DECLARE cur_estudiantes CURSOR FOR 
-        SELECT id FROM estudiantes;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = 1;
-    
-    OPEN cur_estudiantes;
-    
-    actualizar: LOOP
-        FETCH cur_estudiantes INTO v_id;
-        IF v_fin = 1 THEN
-            LEAVE actualizar;
-        END IF;
-        
-        SELECT AVG(nota) INTO v_promedio 
-        FROM calificaciones 
-        WHERE estudiante_id = v_id;
-        
-        UPDATE estudiantes 
-        SET promedio = v_promedio 
-        WHERE id = v_id;
-    END LOOP actualizar;
-    
-    CLOSE cur_estudiantes;
-END $$
-
-DELIMITER ;</pre>
-        </div>
     </div>
 
     <div class="ejercicio">
         <h3>Ejercicio 3 - Reporte de Calificaciones</h3>
         <p>Desarrollar un procedimiento que genere un reporte de calificaciones usando cursores anidados: uno para recorrer los cursos y otro para los estudiantes en cada curso.</p>
         <p class="nota-importante">Usar las tablas: cursos(id, nombre), estudiantes(id, nombre) y calificaciones(curso_id, estudiante_id, nota)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE PROCEDURE reporte_calificaciones()
-BEGIN
-    DECLARE v_curso_id INT;
-    DECLARE v_curso_nombre VARCHAR(50);
-    DECLARE v_estudiante_id INT;
-    DECLARE v_estudiante_nombre VARCHAR(50);
-    DECLARE v_nota DECIMAL(4,2);
-    DECLARE v_fin_cursos, v_fin_estudiantes INT DEFAULT 0;
-    
-    DECLARE cur_cursos CURSOR FOR 
-        SELECT id, nombre FROM cursos;
-    
-    DECLARE cur_estudiantes CURSOR FOR 
-        SELECT e.id, e.nombre, c.nota
-        FROM estudiantes e
-        JOIN calificaciones c ON e.id = c.estudiante_id
-        WHERE c.curso_id = v_curso_id;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND 
-        SET v_fin_cursos = 1;
-    
-    OPEN cur_cursos;
-    
-    cursos: LOOP
-        FETCH cur_cursos INTO v_curso_id, v_curso_nombre;
-        IF v_fin_cursos = 1 THEN
-            LEAVE cursos;
-        END IF;
-        
-        SELECT CONCAT('Curso: ', v_curso_nombre);
-        
-        SET v_fin_estudiantes = 0;
-        OPEN cur_estudiantes;
-        
-        estudiantes: LOOP
-            FETCH cur_estudiantes INTO v_estudiante_id, v_estudiante_nombre, v_nota;
-            IF v_fin_estudiantes = 1 THEN
-                LEAVE estudiantes;
-            END IF;
-            
-            SELECT CONCAT('  ', v_estudiante_nombre, ': ', v_nota);
-        END LOOP estudiantes;
-        
-        CLOSE cur_estudiantes;
-    END LOOP cursos;
-    
-    CLOSE cur_cursos;
-END $$
-
-DELIMITER ;</pre>
-        </div>
     </div>
 
     <div class="ejercicio">
         <h3>Ejercicio 4 - Migración de Datos</h3>
         <p>Crear un procedimiento que use un cursor para migrar datos de una tabla antigua a una nueva, realizando transformaciones en el proceso.</p>
         <p class="nota-importante">Usar las tablas: estudiantes_antiguo(id, nombre_completo, fecha) y estudiantes_nuevo(id, nombre, apellido, fecha_nacimiento)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE PROCEDURE migrar_estudiantes()
-BEGIN
-    DECLARE v_id INT;
-    DECLARE v_nombre_completo VARCHAR(100);
-    DECLARE v_fecha DATE;
-    DECLARE v_nombre, v_apellido VARCHAR(50);
-    DECLARE v_fin INT DEFAULT 0;
-    
-    DECLARE cur_antiguos CURSOR FOR 
-        SELECT id, nombre_completo, fecha 
-        FROM estudiantes_antiguo;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = 1;
-    
-    OPEN cur_antiguos;
-    
-    migrar: LOOP
-        FETCH cur_antiguos INTO v_id, v_nombre_completo, v_fecha;
-        IF v_fin = 1 THEN
-            LEAVE migrar;
-        END IF;
-        
-        -- Separar nombre y apellido
-        SET v_nombre = SUBSTRING_INDEX(v_nombre_completo, ' ', 1);
-        SET v_apellido = SUBSTRING(v_nombre_completo, LENGTH(v_nombre) + 2);
-        
-        INSERT INTO estudiantes_nuevo (id, nombre, apellido, fecha_nacimiento)
-        VALUES (v_id, v_nombre, v_apellido, v_fecha);
-    END LOOP migrar;
-    
-    CLOSE cur_antiguos;
-END $$
-
-DELIMITER ;</pre>
-        </div>
     </div>
 
     <div class="ejercicio">
         <h3>Ejercicio 5 - Verificación de Consistencia</h3>
         <p>Desarrollar un procedimiento que use un cursor para verificar la consistencia de datos entre dos tablas relacionadas, reportando cualquier inconsistencia.</p>
         <p class="nota-importante">Usar las tablas: estudiantes(id, nombre) y inscripciones(estudiante_id, curso_id)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE PROCEDURE verificar_consistencia()
-BEGIN
-    DECLARE v_estudiante_id INT;
-    DECLARE v_nombre VARCHAR(50);
-    DECLARE v_inscripciones INT;
-    DECLARE v_fin INT DEFAULT 0;
-    
-    DECLARE cur_estudiantes CURSOR FOR 
-        SELECT id, nombre 
-        FROM estudiantes;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = 1;
-    
-    CREATE TEMPORARY TABLE IF NOT EXISTS inconsistencias (
-        estudiante_id INT,
-        nombre VARCHAR(50),
-        tipo_error VARCHAR(100)
-    );
-    
-    OPEN cur_estudiantes;
-    
-    verificar: LOOP
-        FETCH cur_estudiantes INTO v_estudiante_id, v_nombre;
-        IF v_fin = 1 THEN
-            LEAVE verificar;
-        END IF;
-        
-        -- Verificar inscripciones
-        SELECT COUNT(*) INTO v_inscripciones 
-        FROM inscripciones 
-        WHERE estudiante_id = v_estudiante_id;
-        
-        IF v_inscripciones = 0 THEN
-            INSERT INTO inconsistencias 
-            VALUES (v_estudiante_id, v_nombre, 'Estudiante sin inscripciones');
-        END IF;
-    END LOOP verificar;
-    
-    CLOSE cur_estudiantes;
-    
-    -- Mostrar resultados
-    SELECT * FROM inconsistencias;
-    DROP TEMPORARY TABLE inconsistencias;
-END $$
-
-DELIMITER ;</pre>
-        </div>
     </div>
 
     <div class="ejercicio">
         <h3>Ejercicio 6 - Generador de Reportes HTML</h3>
         <p>Crear un procedimiento que use un cursor para generar un reporte HTML con el historial académico de cada estudiante.</p>
         <p class="nota-importante">Usar las tablas: estudiantes(id, nombre), cursos(id, nombre) y calificaciones(estudiante_id, curso_id, nota)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE PROCEDURE generar_reporte_html()
-BEGIN
-    DECLARE v_estudiante_id INT;
-    DECLARE v_estudiante_nombre VARCHAR(50);
-    DECLARE v_html TEXT;
-    DECLARE v_fin INT DEFAULT 0;
-    
-    DECLARE cur_estudiantes CURSOR FOR 
-        SELECT id, nombre 
-        FROM estudiantes;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = 1;
-    
-    -- Iniciar HTML
-    SET @reporte = '<!DOCTYPE html><html><body><h1>Reportes Académicos</h1>';
-    
-    OPEN cur_estudiantes;
-    
-    generar: LOOP
-        FETCH cur_estudiantes INTO v_estudiante_id, v_estudiante_nombre;
-        IF v_fin = 1 THEN
-            LEAVE generar;
-        END IF;
-        
-        -- Generar sección del estudiante
-        SET @reporte = CONCAT(@reporte, 
-            '<div class="estudiante">',
-            '<h2>', v_estudiante_nombre, '</h2>',
-            '<table border="1">',
-            '<tr><th>Curso</th><th>Calificación</th></tr>'
-        );
-        
-        -- Agregar calificaciones
-        INSERT INTO @temp_notas 
-        SELECT c.nombre, cal.nota
-        FROM calificaciones cal
-        JOIN cursos c ON cal.curso_id = c.id
-        WHERE cal.estudiante_id = v_estudiante_id;
-        
-        -- Cerrar sección
-        SET @reporte = CONCAT(@reporte, '</table></div>');
-    END LOOP generar;
-    
-    CLOSE cur_estudiantes;
-    
-    -- Finalizar HTML
-    SET @reporte = CONCAT(@reporte, '</body></html>');
-    
-    -- Mostrar resultado
-    SELECT @reporte AS reporte_html;
-END $$
-
-DELIMITER ;</pre>
-        </div>
-    </div>
+ </div>
 
     <script>
         function toggleSolucion(button) {
