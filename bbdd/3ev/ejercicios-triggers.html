@@ -75,40 +75,7 @@
             <li>Mantener el stock mínimo y máximo permitido</li>
         </ul>
         <p class="nota-importante">Tablas necesarias: productos(id, nombre, stock, stock_minimo, stock_maximo) y productos_historico(id, producto_id, usuario, fecha, operacion, stock_anterior, stock_nuevo)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE TRIGGER tr_productos_after_update
-AFTER UPDATE ON productos
-FOR EACH ROW
-BEGIN
-    IF OLD.stock != NEW.stock THEN
-        INSERT INTO productos_historico 
-        (producto_id, usuario, fecha, operacion, stock_anterior, stock_nuevo)
-        VALUES
-        (NEW.id, CURRENT_USER(), NOW(), 'UPDATE', OLD.stock, NEW.stock);
-    END IF;
-END $$
-
-CREATE TRIGGER tr_productos_before_update
-BEFORE UPDATE ON productos
-FOR EACH ROW
-BEGIN
-    IF NEW.stock < NEW.stock_minimo THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Stock no puede ser menor al mínimo permitido';
-    END IF;
-    
-    IF NEW.stock > NEW.stock_maximo THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Stock no puede ser mayor al máximo permitido';
-    END IF;
-END $$
-
-DELIMITER ;</pre>
-        </div>
+ 
     </div>
 
     <div class="ejercicio">
@@ -121,49 +88,7 @@ DELIMITER ;</pre>
             <li>Registrar cambios de salario en una tabla de auditoría</li>
         </ul>
         <p class="nota-importante">Tablas: empleados(id, nombre, email, fecha_nacimiento, salario) y auditoria_salarios(id, empleado_id, salario_anterior, salario_nuevo, fecha_cambio)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE TRIGGER tr_empleados_before_insert
-BEFORE INSERT ON empleados
-FOR EACH ROW
-BEGIN
-    -- Validar salario
-    IF NEW.salario < 0 OR NEW.salario > 100000 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Salario fuera de rango permitido';
-    END IF;
-    
-    -- Validar edad
-    IF TIMESTAMPDIFF(YEAR, NEW.fecha_nacimiento, CURDATE()) < 18 OR
-       TIMESTAMPDIFF(YEAR, NEW.fecha_nacimiento, CURDATE()) > 65 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Edad debe estar entre 18 y 65 años';
-    END IF;
-    
-    -- Validar email
-    IF NEW.email NOT REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Formato de email inválido';
-    END IF;
-END $$
-
-CREATE TRIGGER tr_empleados_after_update
-AFTER UPDATE ON empleados
-FOR EACH ROW
-BEGIN
-    IF OLD.salario != NEW.salario THEN
-        INSERT INTO auditoria_salarios 
-        (empleado_id, salario_anterior, salario_nuevo, fecha_cambio)
-        VALUES
-        (NEW.id, OLD.salario, NEW.salario, NOW());
-    END IF;
-END $$
-
-DELIMITER ;</pre>
-        </div>
+       
     </div>
 
     <div class="ejercicio">
@@ -176,54 +101,7 @@ DELIMITER ;</pre>
             <li>Mantenga un historial de cambios de calificaciones</li>
         </ul>
         <p class="nota-importante">Tablas: estudiantes(id, nombre, promedio, estado), calificaciones(id, estudiante_id, materia_id, nota) y historial_calificaciones(id, estudiante_id, materia_id, nota_anterior, nota_nueva, fecha_cambio)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE TRIGGER tr_calificaciones_before_insert
-BEFORE INSERT ON calificaciones
-FOR EACH ROW
-BEGIN
-    IF NEW.nota < 0 OR NEW.nota > 10 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: La calificación debe estar entre 0 y 10';
-    END IF;
-END $$
-
-CREATE TRIGGER tr_calificaciones_after_insert
-AFTER INSERT ON calificaciones
-FOR EACH ROW
-BEGIN
-    DECLARE v_promedio DECIMAL(4,2);
-    
-    -- Calcular nuevo promedio
-    SELECT AVG(nota) INTO v_promedio
-    FROM calificaciones
-    WHERE estudiante_id = NEW.estudiante_id;
-    
-    -- Actualizar promedio y estado
-    UPDATE estudiantes
-    SET promedio = v_promedio,
-        estado = CASE 
-            WHEN v_promedio >= 5 THEN 'aprobado'
-            ELSE 'reprobado'
-        END
-    WHERE id = NEW.estudiante_id;
-END $$
-
-CREATE TRIGGER tr_calificaciones_after_update
-AFTER UPDATE ON calificaciones
-FOR EACH ROW
-BEGIN
-    INSERT INTO historial_calificaciones 
-    (estudiante_id, materia_id, nota_anterior, nota_nueva, fecha_cambio)
-    VALUES
-    (NEW.estudiante_id, NEW.materia_id, OLD.nota, NEW.nota, NOW());
-END $$
-
-DELIMITER ;</pre>
-        </div>
+   
     </div>
 
     <div class="ejercicio">
@@ -236,61 +114,7 @@ DELIMITER ;</pre>
             <li>Registre los cambios en el estado del pedido</li>
         </ul>
         <p class="nota-importante">Tablas: pedidos(id, cliente_id, total, estado), detalle_pedido(id, pedido_id, producto_id, cantidad, precio), productos(id, nombre, stock) y log_pedidos(id, pedido_id, estado_anterior, estado_nuevo, fecha_cambio)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE TRIGGER tr_detalle_pedido_before_insert
-BEFORE INSERT ON detalle_pedido
-FOR EACH ROW
-BEGIN
-    DECLARE v_stock_actual INT;
-    
-    -- Verificar stock
-    SELECT stock INTO v_stock_actual
-    FROM productos
-    WHERE id = NEW.producto_id;
-    
-    IF v_stock_actual < NEW.cantidad THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Stock insuficiente';
-    END IF;
-END $$
-
-CREATE TRIGGER tr_detalle_pedido_after_insert
-AFTER INSERT ON detalle_pedido
-FOR EACH ROW
-BEGIN
-    -- Actualizar stock
-    UPDATE productos
-    SET stock = stock - NEW.cantidad
-    WHERE id = NEW.producto_id;
-    
-    -- Actualizar total del pedido
-    UPDATE pedidos
-    SET total = (
-        SELECT SUM(cantidad * precio)
-        FROM detalle_pedido
-        WHERE pedido_id = NEW.pedido_id
-    )
-    WHERE id = NEW.pedido_id;
-END $$
-
-CREATE TRIGGER tr_pedidos_after_update
-AFTER UPDATE ON pedidos
-FOR EACH ROW
-BEGIN
-    IF OLD.estado != NEW.estado THEN
-        INSERT INTO log_pedidos 
-        (pedido_id, estado_anterior, estado_nuevo, fecha_cambio)
-        VALUES
-        (NEW.id, OLD.estado, NEW.estado, NOW());
-    END IF;
-END $$
-
-DELIMITER ;</pre>
-        </div>
+     
     </div>
 
     <div class="ejercicio">
@@ -303,67 +127,7 @@ DELIMITER ;</pre>
             <li>Controle límites diarios de transacciones</li>
         </ul>
         <p class="nota-importante">Tablas: cuentas(id, cliente_id, saldo), transacciones(id, cuenta_id, tipo, monto, fecha) y limites_diarios(cuenta_id, fecha, monto_total)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE TRIGGER tr_transacciones_before_insert
-BEFORE INSERT ON transacciones
-FOR EACH ROW
-BEGIN
-    DECLARE v_saldo_actual DECIMAL(10,2);
-    DECLARE v_monto_diario DECIMAL(10,2);
-    
-    -- Verificar saldo para retiros
-    IF NEW.tipo = 'retiro' THEN
-        SELECT saldo INTO v_saldo_actual
-        FROM cuentas
-        WHERE id = NEW.cuenta_id;
-        
-        IF v_saldo_actual < NEW.monto THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Error: Saldo insuficiente';
-        END IF;
-        
-        -- Verificar límite diario
-        SELECT COALESCE(SUM(monto), 0) INTO v_monto_diario
-        FROM transacciones
-        WHERE cuenta_id = NEW.cuenta_id
-        AND DATE(fecha) = CURDATE()
-        AND tipo = 'retiro';
-        
-        IF (v_monto_diario + NEW.monto) > 5000 THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Error: Límite diario excedido';
-        END IF;
-    END IF;
-END $$
-
-CREATE TRIGGER tr_transacciones_after_insert
-AFTER INSERT ON transacciones
-FOR EACH ROW
-BEGIN
-    -- Actualizar saldo
-    IF NEW.tipo = 'deposito' THEN
-        UPDATE cuentas
-        SET saldo = saldo + NEW.monto
-        WHERE id = NEW.cuenta_id;
-    ELSE
-        UPDATE cuentas
-        SET saldo = saldo - NEW.monto
-        WHERE id = NEW.cuenta_id;
-    END IF;
-    
-    -- Actualizar límites diarios
-    INSERT INTO limites_diarios (cuenta_id, fecha, monto_total)
-    VALUES (NEW.cuenta_id, CURDATE(), NEW.monto)
-    ON DUPLICATE KEY UPDATE
-    monto_total = monto_total + NEW.monto;
-END $$
-
-DELIMITER ;</pre>
-        </div>
+ 
     </div>
 
     <div class="ejercicio">
@@ -376,101 +140,7 @@ DELIMITER ;</pre>
             <li>Valide el número máximo de préstamos por usuario</li>
         </ul>
         <p class="nota-importante">Tablas: libros(id, titulo, copias_disponibles), prestamos(id, libro_id, usuario_id, fecha_prestamo, fecha_devolucion, estado), usuarios(id, nombre, prestamos_activos) y multas(id, usuario_id, monto, fecha, pagada)</p>
-        <button onclick="toggleSolucion(this)">Ver Solución</button>
-        <div class="solucion codigo">
-            <pre>
-DELIMITER $$
-
-CREATE TRIGGER tr_prestamos_before_insert
-BEFORE INSERT ON prestamos
-FOR EACH ROW
-BEGIN
-    DECLARE v_copias_disponibles INT;
-    DECLARE v_prestamos_activos INT;
-    DECLARE v_tiene_multas INT;
-    
-    -- Verificar disponibilidad
-    SELECT copias_disponibles INTO v_copias_disponibles
-    FROM libros
-    WHERE id = NEW.libro_id;
-    
-    IF v_copias_disponibles <= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: No hay copias disponibles';
-    END IF;
-    
-    -- Verificar límite de préstamos
-    SELECT prestamos_activos INTO v_prestamos_activos
-    FROM usuarios
-    WHERE id = NEW.usuario_id;
-    
-    IF v_prestamos_activos >= 3 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Límite de préstamos alcanzado';
-    END IF;
-    
-    -- Verificar multas pendientes
-    SELECT COUNT(*) INTO v_tiene_multas
-    FROM multas
-    WHERE usuario_id = NEW.usuario_id
-    AND pagada = FALSE;
-    
-    IF v_tiene_multas > 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Usuario tiene multas pendientes';
-    END IF;
-END $$
-
-CREATE TRIGGER tr_prestamos_after_insert
-AFTER INSERT ON prestamos
-FOR EACH ROW
-BEGIN
-    -- Actualizar inventario
-    UPDATE libros
-    SET copias_disponibles = copias_disponibles - 1
-    WHERE id = NEW.libro_id;
-    
-    -- Actualizar contador de préstamos
-    UPDATE usuarios
-    SET prestamos_activos = prestamos_activos + 1
-    WHERE id = NEW.usuario_id;
-END $$
-
-CREATE TRIGGER tr_prestamos_before_update
-BEFORE UPDATE ON prestamos
-FOR EACH ROW
-BEGIN
-    -- Verificar retraso y generar multa
-    IF NEW.estado = 'devuelto' AND NEW.fecha_devolucion > NEW.fecha_prestamo + INTERVAL 15 DAY THEN
-        INSERT INTO multas (usuario_id, monto, fecha, pagada)
-        VALUES (
-            NEW.usuario_id,
-            DATEDIFF(NEW.fecha_devolucion, NEW.fecha_prestamo + INTERVAL 15 DAY) * 1.00,
-            NOW(),
-            FALSE
-        );
-    END IF;
-END $$
-
-CREATE TRIGGER tr_prestamos_after_update
-AFTER UPDATE ON prestamos
-FOR EACH ROW
-BEGIN
-    IF NEW.estado = 'devuelto' AND OLD.estado != 'devuelto' THEN
-        -- Actualizar inventario
-        UPDATE libros
-        SET copias_disponibles = copias_disponibles + 1
-        WHERE id = NEW.libro_id;
-        
-        -- Actualizar contador de préstamos
-        UPDATE usuarios
-        SET prestamos_activos = prestamos_activos - 1
-        WHERE id = NEW.usuario_id;
-    END IF;
-END $$
-
-DELIMITER ;</pre>
-        </div>
+      
     </div>
 
     <script>
