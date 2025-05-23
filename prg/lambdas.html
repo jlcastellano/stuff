@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funciones Lambda en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Funciones Lambda en Java</h1>
+
+        <div class="section">
+            <h2>1. ¿Qué son las Funciones Lambda?</h2>
+            <p>Las funciones lambda son una forma concisa de representar una función anónima que puede ser pasada como argumento o almacenada como variable. Fueron introducidas en Java 8 como parte de la programación funcional.</p>
+
+            <h3>Características principales:</h3>
+            <ul>
+                <li>Son funciones anónimas (sin nombre)</li>
+                <li>Pueden ser tratadas como valores</li>
+                <li>Pueden tener cero o más parámetros</li>
+                <li>Pueden ser pasadas como argumentos</li>
+                <li>Pueden ser retornadas como resultado</li>
+            </ul>
+
+            <div class="note">
+                <strong>Sintaxis básica:</strong><br>
+                (parámetros) -> expresión<br>
+                o<br>
+                (parámetros) -> { sentencias; }
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Sintaxis y Ejemplos Básicos</h2>
+
+            <h3>Lambda sin parámetros:</h3>
+            <div class="code-block">
+                <pre>
+Runnable runnable = () -> System.out.println("¡Hola Mundo!");
+
+// Equivalente a:
+Runnable runnable = new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("¡Hola Mundo!");
+    }
+};</pre>
+            </div>
+
+            <h3>Lambda con un parámetro:</h3>
+            <div class="code-block">
+                <pre>
+Consumer<String> consumer = (nombre) -> System.out.println("Hola " + nombre);
+// Si solo hay un parámetro, los paréntesis son opcionales
+Consumer<String> consumer = nombre -> System.out.println("Hola " + nombre);</pre>
+            </div>
+
+            <h3>Lambda con múltiples parámetros:</h3>
+            <div class="code-block">
+                <pre>
+BiFunction<Integer, Integer, Integer> suma = (a, b) -> a + b;
+// Con bloque de código
+BiFunction<Integer, Integer, Integer> multiplicacion = (a, b) -> {
+    System.out.println("Multiplicando " + a + " y " + b);
+    return a * b;
+};</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. Interfaces Funcionales Comunes</h2>
+
+            <h3>Predicate<T></h3>
+            <p>Representa una función que acepta un argumento y devuelve un boolean.</p>
+            <div class="code-block">
+                <pre>
+Predicate<Integer> esPar = numero -> numero % 2 == 0;
+System.out.println(esPar.test(4)); // true
+System.out.println(esPar.test(7)); // false</pre>
+            </div>
+
+            <h3>Consumer<T></h3>
+            <p>Acepta un argumento y no devuelve nada.</p>
+            <div class="code-block">
+                <pre>
+Consumer<String> imprimir = mensaje -> System.out.println(mensaje);
+imprimir.accept("Hola Mundo!");</pre>
+            </div>
+
+            <h3>Function<T,R></h3>
+            <p>Acepta un argumento y devuelve un resultado.</p>
+            <div class="code-block">
+                <pre>
+Function<String, Integer> longitud = str -> str.length();
+System.out.println(longitud.apply("Hola")); // 4</pre>
+            </div>
+
+            <h3>Supplier<T></h3>
+            <p>No acepta argumentos pero devuelve un resultado.</p>
+            <div class="code-block">
+                <pre>
+Supplier<Double> numeroAleatorio = () -> Math.random();
+System.out.println(numeroAleatorio.get());</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>4. Ejemplos Prácticos</h2>
+
+            <h3>Ejemplo 1: Filtrado de lista</h3>
+            <div class="code-block">
+                <pre>
+List<String> nombres = Arrays.asList("Ana", "Juan", "Pedro", "María");
+nombres.stream()
+      .filter(nombre -> nombre.length() > 3)
+      .forEach(nombre -> System.out.println(nombre));</pre>
+            </div>
+
+            <h3>Ejemplo 2: Ordenamiento personalizado</h3>
+            <div class="code-block">
+                <pre>
+List<String> palabras = Arrays.asList("zebra", "ardilla", "perro");
+Collections.sort(palabras, (s1, s2) -> s1.compareTo(s2));
+
+// Con método de referencia
+Collections.sort(palabras, String::compareTo);</pre>
+            </div>
+
+            <h3>Ejemplo 3: Manejo de eventos en Swing</h3>
+            <div class="code-block">
+                <pre>
+JButton boton = new JButton("Clic");
+boton.addActionListener(e -> System.out.println("Botón presionado"));
+
+// Equivalente tradicional
+boton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Botón presionado");
+    }
+});</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. Casos de Uso Avanzados</h2>
+
+            <h3>Composición de funciones</h3>
+            <div class="code-block">
+                <pre>
+Function<Integer, Integer> duplicar = x -> x * 2;
+Function<Integer, Integer> sumarUno = x -> x + 1;
+Function<Integer, Integer> duplicarYSumarUno = duplicar.andThen(sumarUno);
+System.out.println(duplicarYSumarUno.apply(5)); // (5 * 2) + 1 = 11</pre>
+            </div>
+
+            <h3>Uso con Streams</h3>
+            <div class="code-block">
+                <pre>
+List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5);
+int suma = numeros.stream()
+                 .filter(n -> n % 2 == 0)    // Filtrar pares
+                 .map(n -> n * n)            // Elevar al cuadrado
+                 .reduce(0, (a, b) -> a + b); // Sumar todo</pre>
+            </div>
+
+            <h3>Captura de variables</h3>
+            <div class="code-block">
+                <pre>
+int multiplicador = 2;
+// Las variables capturadas deben ser final o efectivamente finales
+Function<Integer, Integer> multiplicar = n -> n * multiplicador;</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>6. Ejercicios Prácticos</h2>
+
+            <h3>Ejercicio 1: Procesamiento de lista</h3>
+            <div class="code-block">
+                <pre>
+public class ProcesadorLista {
+    public static void main(String[] args) {
+        List<String> palabras = Arrays.asList("Java", "Python", "JavaScript", "C++");
+        
+        // Filtrar palabras que empiezan con J
+        palabras.stream()
+               .filter(p -> p.startsWith("J"))
+               .forEach(System.out::println);
+               
+        // Convertir a mayúsculas y ordenar
+        palabras.stream()
+               .map(String::toUpperCase)
+               .sorted()
+               .forEach(System.out::println);
+    }
+}</pre>
+            </div>
+
+            <h3>Ejercicio 2: Calculadora funcional</h3>
+            <div class="code-block">
+                <pre>
+public class CalculadoraFuncional {
+    public static void main(String[] args) {
+        // Definir operaciones
+        BiFunction<Double, Double, Double> suma = (a, b) -> a + b;
+        BiFunction<Double, Double, Double> resta = (a, b) -> a - b;
+        BiFunction<Double, Double, Double> multiplicacion = (a, b) -> a * b;
+        BiFunction<Double, Double, Double> division = (a, b) -> a / b;
+        
+        // Usar operaciones
+        System.out.println(operar(10.0, 5.0, suma));          // 15.0
+        System.out.println(operar(10.0, 5.0, resta));         // 5.0
+        System.out.println(operar(10.0, 5.0, multiplicacion)); // 50.0
+        System.out.println(operar(10.0, 5.0, division));      // 2.0
+    }
+    
+    public static Double operar(Double a, Double b, 
+                              BiFunction<Double, Double, Double> operacion) {
+        return operacion.apply(a, b);
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>7. Mejores Prácticas</h2>
+            <ul>
+                <li>Mantener las expresiones lambda simples y legibles</li>
+                <li>Usar métodos de referencia cuando sea posible</li>
+                <li>Evitar efectos secundarios en expresiones lambda</li>
+                <li>Considerar la reutilización de lambdas comunes</li>
+                <li>Documentar adecuadamente las interfaces funcionales personalizadas</li>
+                <li>Usar tipos genéricos apropiadamente</li>
+            </ul>
+
+            <div class="note">
+                <strong>Consejo:</strong> Si una expresión lambda se vuelve demasiado compleja, 
+                considerar extraerla a un método separado o una clase dedicada.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>8. Consideraciones de Rendimiento</h2>
+            <ul>
+                <li>Las lambdas tienen un pequeño overhead en comparación con las clases anónimas</li>
+                <li>El uso excesivo de lambdas puede afectar la legibilidad del código</li>
+                <li>Las lambdas son especialmente útiles en operaciones de streaming y procesamiento paralelo</li>
+                <li>Considerar el uso de métodos de referencia para mejor rendimiento</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

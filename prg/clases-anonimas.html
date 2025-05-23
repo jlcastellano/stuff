@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clases Anónimas en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+            white-space: pre;
+        }
+
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .important {
+            background: #f8d7da;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clases Anónimas en Java</h1>
+
+        <div class="section">
+            <h2>1. ¿Qué son las Clases Anónimas?</h2>
+            <p>Las clases anónimas son clases sin nombre que se declaran e instancian al mismo tiempo. Son una forma de crear una subclase o implementar una interfaz de manera inmediata sin necesidad de crear una clase separada.</p>
+
+            <div class="note">
+                <strong>Características principales:</strong>
+                <ul>
+                    <li>No tienen nombre</li>
+                    <li>Se declaran y crean en una sola expresión</li>
+                    <li>Son clases internas</li>
+                    <li>Solo pueden implementar una interfaz o extender una clase</li>
+                    <li>Tienen acceso a las variables finales o efectivamente finales del contexto que las rodea</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Sintaxis Básica</h2>
+
+            <h3>Implementando una interfaz:</h3>
+            <div class="code-block">
+Interface miInterfaz = new Interface() {
+    @Override
+    public void miMetodo() {
+        // Implementación
+    }
+};</div>
+
+            <h3>Extendiendo una clase:</h3>
+            <div class="code-block">
+MiClase objeto = new MiClase() {
+    @Override
+    public void miMetodo() {
+        // Nueva implementación
+    }
+};</div>
+        </div>
+
+        <div class="section">
+            <h2>3. Ejemplos Prácticos</h2>
+
+            <h3>Ejemplo 1: Runnable</h3>
+            <div class="code-block">
+Runnable runnable = new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Ejecutando en un hilo");
+    }
+};
+
+// Usar el runnable
+new Thread(runnable).start();</div>
+
+            <h3>Ejemplo 2: ActionListener</h3>
+            <div class="code-block">
+JButton boton = new JButton("Clic");
+boton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Botón presionado");
+    }
+});</div>
+
+            <h3>Ejemplo 3: Comparator</h3>
+            <div class="code-block">
+List<String> lista = new ArrayList<>();
+Collections.sort(lista, new Comparator<String>() {
+    @Override
+    public int compare(String s1, String s2) {
+        return s1.length() - s2.length();
+    }
+});</div>
+        </div>
+
+        <div class="section">
+            <h2>4. Casos de Uso Comunes</h2>
+
+            <h3>Listeners de Eventos</h3>
+            <div class="code-block">
+// Ejemplo con MouseListener
+component.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Clic en: " + e.getX() + "," + e.getY());
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("Mouse entró");
+    }
+});</div>
+
+            <h3>Thread personalizado</h3>
+            <div class="code-block">
+Thread thread = new Thread() {
+    @Override
+    public void run() {
+        for(int i = 0; i < 5; i++) {
+            System.out.println("Contador: " + i);
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+};
+thread.start();</div>
+
+            <h3>Callbacks personalizados</h3>
+            <div class="code-block">
+interface Callback {
+    void onComplete(String result);
+}
+
+public void procesarAsincrono(final Callback callback) {
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            // Proceso largo
+            String resultado = "Proceso completado";
+            callback.onComplete(resultado);
+        }
+    }).start();
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>5. Acceso a Variables Externas</h2>
+            
+            <div class="important">
+                Las clases anónimas pueden acceder a:
+                <ul>
+                    <li>Variables finales del método que las contiene</li>
+                    <li>Variables efectivamente finales (no modificadas después de su inicialización)</li>
+                    <li>Variables de instancia y métodos de la clase que las contiene</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+public class EjemploAcceso {
+    private int variableInstancia = 1;
+    
+    public void metodo() {
+        final int variableFinal = 2;
+        int variableEfectivamenteFinal = 3;
+        
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(variableInstancia);      // OK
+                System.out.println(variableFinal);          // OK
+                System.out.println(variableEfectivamenteFinal); // OK
+            }
+        };
+    }
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>6. Ejemplos Avanzados</h2>
+
+            <h3>Ejemplo 1: Factory Method con clase anónima</h3>
+            <div class="code-block">
+public interface Producto {
+    void usar();
+}
+
+public class Factory {
+    public Producto crearProducto(final String tipo) {
+        return new Producto() {
+            private final String tipoProducto = tipo;
+            
+            @Override
+            public void usar() {
+                System.out.println("Usando producto: " + tipoProducto);
+            }
+        };
+    }
+}</div>
+
+            <h3>Ejemplo 2: Estado interno en clase anónima</h3>
+            <div class="code-block">
+public class Contador {
+    public Runnable crearContador() {
+        return new Runnable() {
+            private int cuenta = 0;
+            
+            @Override
+            public void run() {
+                System.out.println("Cuenta: " + (++cuenta));
+            }
+        };
+    }
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>7. Comparación con Lambdas</h2>
+            
+            <div class="note">
+                <strong>Clases Anónimas vs Lambdas:</strong>
+                <ul>
+                    <li>Las clases anónimas pueden tener estado (variables de instancia)</li>
+                    <li>Pueden implementar múltiples métodos</li>
+                    <li>Pueden tener constructores</li>
+                    <li>Son más verbosas que las lambdas</li>
+                    <li>Pueden extender clases (las lambdas no)</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+// Clase anónima
+Runnable r1 = new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Clase anónima");
+    }
+};
+
+// Lambda equivalente
+Runnable r2 = () -> System.out.println("Lambda");</div>
+        </div>
+
+        <div class="section">
+            <h2>8. Mejores Prácticas</h2>
+            <ul>
+                <li>Usar lambdas en lugar de clases anónimas para interfaces funcionales</li>
+                <li>Mantener las clases anónimas pequeñas y enfocadas</li>
+                <li>Considerar crear una clase nombrada si la lógica es compleja</li>
+                <li>Documentar el propósito de la clase anónima</li>
+                <li>Evitar anidar múltiples clases anónimas</li>
+            </ul>
+
+            <div class="note">
+                <strong>Cuándo usar clases anónimas:</strong>
+                <ul>
+                    <li>Cuando necesitas mantener estado</li>
+                    <li>Cuando necesitas implementar múltiples métodos</li>
+                    <li>Cuando necesitas extender una clase</li>
+                    <li>En situaciones donde la legibilidad es más importante que la concisión</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>9. Consideraciones de Rendimiento</h2>
+            <ul>
+                <li>Cada clase anónima crea un nuevo archivo .class</li>
+                <li>Mayor consumo de memoria que las lambdas</li>
+                <li>Tiempo de carga de clase adicional</li>
+                <li>Pueden impactar en el tiempo de inicio de la aplicación</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos Genéricos en Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #2980b9;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+            white-space: pre;
+        }
+
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .important {
+            background: #f8d7da;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tipos Genéricos en Java</h1>
+
+        <div class="section">
+            <h2>1. ¿Qué son los Tipos Genéricos?</h2>
+            <p>Los tipos genéricos permiten escribir clases, interfaces y métodos que pueden trabajar con diferentes tipos de datos mientras mantienen la seguridad de tipos en tiempo de compilación.</p>
+
+            <div class="note">
+                <strong>Ventajas principales:</strong>
+                <ul>
+                    <li>Seguridad de tipos en tiempo de compilación</li>
+                    <li>Eliminación de casteos explícitos</li>
+                    <li>Permiten implementar algoritmos genéricos</li>
+                    <li>Reutilización de código</li>
+                    <li>Mayor robustez en el código</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Sintaxis Básica</h2>
+
+            <h3>Declaración de una clase genérica:</h3>
+            <div class="code-block">
+public class Contenedor<T> {
+    private T contenido;
+    
+    public void setContenido(T contenido) {
+        this.contenido = contenido;
+    }
+    
+    public T getContenido() {
+        return contenido;
+    }
+}</div>
+
+            <h3>Convenciones de nomenclatura comunes:</h3>
+            <ul>
+                <li>T - Tipo general (Type)</li>
+                <li>E - Elemento (Element)</li>
+                <li>K - Clave (Key)</li>
+                <li>V - Valor (Value)</li>
+                <li>N - Número (Number)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>3. Uso de Tipos Genéricos</h2>
+
+            <h3>Ejemplo básico:</h3>
+            <div class="code-block">
+// Crear instancia con tipo específico
+Contenedor<String> contenedorString = new Contenedor<>();
+contenedorString.setContenido("Hola Mundo");
+String contenido = contenedorString.getContenido(); // No necesita casting
+
+// Otro tipo
+Contenedor<Integer> contenedorInt = new Contenedor<>();
+contenedorInt.setContenido(42);
+int numero = contenedorInt.getContenido();</div>
+
+            <h3>Múltiples parámetros de tipo:</h3>
+            <div class="code-block">
+public class Par<K, V> {
+    private K clave;
+    private V valor;
+    
+    public Par(K clave, V valor) {
+        this.clave = clave;
+        this.valor = valor;
+    }
+    
+    public K getClave() { return clave; }
+    public V getValor() { return valor; }
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>4. Restricciones de Tipos (Bounds)</h2>
+
+            <h3>Upper Bounded Wildcards:</h3>
+            <div class="code-block">
+// Acepta Number y sus subclases
+public void procesarNumeros(List<? extends Number> lista) {
+    for (Number n : lista) {
+        System.out.println(n.doubleValue());
+    }
+}</div>
+
+            <h3>Lower Bounded Wildcards:</h3>
+            <div class="code-block">
+// Acepta Integer y sus superclases
+public void agregarEnteros(List<? super Integer> lista) {
+    lista.add(42);
+}</div>
+
+            <h3>Restricción de tipo:</h3>
+            <div class="code-block">
+// T debe ser subclase de Number
+public class Calculadora<T extends Number> {
+    public double sumar(T a, T b) {
+        return a.doubleValue() + b.doubleValue();
+    }
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>5. Métodos Genéricos</h2>
+
+            <h3>Método genérico simple:</h3>
+            <div class="code-block">
+public static <T> void imprimirArray(T[] array) {
+    for (T elemento : array) {
+        System.out.println(elemento);
+    }
+}</div>
+
+            <h3>Método con múltiples tipos:</h3>
+            <div class="code-block">
+public static <T, U> Par<T, U> crearPar(T primero, U segundo) {
+    return new Par<>(primero, segundo);
+}</div>
+
+            <h3>Método con restricción de tipo:</h3>
+            <div class="code-block">
+public static <T extends Comparable<T>> T encontrarMaximo(T[] array) {
+    if (array == null || array.length == 0) return null;
+    
+    T max = array[0];
+    for (int i = 1; i < array.length; i++) {
+        if (array[i].compareTo(max) > 0) {
+            max = array[i];
+        }
+    }
+    return max;
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>6. Wildcards</h2>
+
+            <h3>Wildcard sin restricción:</h3>
+            <div class="code-block">
+public void procesarLista(List<?> lista) {
+    for (Object elemento : lista) {
+        System.out.println(elemento);
+    }
+}</div>
+
+            <h3>Wildcard con límite superior:</h3>
+            <div class="code-block">
+public double sumarLista(List<? extends Number> lista) {
+    double suma = 0.0;
+    for (Number numero : lista) {
+        suma += numero.doubleValue();
+    }
+    return suma;
+}</div>
+
+            <h3>Wildcard con límite inferior:</h3>
+            <div class="code-block">
+public void llenarLista(List<? super Integer> lista) {
+    for (int i = 1; i <= 5; i++) {
+        lista.add(i);
+    }
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>7. Ejemplos Prácticos</h2>
+
+            <h3>Ejemplo 1: Stack Genérico</h3>
+            <div class="code-block">
+public class Stack<T> {
+    private ArrayList<T> elementos = new ArrayList<>();
+    
+    public void push(T elemento) {
+        elementos.add(elemento);
+    }
+    
+    public T pop() {
+        if (elementos.isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return elementos.remove(elementos.size() - 1);
+    }
+    
+    public boolean isEmpty() {
+        return elementos.isEmpty();
+    }
+}</div>
+
+            <h3>Ejemplo 2: Par Ordenado</h3>
+            <div class="code-block">
+public class ParOrdenado<T extends Comparable<T>> {
+    private T primero;
+    private T segundo;
+    
+    public ParOrdenado(T primero, T segundo) {
+        if (primero.compareTo(segundo) <= 0) {
+            this.primero = primero;
+            this.segundo = segundo;
+        } else {
+            this.primero = segundo;
+            this.segundo = primero;
+        }
+    }
+    
+    public T getPrimero() { return primero; }
+    public T getSegundo() { return segundo; }
+}</div>
+
+            <h3>Ejemplo 3: Repositorio Genérico</h3>
+            <div class="code-block">
+public interface Repository<T, ID> {
+    T findById(ID id);
+    void save(T entity);
+    void delete(ID id);
+    List<T> findAll();
+}
+
+public class UserRepository implements Repository<User, Long> {
+    @Override
+    public User findById(Long id) {
+        // Implementación
+    }
+    
+    @Override
+    public void save(User user) {
+        // Implementación
+    }
+    
+    @Override
+    public void delete(Long id) {
+        // Implementación
+    }
+    
+    @Override
+    public List<User> findAll() {
+        // Implementación
+    }
+}</div>
+        </div>
+
+        <div class="section">
+            <h2>8. Mejores Prácticas</h2>
+            <ul>
+                <li>Usar nombres descriptivos para los parámetros de tipo</li>
+                <li>Limitar el uso de wildcards a APIs públicas</li>
+                <li>Preferir tipos específicos sobre wildcards cuando sea posible</li>
+                <li>Documentar el propósito de cada parámetro de tipo</li>
+                <li>Considerar las restricciones de tipo para garantizar operaciones válidas</li>
+            </ul>
+
+            <div class="important">
+                <strong>Consideraciones importantes:</strong>
+                <ul>
+                    <li>Los tipos genéricos se borran en tiempo de ejecución (type erasure)</li>
+                    <li>No se pueden crear arrays de tipos genéricos</li>
+                    <li>No se pueden usar tipos primitivos como argumentos de tipo (usar wrappers)</li>
+                    <li>No se pueden crear instancias de tipos genéricos</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
