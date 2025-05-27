@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica Evaluable - Bases de Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        
+        h1 {
+            color: white;
+        } 
+        
+        h2, h3 {
+            color: #2c3e50;
+        }
+        
+        .header {
+            background-color: #3498db;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .evaluation {
+            background-color: #e8f4f8;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .evaluation-item {
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .important {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sistema de Gestión de Base de Datos para E-Commerce</h1>
+    </div>
+
+    <div class="section">
+        <h2>1. Objetivos</h2>
+        <p>Desarrollar un sistema completo de gestión de base de datos para una tienda online, implementando todas las funcionalidades necesarias mediante SQL, procedimientos almacenados, triggers y vistas.</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Modelo de Datos</h2>
+        <h3>2.1 Tablas Principales</h3>
+        
+        <h4>Productos</h4>
+        <table>
+            <tr>
+                <th>Campo</th>
+            </tr>
+            <tr>
+                <td>ID_Producto</td>
+            </tr>
+            <tr>
+                <td>Nombre</td>
+            </tr>
+            <tr>
+                <td>Descripcion</td>
+            </tr>
+            <tr>
+                <td>Precio</td>
+            </tr>
+            <tr>
+                <td>ID_Categoria</td>
+            </tr>
+            <tr>
+                <td>Stock</td>
+            </tr>
+        </table>
+
+        <h4>Categorias</h4>
+        <table>
+            <tr>
+                <th>Campo</th>
+            </tr>
+            <tr>
+                <td>ID_Categoria</td>
+            </tr>
+            <tr>
+                <td>Nombre</td>
+            </tr>
+            <tr>
+                <td>Descripcion</td>
+            </tr>
+        </table>
+
+        <h4>Clientes</h4>
+        <table>
+            <tr>
+                <th>Campo</th>
+            </tr>
+            <tr>
+                <td>ID_Cliente</td>
+            </tr>
+            <tr>
+                <td>Nombre</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+            </tr>
+            <tr>
+                <td>Telefono</td>
+            </tr>
+            <tr>
+                <td>Direccion</td>
+            </tr>
+        </table>
+
+        <h4>Pedidos</h4>
+        <table>
+            <tr>
+                <th>Campo</th>
+            </tr>
+            <tr>
+                <td>ID_Pedido</td>
+            </tr>
+            <tr>
+                <td>ID_Cliente</td>
+            </tr>
+            <tr>
+                <td>Fecha_Pedido</td>
+            </tr>
+            <tr>
+                <td>Estado</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>3. Requisitos de Implementación</h2>
+        
+        <h3>3.1 Procedimientos Almacenados</h3>
+        <ul>
+            <li>SP_RegistrarCliente(IN datos_cliente JSON)</li>
+            <li>SP_CrearPedido(IN ID_Cliente INT, IN productos JSON)</li>
+            <li>SP_ActualizarStock(IN ID_Producto INT, IN cantidad INT)</li>
+            <li>SP_CalcularTotalPedido(IN ID_Pedido INT)</li>
+            <li>SP_GenerarReporteVentas(IN fecha_inicio DATE, IN fecha_fin DATE)</li>
+        </ul>
+
+        <h3>3.2 Triggers</h3>
+        <ul>
+            <li>TRG_ControlStock: Verifica stock antes de insertar en Detalles_Pedido</li>
+            <li>TRG_ActualizarTotalPedido: Actualiza el total del pedido</li>
+            <li>TRG_RegistroHistorico: Registra cambios en precios de productos</li>
+            <li>TRG_NotificacionStockBajo: Genera alerta cuando el stock es bajo</li>
+        </ul>
+
+        <h3>3.3 Vistas</h3>
+        <ul>
+            <li>V_ProductosMasVendidos</li>
+            <li>V_ClientesPreferenciales</li>
+            <li>V_EstadisticasVentas</li>
+            <li>V_StockCritico</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>4. Entregables</h2>
+        <ol>
+            <li>Script SQL de creación de base de datos completa</li>
+            <li>Scripts de procedimientos almacenados</li>
+            <li>Scripts de triggers</li>
+            <li>Scripts de vistas</li>
+        </ol>
+    </div>
+
+    <div class="evaluation">
+        <h2>5. Criterios de Evaluación (100 puntos)</h2>
+        
+        <div class="evaluation-item">
+            <h3>Diseño de Base de Datos (25 puntos)</h3>
+            <ul>
+                <li>Diseño normalizado y eficiente (10 puntos)</li>
+                <li>Implementación correcta de relaciones y restricciones (8 puntos)</li>
+                <li>Documentación del diseño (7 puntos)</li>
+            </ul>
+        </div>
+
+        <div class="evaluation-item">
+            <h3>Procedimientos Almacenados (25 puntos)</h3>
+            <ul>
+                <li>Funcionalidad correcta (10 puntos)</li>
+                <li>Manejo de errores y excepciones (8 puntos)</li>
+                <li>Optimización y rendimiento (7 puntos)</li>
+            </ul>
+        </div>
+
+        <div class="evaluation-item">
+            <h3>Triggers (20 puntos)</h3>
+            <ul>
+                <li>Implementación correcta (8 puntos)</li>
+                <li>Manejo de casos especiales (7 puntos)</li>
+                <li>Eficiencia del código (5 puntos)</li>
+            </ul>
+        </div>
+
+        <div class="evaluation-item">
+            <h3>Vistas (15 puntos)</h3>
+            <ul>
+                <li>Diseño e implementación (8 puntos)</li>
+                <li>Optimización de consultas (7 puntos)</li>
+            </ul>
+        </div>
+
+        <div class="evaluation-item">
+            <h3>Documentación y Pruebas (15 puntos)</h3>
+            <ul>
+                <li>Calidad de la documentación (8 puntos)</li>
+                <li>Cobertura de pruebas (7 puntos)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. Notas Importantes</h2>
+        <ul>
+            <li>Se valorará positivamente la implementación de características adicionales</li>
+            <li>La entrega debe realizarse en un único archivo ZIP (apellido_nombre.zip) con todos los componentes requeridos</li>
+        </ul>
+    </div>
+</body>
+</html>
