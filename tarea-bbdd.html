@@ -178,14 +178,32 @@
     <div class="section">
         <h2>3. Requisitos de Implementación</h2>
         
-        <h3>3.1 Procedimientos Almacenados</h3>
-        <ul>
-            <li>SP_RegistrarCliente(IN datos_cliente JSON)</li>
-            <li>SP_CrearPedido(IN ID_Cliente INT, IN productos JSON)</li>
-            <li>SP_ActualizarStock(IN ID_Producto INT, IN cantidad INT)</li>
-            <li>SP_CalcularTotalPedido(IN ID_Pedido INT)</li>
-            <li>SP_GenerarReporteVentas(IN fecha_inicio DATE, IN fecha_fin DATE)</li>
-        </ul>
+<h3>3.1 Procedimientos Almacenados</h3>
+<ul>
+    <li>SP_RegistrarCliente(
+        IN p_nombre VARCHAR(100),
+        IN p_email VARCHAR(100),
+        IN p_telefono VARCHAR(15),
+        IN p_direccion VARCHAR(200)
+    )</li>
+    <li>SP_CrearPedido(
+        IN p_id_cliente INT,
+        IN p_id_producto INT,
+        IN p_cantidad INT
+    )</li>
+    <li>SP_ActualizarStock(
+        IN p_id_producto INT,
+        IN p_cantidad INT
+    )</li>
+    <li>SP_CalcularTotalPedido(
+        IN p_id_pedido INT,
+        OUT p_total DECIMAL(10,2)
+    )</li>
+    <li>SP_GenerarReporteVentas(
+        IN p_fecha_inicio DATE,
+        IN p_fecha_fin DATE
+    )</li>
+</ul>
 
         <h3>3.2 Triggers</h3>
         <ul>
