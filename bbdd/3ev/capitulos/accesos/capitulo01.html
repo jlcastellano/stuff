@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control de Acceso a los Datos</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Control de Acceso a los Datos</h1>
+
+        <section>
+            <p>El control de acceso a los datos es un aspecto fundamental de la seguridad en bases de datos que permite gestionar quién puede acceder a qué información y qué operaciones puede realizar sobre ella. Este sistema se basa en varios componentes clave que trabajan juntos para garantizar la seguridad y la integridad de los datos.</p>
+        </section>
+
+        <section>
+            <h2>1. Gestión de Usuarios</h2>
+            
+            <p>La gestión de usuarios es el primer nivel de control de acceso en una base de datos. Permite crear y administrar las cuentas de usuario que tendrán acceso al sistema. Cada usuario puede tener diferentes niveles de acceso y privilegios según sus necesidades específicas.</p>
+
+            <h3>Crear Usuarios</h3>
+            <div class="codigo">
+                <pre>
+-- Crear usuario con contraseña
+CREATE USER 'usuario1'@'localhost' 
+IDENTIFIED BY 'password123';
+
+-- Crear usuario que se puede conectar desde cualquier host
+CREATE USER 'usuario2'@'%' 
+IDENTIFIED BY 'password123';
+
+-- Crear usuario con autenticación por plugin
+CREATE USER 'usuario3'@'localhost' 
+IDENTIFIED WITH mysql_native_password BY 'password123';</pre>
+            </div>
+
+            <h3>Modificar Usuarios</h3>
+            <p>Los usuarios pueden necesitar cambios en sus configuraciones a lo largo del tiempo, como actualizaciones de contraseña o cambios en el método de autenticación.</p>
+            <div class="codigo">
+                <pre>
+-- Cambiar contraseña
+ALTER USER 'usuario1'@'localhost' 
+IDENTIFIED BY 'nueva_password';
+
+-- Cambiar método de autenticación
+ALTER USER 'usuario1'@'localhost' 
+IDENTIFIED WITH mysql_native_password BY 'password123';
+
+-- Bloquear/Desbloquear cuenta
+ALTER USER 'usuario1'@'localhost' ACCOUNT LOCK;
+ALTER USER 'usuario1'@'localhost' ACCOUNT UNLOCK;</pre>
+            </div>
+
+            <h3>Eliminar Usuarios</h3>
+            <p>Cuando un usuario ya no necesita acceso a la base de datos, su cuenta debe ser eliminada por seguridad.</p>
+            <div class="codigo">
+                <pre>DROP USER 'usuario1'@'localhost';</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Privilegios</h2>
+            
+            <p>Los privilegios son permisos específicos que determinan qué acciones puede realizar un usuario sobre los objetos de la base de datos. El sistema de privilegios permite un control granular sobre las operaciones permitidas.</p>
+
+            <div class="note-block">
+                <p><strong>Tipos de Privilegios:</strong></p>
+                <ul>
+                    <li><strong>Global:</strong> ALL PRIVILEGES - Todos los privilegios en todas las bases de datos</li>
+                    <li><strong>Base de datos:</strong> CREATE, DROP - Crear/eliminar objetos en una base de datos</li>
+                    <li><strong>Tabla:</strong> SELECT, INSERT, UPDATE, DELETE - Operaciones sobre datos en tablas</li>
+                    <li><strong>Columna:</strong> SELECT, INSERT, UPDATE - Operaciones sobre columnas específicas</li>
+                </ul>
+            </div>
+
+            <h3>Otorgar Privilegios</h3>
+            <p>Los privilegios se asignan mediante el comando GRANT, que permite especificar exactamente qué permisos se otorgan y a qué nivel.</p>
+            <div class="codigo">
+                <pre>
+-- Privilegios globales
+GRANT ALL PRIVILEGES ON *.* 
+TO 'admin'@'localhost';
+
+-- Privilegios sobre base de datos
+GRANT CREATE, DROP ON empresa.* 
+TO 'dba'@'localhost';
+
+-- Privilegios sobre tabla
+GRANT SELECT, INSERT ON empresa.empleados 
+TO 'rrhh'@'localhost';
+
+-- Privilegios sobre columnas específicas
+GRANT SELECT (nombre, departamento), 
+UPDATE (salario) ON empresa.empleados 
+TO 'supervisor'@'localhost';
+
+-- Privilegios con condiciones
+GRANT SELECT ON empresa.empleados 
+TO 'analista'@'localhost'
+WHERE departamento = 'IT';</pre>
+            </div>
+
+            <h3>Revocar Privilegios</h3>
+            <p>Los privilegios pueden ser revocados cuando ya no son necesarios, siguiendo el principio de mínimo privilegio.</p>
+            <div class="codigo">
+                <pre>
+-- Revocar privilegios específicos
+REVOKE INSERT, UPDATE ON empresa.empleados 
+FROM 'usuario1'@'localhost';
+
+-- Revocar todos los privilegios
+REVOKE ALL PRIVILEGES ON *.* 
+FROM 'usuario1'@'localhost';</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Roles</h2>
+            
+            <p>Los roles son conjuntos de privilegios que pueden ser asignados a múltiples usuarios. Facilitan la administración de permisos al agrupar privilegios comunes que corresponden a funciones específicas dentro de la organización.</p>
+
+            <div class="codigo">
+                <pre>
+-- Crear rol
+CREATE ROLE 'rol_rrhh';
+
+-- Asignar privilegios al rol
+GRANT SELECT, INSERT, UPDATE 
+ON empresa.empleados TO 'rol_rrhh';
+
+-- Asignar rol a usuario
+GRANT 'rol_rrhh' TO 'usuario1'@'localhost';
+
+-- Activar rol
+SET ROLE 'rol_rrhh';
+
+-- Revocar rol
+REVOKE 'rol_rrhh' FROM 'usuario1'@'localhost';</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Vistas de Seguridad</h2>
+            
+            <p>Las vistas de seguridad son vistas especialmente diseñadas para controlar el acceso a los datos. Permiten mostrar solo cierta información a determinados usuarios, ocultando datos sensibles o irrelevantes.</p>
+
+            <div class="codigo">
+                <pre>
+-- Crear vista con acceso restringido
+CREATE VIEW empleados_vista AS
+SELECT id, nombre, departamento
+FROM empleados
+WHERE departamento = 'IT';
+
+-- Otorgar acceso a la vista
+GRANT SELECT ON empresa.empleados_vista 
+TO 'usuario1'@'localhost';</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Auditoría</h2>
+            
+            <p>La auditoría permite rastrear y registrar las actividades realizadas en la base de datos. Es crucial para la seguridad y el cumplimiento normativo, permitiendo detectar y investigar accesos o cambios no autorizados.</p>
+
+            <div class="codigo">
+                <pre>
+-- Habilitar registro de auditoría
+SET GLOBAL general_log = 'ON';
+SET GLOBAL general_log_file = '/var/log/mysql/mysql.log';
+
+-- Consultar actividad de usuarios
+SELECT * FROM mysql.general_log;
+
+-- Ver privilegios actuales
+SHOW GRANTS;
+
+-- Ver privilegios de un usuario específico
+SHOW GRANTS FOR 'usuario1'@'localhost';</pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Buenas Prácticas de Seguridad</h2>
+            <p>Para mantener un sistema de base de datos seguro, es importante seguir ciertas prácticas recomendadas en la gestión de accesos:</p>
+            <div class="note-block">
+                <ul>
+                    <li>Principio de mínimo privilegio: otorgar solo los permisos necesarios</li>
+                    <li>Usar roles para gestionar grupos de privilegios</li>
+                    <li>Cambiar contraseñas regularmente</li>
+                    <li>Auditar accesos y cambios regularmente</li>
+                    <li>Revocar privilegios innecesarios</li>
+                    <li>Usar vistas para restringir acceso a datos sensibles</li>
+                    <li>Mantener actualizados los sistemas de seguridad</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Ejemplo Completo de Configuración de Seguridad</h2>
+            <p>A continuación se muestra un ejemplo práctico que integra los diferentes aspectos del control de acceso en un escenario empresarial:</p>
+            <div class="codigo">
+                <pre>
+-- Crear roles para diferentes departamentos
+CREATE ROLE 'rol_rrhh', 'rol_finanzas', 'rol_it';
+
+-- Configurar privilegios para RRHH
+GRANT SELECT, INSERT, UPDATE ON empresa.empleados TO 'rol_rrhh';
+GRANT SELECT ON empresa.departamentos TO 'rol_rrhh';
+
+-- Configurar privilegios para Finanzas
+GRANT SELECT, UPDATE (salario) ON empresa.empleados TO 'rol_finanzas';
+GRANT ALL PRIVILEGES ON empresa.contabilidad TO 'rol_finanzas';
+
+-- Configurar privilegios para IT
+GRANT ALL PRIVILEGES ON empresa.* TO 'rol_it';
+
+-- Crear usuarios y asignar roles
+CREATE USER 'ana_rrhh'@'localhost' IDENTIFIED BY 'password123';
+GRANT 'rol_rrhh' TO 'ana_rrhh'@'localhost';
+
+CREATE USER 'pedro_finanzas'@'localhost' IDENTIFIED BY 'password456';
+GRANT 'rol_finanzas' TO 'pedro_finanzas'@'localhost';
+
+-- Crear vista segura para RRHH
+CREATE VIEW vista_empleados_rrhh AS
+SELECT id, nombre, departamento, fecha_contrato
+FROM empleados
+WHERE activo = 1;
+
+GRANT SELECT ON empresa.vista_empleados_rrhh TO 'rol_rrhh';</pre>
+            </div>
+        </section>
+
+        <div class="navegacion">
+            <a href="capitulo00.html" class="anterior">← Anterior: 5.2. DCL</a>
+            <a href="capitulo02.html" class="siguiente">Siguiente: 5.2.2. Gestión de Privilegios →</a>
+        </div>
+    </div>
+</body>
+</html>
