@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios BBDD</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .instrucciones {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .criterios {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios BBDD</h1>
+        
+        <div class="instrucciones">
+            <h2>Ejercicio 1: Sistema de Cálculo de Comisiones (30 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Una empresa de ventas necesita automatizar el cálculo de comisiones para sus vendedores. Se requiere crear un procedimiento almacenado que calcule las comisiones mensuales basándose en las ventas totales de cada vendedor.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Crear un procedimiento almacenado llamado <code>sp_calcular_comisiones</code></li>
+                <li>El procedimiento debe aceptar dos parámetros:
+                    <ul>
+                        <li>@mes (INT): Mes para el cálculo</li>
+                        <li>@año (INT): Año para el cálculo</li>
+                    </ul>
+                </li>
+                <li>La comisión debe ser el 5% del total de ventas del vendedor en el mes especificado</li>
+                <li>Implementar manejo de transacciones para garantizar la integridad de los datos</li>
+                <li>Actualizar la tabla de vendedores con las comisiones calculadas</li>
+            </ol>
+
+            <h3>Estructura de Tablas:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE vendedores (
+    id_vendedor INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    comision DECIMAL(10,2)
+)
+
+CREATE TABLE ventas (
+    id_venta INT PRIMARY KEY,
+    id_vendedor INT,
+    fecha_venta DATE,
+    monto_venta DECIMAL(10,2)
+)</pre></div>
+
+        </div>
+
+        <div class="criterios">
+            <h3>Criterios de Evaluación:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Correcta declaración del procedimiento almacenado</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Implementación correcta del cálculo de comisiones</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Manejo adecuado de transacciones</td>
+                    <td>7 puntos</td>
+                </tr>
+                <tr>
+                    <td>Correcto uso de los parámetros @mes y @año</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Actualización correcta de la tabla vendedores</td>
+                    <td>5 puntos</td>
+                </tr>
+            </table>
+
+            <h3>Notas Adicionales:</h3>
+            <ul>
+                <li>El código debe estar correctamente indentado y comentado</li>
+                <li>Se evaluará el manejo de errores implementado</li>
+                <li>La solución debe ser eficiente en términos de rendimiento</li>
+                <li>Se debe considerar la posibilidad de valores NULL en las ventas</li>
+            </ul>
+        </div>
+
+        <!-- Nuevo ejercicio agregado -->
+        <div class="instrucciones">
+            <h2>Ejercicio 2: Procedimiento de Cierre Mensual (40 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Se requiere implementar un procedimiento almacenado que realice el cierre mensual de ventas, calculando totales y actualizando las estadísticas del mes en una tabla de resumen.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Crear un procedimiento almacenado llamado <code>sp_cierre_mensual</code></li>
+                <li>El procedimiento debe aceptar dos parámetros:
+                    <ul>
+                        <li>@mes (INT): Mes del cierre</li>
+                        <li>@año (INT): Año del cierre</li>
+                    </ul>
+                </li>
+                <li>Debe calcular y almacenar:
+                    <ul>
+                        <li>Total de ventas del mes</li>
+                        <li>Total de productos vendidos</li>
+                        <li>Identificar al mejor vendedor del mes</li>
+                    </ul>
+                </li>
+                <li>Implementar manejo de transacciones</li>
+                <li>Generar registro en la tabla resumen_mensual</li>
+            </ol>
+
+            <h3>Estructura de Tablas:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE resumen_mensual (
+    id_resumen INT PRIMARY KEY IDENTITY(1,1),
+    mes INT,
+    año INT,
+    total_ventas DECIMAL(12,2),
+    total_productos_vendidos INT,
+    mejor_vendedor INT
+)
+
+CREATE TABLE detalles_venta (
+    id_detalle INT PRIMARY KEY,
+    id_venta INT,
+    cantidad INT,
+    precio_unitario DECIMAL(10,2)
+)</pre></div>
+        </div>
+
+        <div class="criterios">
+            <h3>Criterios de Evaluación - Ejercicio 2:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Correcta declaración del procedimiento</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Cálculo correcto de totales</td>
+                    <td>10 puntos</td>
+                </tr>
+                <tr>
+                    <td>Identificación correcta del mejor vendedor</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Manejo adecuado de transacciones</td>
+                    <td>7 puntos</td>
+                </tr>
+                <tr>
+                    <td>Inserción correcta en resumen_mensual</td>
+                    <td>10 puntos</td>
+                </tr>
+            </table>
+
+            <h3>Notas Adicionales:</h3>
+            <ul>
+                <li>Considerar la posibilidad de registros duplicados</li>
+                <li>Validar la existencia de datos para el mes y año especificados</li>
+                <li>Implementar manejo de errores robusto</li>
+                <li>Optimizar las consultas para mejor rendimiento</li>
+            </ul>
+        </div>
+    </div>
+        <div class="container">
+        <!-- Previous exercises remain the same -->
+
+        <div class="instrucciones">
+            <h2>Ejercicio 3: Cursor para Actualización Masiva de Precios (30 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Se necesita implementar un mecanismo para actualizar los precios de los productos de forma masiva, aplicando diferentes porcentajes de incremento según la categoría del producto utilizando un cursor.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Crear un cursor que recorra la tabla de productos</li>
+                <li>Aplicar los siguientes incrementos:
+                    <ul>
+                        <li>Electrónica: 10% de incremento</li>
+                        <li>Ropa: 5% de incremento</li>
+                        <li>Otras categorías: 3% de incremento</li>
+                    </ul>
+                </li>
+                <li>Actualizar los precios de manera individual para cada producto</li>
+                <li>Implementar el correcto manejo del cursor (apertura, recorrido y liberación)</li>
+                <li>Manejar las variables necesarias para el procesamiento</li>
+            </ol>
+
+            <h3>Estructura de Tablas:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE productos (
+    id_producto INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    categoria VARCHAR(50),
+    precio DECIMAL(10,2)
+)</pre></div>
+        </div>
+
+        <div class="criterios">
+            <h3>Criterios de Evaluación - Ejercicio 3:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Declaración correcta del cursor y variables</td>
+                    <td>6 puntos</td>
+                </tr>
+                <tr>
+                    <td>Implementación correcta del CASE para incrementos</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Manejo adecuado del ciclo WHILE</td>
+                    <td>6 puntos</td>
+                </tr>
+                <tr>
+                    <td>Correcta actualización de precios</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Liberación apropiada de recursos</td>
+                    <td>5 puntos</td>
+                </tr>
+            </table>
+
+            <h3>Notas Adicionales:</h3>
+            <ul>
+                <li>El cursor debe estar correctamente cerrado y liberado</li>
+                <li>Considerar el rendimiento al procesar grandes volúmenes de datos</li>
+                <li>Validar que los nuevos precios sean coherentes</li>
+                <li>Documentar el código adecuadamente</li>
+            </ul>
+        </div>
+
+        <div class="criterios">
+            <h3>Resumen de Puntuación Total:</h3>
+            <table>
+                <tr>
+                    <th>Ejercicio</th>
+                    <th>Puntuación Máxima</th>
+                </tr>
+                <tr>
+                    <td>Ejercicio 1: Sistema de Cálculo de Comisiones</td>
+                    <td>30 puntos</td>
+                </tr>
+                <tr>
+                    <td>Ejercicio 2: Procedimiento de Cierre Mensual</td>
+                    <td>40 puntos</td>
+                </tr>
+                <tr>
+                    <td>Ejercicio 3: Cursor para Actualización de Precios</td>
+                    <td>30 puntos</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th>100 puntos</th>
+                </tr>
+            </table>
+
+            <h3>Consideraciones Generales:</h3>
+            <ul>
+                <li>Todos los ejercicios deben incluir manejo de errores</li>
+                <li>Se evaluará la eficiencia y optimización del código</li>
+                <li>La documentación y comentarios son importantes</li>
+                <li>Se debe mantener la integridad de los datos en todo momento</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
