@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Prácticos de Programación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 20px;
+        }
+        .criteria {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        .criteria-item {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 10px 0;
+        }
+        .time {
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .ejercicio {
+            border-top: 3px solid #3498db;
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Primer ejercicio - Sistema de Gastos -->
+    <div class="container">
+        <h1>1. Sistema Básico de Registro de Gastos</h1>
+
+        <p>Desarrolle una aplicación de escritorio simple en Java para registrar y visualizar gastos personales. 
+        La aplicación debe permitir el registro básico de gastos y su categorización mediante una interfaz gráfica intuitiva.</p>
+
+        <h2>Requisitos Funcionales</h2>
+        <ul>
+            <li>Implementación de la estructura de datos (25 puntos)
+                <ul>
+                    <li>Utilizar HashMap para almacenar gastos por categoría</li>
+                    <li>Crear clases necesarias para representar gastos y categorías</li>
+                </ul>
+            </li>
+            <li>Interfaz gráfica con Swing (40 puntos)
+                <ul>
+                    <li>Ventana principal con menú de opciones</li>
+                    <li>Formulario para añadir nuevos gastos</li>
+                    <li>Panel para mostrar lista de gastos</li>
+                    <li>Vista de resumen simple por categorías</li>
+                </ul>
+            </li>
+            <li>Gestión de datos (35 puntos)
+                <ul>
+                    <li>Guardar gastos en archivo de texto plano o binario</li>
+                    <li>Cargar datos al iniciar la aplicación</li>
+                    <li>Validación básica de entrada de datos</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Funcionalidades Mínimas Requeridas</h2>
+        <ul>
+            <li>Agregar un nuevo gasto (cantidad, categoría, fecha)</li>
+            <li>Visualizar lista de gastos registrados</li>
+            <li>Mostrar suma total por categoría</li>
+            <li>Guardar datos de forma persistente</li>
+            <li>Cargar datos guardados previamente</li>
+        </ul>
+
+        <h2>Criterios de Evaluación</h2>
+        <div class="criteria">
+            <div class="criteria-item">• Funcionalidad básica completa (40%)</div>
+            <div class="criteria-item">• Interfaz gráfica funcional y usable (25%)</div>
+            <div class="criteria-item">• Manejo de errores básicos (15%)</div>
+            <div class="criteria-item">• Estructura y organización del código (15%)</div>
+            <div class="criteria-item">• Comentarios y documentación básica (5%)</div>
+        </div>
+
+    </div>
+
+    <!-- Segundo ejercicio - Control de Asistencia -->
+    <div class="container">
+        <h1>2. Sistema de Control de Asistencia para Pequeño Negocio</h1>
+        
+
+        <p>Desarrolle una aplicación de escritorio en Java para gestionar el control de asistencia de empleados en un pequeño negocio. El sistema debe permitir registrar entradas y salidas, calcular horas trabajadas y generar reportes básicos.</p>
+
+        <h2>Requisitos Funcionales</h2>
+        <ul>
+            <li>Gestión de empleados (20 puntos)
+                <ul>
+                    <li>Alta y baja de empleados</li>
+                    <li>Asignación de identificadores únicos</li>
+                    <li>Almacenamiento de datos básicos</li>
+                </ul>
+            </li>
+            <li>Sistema de fichaje (30 puntos)
+                <ul>
+                    <li>Registro de entrada/salida</li>
+                    <li>Validación de empleado</li>
+                    <li>Captura automática de hora</li>
+                </ul>
+            </li>
+            <li>Cálculos y reportes (30 puntos)
+                <ul>
+                    <li>Cálculo de horas trabajadas</li>
+                    <li>Generación de reportes por empleado</li>
+                    <li>Resumen mensual en formato texto</li>
+                </ul>
+            </li>
+            <li>Interfaz gráfica (20 puntos)
+                <ul>
+                    <li>Panel de fichaje</li>
+                    <li>Vista de histórico</li>
+                    <li>Gestión de empleados</li>
+                </ul>
+            </li>
+        </ul>
+<h2>Funcionalidades Mínimas</h2>
+<ul>
+    <li>Registro de empleados (nombre, ID, departamento)</li>
+    <li>Sistema de fichaje básico (entrada/salida)</li>
+    <li>Cálculo automático de horas trabajadas por día</li>
+    <li>Visualización del histórico de fichajes</li>
+    <li>Generación de informe básico de asistencia</li>
+    <li>Persistencia de datos entre ejecuciones</li>
+    <li>Validación de fichajes (evitar múltiples entradas/salidas)</li>
+</ul>
+        <h2>Criterios de Evaluación</h2>
+        <div class="criteria">
+            <div class="criteria-item">• Implementación del sistema de fichaje (35%)</div>
+            <div class="criteria-item">• Precisión en cálculos de tiempo (25%)</div>
+            <div class="criteria-item">• Interfaz de usuario (20%)</div>
+            <div class="criteria-item">• Gestión de datos (15%)</div>
+            <div class="criteria-item">• Documentación (5%)</div>
+        </div>
+    </div>
+
+    <!-- Tercer ejercicio - Gestor de Recetas -->
+    <div class="container">
+        <h1>3. Gestor de Recetas de Cocina</h1>
+
+
+        <p>Desarrolle una aplicación para gestionar y organizar recetas de cocina. El sistema debe permitir almacenar, buscar y visualizar recetas, incluyendo ingredientes y pasos de preparación.</p>
+
+        <h2>Requisitos Funcionales</h2>
+        <ul>
+            <li>Estructura de datos (25 puntos)
+                <ul>
+                    <li>Implementación con TreeMap para categorización</li>
+                    <li>Modelo de datos para recetas e ingredientes</li>
+                    <li>Sistema de categorías jerárquico</li>
+                </ul>
+            </li>
+            <li>Gestión de recetas (35 puntos)
+                <ul>
+                    <li>Alta y modificación de recetas</li>
+                    <li>Gestión de ingredientes y cantidades</li>
+                    <li>Almacenamiento en archivo binario</li>
+                </ul>
+            </li>
+            <li>Sistema de búsqueda (20 puntos)
+                <ul>
+                    <li>Búsqueda por nombre</li>
+                    <li>Filtrado por ingredientes</li>
+                    <li>Búsqueda por categoría</li>
+                </ul>
+            </li>
+            <li>Interfaz de usuario (20 puntos)
+                <ul>
+                    <li>Formulario de ingreso de recetas</li>
+                    <li>Visualización de recetas</li>
+                    <li>Panel de búsqueda</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Funcionalidades Mínimas</h2>
+        <ul>
+            <li>Agregar nueva receta con ingredientes y pasos</li>
+            <li>Buscar recetas por nombre o ingredientes</li>
+            <li>Categorizar recetas</li>
+            <li>Guardar y cargar recetas desde archivo</li>
+            <li>Visualizar recetas completas</li>
+        </ul>
+
+        <h2>Criterios de Evaluación</h2>
+        <div class="criteria">
+            <div class="criteria-item">• Implementación del TreeMap y estructura de datos (30%)</div>
+            <div class="criteria-item">• Sistema de búsqueda y filtrado (25%)</div>
+            <div class="criteria-item">• Interfaz gráfica y usabilidad (25%)</div>
+            <div class="criteria-item">• Persistencia de datos (15%)</div>
+            <div class="criteria-item">• Documentación (5%)</div>
+        </div>
+    </div>
+</body>
+</html>
