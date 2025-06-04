@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Adicionales BBDD</title>
+    <style>
+        /* Mantenemos los mismos estilos del documento original */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .instrucciones {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .criterios {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ejercicios Adicionales BBDD</h1>
+
+        <div class="instrucciones">
+            <h2>Ejercicio 4: Sistema de Gestión de Inventario (30 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Desarrollar un trigger que mantenga actualizado automáticamente el inventario cuando se realizan ventas y que evite ventas cuando no hay stock suficiente.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Crear un trigger AFTER INSERT en la tabla detalles_venta</li>
+                <li>Verificar stock disponible antes de permitir la venta</li>
+                <li>Actualizar automáticamente el stock en la tabla productos</li>
+                <li>Mantener un registro de movimientos de inventario</li>
+                <li>Implementar rollback si no hay stock suficiente</li>
+            </ol>
+
+            <h3>Estructura de Tablas Adicional:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE movimientos_inventario (
+    id_movimiento INT PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT,
+    tipo_movimiento ENUM('ENTRADA', 'SALIDA'),
+    cantidad INT,
+    fecha_movimiento DATETIME,
+    usuario VARCHAR(50)
+)</pre></div>
+
+            <h3>Criterios de Evaluación:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Implementación correcta del trigger</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Validación de stock</td>
+                    <td>7 puntos</td>
+                </tr>
+                <tr>
+                    <td>Registro de movimientos</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Manejo de errores</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Rollback implementado</td>
+                    <td>5 puntos</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="instrucciones">
+            <h2>Ejercicio 5: Sistema de Fidelización de Clientes (35 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Crear un sistema de puntos de fidelización que calcule y actualice automáticamente los puntos de los clientes basándose en sus compras.</p>
+
+            <h3>Estructura de Tablas:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE clientes (
+    id_cliente INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    nivel_fidelidad VARCHAR(20),
+    puntos_acumulados INT DEFAULT 0
+);
+
+CREATE TABLE niveles_fidelidad (
+    nivel VARCHAR(20) PRIMARY KEY,
+    puntos_minimos INT,
+    porcentaje_beneficio DECIMAL(5,2)
+);</pre></div>
+
+            <h3>Requerimientos:</h3>
+            <ol>
+                <li>Función que calcule puntos por compra (1 punto por cada $10)</li>
+                <li>Procedimiento que actualice nivel de fidelidad</li>
+                <li>Trigger que actualice puntos después de cada venta</li>
+                <li>Procedimiento de canje de puntos</li>
+            </ol>
+
+            <h3>Criterios de Evaluación:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Función de cálculo de puntos</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Procedimiento de actualización de nivel</td>
+                    <td>10 puntos</td>
+                </tr>
+                <tr>
+                    <td>Trigger de actualización</td>
+                    <td>9 puntos</td>
+                </tr>
+                <tr>
+                    <td>Procedimiento de canje</td>
+                    <td>8 puntos</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="instrucciones">
+            <h2>Ejercicio 6: Gestión de Pedidos y Stock Automático (40 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Implementar un sistema automático de gestión de inventario que monitoree los niveles de stock y genere pedidos automáticos cuando sea necesario, considerando tiempos de entrega y niveles óptimos de inventario.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Crear un trigger AFTER UPDATE en la tabla productos que monitoree el stock</li>
+                <li>Implementar una función que calcule la necesidad de pedido basada en:
+                    <ul>
+                        <li>Stock actual vs. stock mínimo</li>
+                        <li>Tendencia de ventas del último mes</li>
+                        <li>Tiempo promedio de entrega</li>
+                    </ul>
+                </li>
+                <li>Crear un procedimiento almacenado que:
+                    <ul>
+                        <li>Verifique productos bajo mínimos</li>
+                        <li>Genere pedidos automáticos</li>
+                        <li>Actualice el estado de los pedidos</li>
+                    </ul>
+                </li>
+                <li>Implementar un sistema de notificaciones para pedidos urgentes</li>
+            </ol>
+
+            <h3>Estructura de Tablas Adicional:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE configuracion_stock (
+    id_producto INT PRIMARY KEY,
+    stock_minimo INT,
+    stock_optimo INT,
+    tiempo_entrega_dias INT,
+    punto_pedido INT,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+CREATE TABLE historial_ventas_diarias (
+    id_historial INT PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT,
+    fecha DATE,
+    unidades_vendidas INT,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+CREATE TABLE notificaciones_stock (
+    id_notificacion INT PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT,
+    tipo_notificacion ENUM('BAJO_MINIMO', 'PEDIDO_GENERADO', 'PEDIDO_URGENTE'),
+    mensaje TEXT,
+    fecha_notificacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado ENUM('PENDIENTE', 'PROCESADA') DEFAULT 'PENDIENTE',
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);</pre></div>
+
+            <h3>Criterios de Evaluación:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Implementación del trigger de monitoreo</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Función de cálculo de necesidades</td>
+                    <td>10 puntos</td>
+                </tr>
+                <tr>
+                    <td>Procedimiento de gestión de pedidos</td>
+                    <td>12 puntos</td>
+                </tr>
+                <tr>
+                    <td>Sistema de notificaciones</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Manejo de errores y transacciones</td>
+                    <td>5 puntos</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="instrucciones">
+            <h2>Ejercicio 7: Sistema de Auditoría y Control de Acceso (35 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Desarrollar un sistema completo de auditoría y control de acceso que registre todas las operaciones críticas y gestione los permisos de usuarios según su nivel de acceso.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Implementar triggers de auditoría para:
+                    <ul>
+                        <li>Cambios en precios de productos</li>
+                        <li>Modificaciones de comisiones</li>
+                        <li>Operaciones en ventas</li>
+                        <li>Cambios en niveles de acceso</li>
+                    </ul>
+                </li>
+                <li>Crear procedimientos para control de acceso que:
+                    <ul>
+                        <li>Validen el nivel de acceso del usuario</li>
+                        <li>Registren intentos de acceso no autorizado</li>
+                        <li>Gestionen la elevación temporal de privilegios</li>
+                    </ul>
+                </li>
+                <li>Desarrollar funciones de verificación de permisos</li>
+            </ol>
+
+            <h3>Estructura de Tablas Adicional:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE usuarios_sistema (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_usuario VARCHAR(50),
+    nivel_acceso ENUM('BASICO', 'SUPERVISOR', 'ADMINISTRADOR'),
+    estado ENUM('ACTIVO', 'INACTIVO', 'BLOQUEADO')
+);
+
+CREATE TABLE permisos_especiales (
+    id_permiso INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT,
+    tipo_permiso VARCHAR(50),
+    fecha_inicio DATETIME,
+    fecha_fin DATETIME,
+    autorizado_por INT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios_sistema(id_usuario)
+);
+
+CREATE TABLE log_accesos (
+    id_log INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT,
+    tipo_operacion VARCHAR(50),
+    fecha_hora DATETIME,
+    resultado ENUM('EXITOSO', 'DENEGADO'),
+    detalles JSON,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios_sistema(id_usuario)
+);</pre></div>
+
+            <h3>Criterios de Evaluación:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Implementación de triggers de auditoría</td>
+                    <td>10 puntos</td>
+                </tr>
+                <tr>
+                    <td>Sistema de control de acceso</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Funciones de verificación</td>
+                    <td>7 puntos</td>
+                </tr>
+                <tr>
+                    <td>Gestión de permisos especiales</td>
+                    <td>5 puntos</td>
+                </tr>
+                <tr>
+                    <td>Registro de auditoría</td>
+                    <td>5 puntos</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="instrucciones">
+            <h2>Ejercicio 8: Sistema de Reportes Dinámicos con Análisis (40 puntos)</h2>
+            
+            <h3>Descripción del Problema:</h3>
+            <p>Crear un sistema flexible de generación de reportes que permita análisis dinámicos de datos, incluyendo tendencias, comparativas y proyecciones.</p>
+
+            <h3>Requerimientos Específicos:</h3>
+            <ol>
+                <li>Implementar un procedimiento principal que:
+                    <ul>
+                        <li>Interprete configuraciones JSON de reportes</li>
+                        <li>Genere consultas dinámicas</li>
+                        <li>Aplique filtros y agregaciones</li>
+                    </ul>
+                </li>
+                <li>Crear funciones de análisis para:
+                    <ul>
+                        <li>Cálculo de tendencias</li>
+                        <li>Comparativas interanuales</li>
+                        <li>Proyecciones de ventas</li>
+                        <li>Análisis de rendimiento</li>
+                    </ul>
+                </li>
+                <li>Desarrollar cursores para procesamiento de datos agregados</li>
+                <li>Implementar cache de resultados para reportes frecuentes</li>
+            </ol>
+
+            <h3>Estructura de Tablas Adicional:</h3>
+            <div class="code-block"><pre>
+CREATE TABLE plantillas_reporte (
+    id_plantilla INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100),
+    descripcion TEXT,
+    configuracion JSON,
+    tipo_analisis ENUM('TENDENCIA', 'COMPARATIVA', 'PROYECCION', 'RENDIMIENTO')
+);
+
+CREATE TABLE cache_reportes (
+    id_cache INT PRIMARY KEY AUTO_INCREMENT,
+    hash_configuracion VARCHAR(64),
+    datos JSON,
+    fecha_generacion DATETIME,
+    fecha_expiracion DATETIME
+);
+
+CREATE TABLE metricas_rendimiento (
+    id_metrica INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_metrica VARCHAR(100),
+    formula TEXT,
+    unidad_medida VARCHAR(20),
+    categoria VARCHAR(50)
+);</pre></div>
+
+            <h3>Criterios de Evaluación:</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Puntuación</th>
+                </tr>
+                <tr>
+                    <td>Generación dinámica de consultas</td>
+                    <td>10 puntos</td>
+                </tr>
+                <tr>
+                    <td>Funciones de análisis</td>
+                    <td>10 puntos</td>
+                </tr>
+                <tr>
+                    <td>Implementación de cursores</td>
+                    <td>8 puntos</td>
+                </tr>
+                <tr>
+                    <td>Sistema de cache</td>
+                    <td>7 puntos</td>
+                </tr>
+                <tr>
+                    <td>Manejo de errores y optimización</td>
+                    <td>5 puntos</td>
+                </tr>
+            </table>
+        </div>
+
+</body>
+</html>
