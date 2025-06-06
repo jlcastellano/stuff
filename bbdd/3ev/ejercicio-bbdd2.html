@@ -273,34 +273,34 @@ CREATE TABLE notificaciones_stock (
             </table>
         </div>
 
-        <div class="instrucciones">
-            <h2>Ejercicio 7: Sistema de Auditoría y Control de Acceso (35 puntos)</h2>
-            
-            <h3>Descripción del Problema:</h3>
-            <p>Desarrollar un sistema completo de auditoría y control de acceso que registre todas las operaciones críticas y gestione los permisos de usuarios según su nivel de acceso.</p>
+<div class="instrucciones">
+    <h2>Ejercicio 7: Sistema de Auditoría y Control de Acceso (35 puntos)</h2>
+    
+    <h3>Descripción del Problema:</h3>
+    <p>Desarrollar un sistema completo de auditoría y control de acceso que registre todas las operaciones críticas y gestione los permisos de usuarios según su nivel de acceso.</p>
 
-            <h3>Requerimientos Específicos:</h3>
-            <ol>
-                <li>Implementar triggers de auditoría para:
-                    <ul>
-                        <li>Cambios en precios de productos</li>
-                        <li>Modificaciones de comisiones</li>
-                        <li>Operaciones en ventas</li>
-                        <li>Cambios en niveles de acceso</li>
-                    </ul>
-                </li>
-                <li>Crear procedimientos para control de acceso que:
-                    <ul>
-                        <li>Validen el nivel de acceso del usuario</li>
-                        <li>Registren intentos de acceso no autorizado</li>
-                        <li>Gestionen la elevación temporal de privilegios</li>
-                    </ul>
-                </li>
-                <li>Desarrollar funciones de verificación de permisos</li>
-            </ol>
+    <h3>Requerimientos Específicos:</h3>
+    <ol>
+        <li>Implementar triggers de auditoría para:
+            <ul>
+                <li>Cambios en precios de productos</li>
+                <li>Modificaciones de comisiones</li>
+                <li>Operaciones en ventas</li>
+                <li>Cambios en niveles de acceso</li>
+            </ul>
+        </li>
+        <li>Crear procedimientos para control de acceso que:
+            <ul>
+                <li>Validen el nivel de acceso del usuario</li>
+                <li>Registren intentos de acceso no autorizado</li>
+                <li>Gestionen la elevación temporal de privilegios</li>
+            </ul>
+        </li>
+        <li>Desarrollar funciones de verificación de permisos</li>
+    </ol>
 
-            <h3>Estructura de Tablas Adicional:</h3>
-            <div class="code-block"><pre>
+    <h3>Estructura de Tablas Adicional:</h3>
+    <div class="code-block"><pre>
 CREATE TABLE usuarios_sistema (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nombre_usuario VARCHAR(50),
@@ -318,86 +318,119 @@ CREATE TABLE permisos_especiales (
     FOREIGN KEY (id_usuario) REFERENCES usuarios_sistema(id_usuario)
 );
 
+CREATE TABLE log_cambios (
+    id_log INT PRIMARY KEY AUTO_INCREMENT,
+    tabla_afectada VARCHAR(50),
+    tipo_operacion ENUM('INSERT', 'UPDATE', 'DELETE'),
+    id_registro INT,
+    campo_modificado VARCHAR(50),
+    valor_anterior TEXT,
+    valor_nuevo TEXT,
+    usuario VARCHAR(50),
+    fecha_cambio DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE log_accesos (
     id_log INT PRIMARY KEY AUTO_INCREMENT,
     id_usuario INT,
     tipo_operacion VARCHAR(50),
     fecha_hora DATETIME,
     resultado ENUM('EXITOSO', 'DENEGADO'),
-    detalles JSON,
+    ip_acceso VARCHAR(45),
+    detalles TEXT,
     FOREIGN KEY (id_usuario) REFERENCES usuarios_sistema(id_usuario)
 );</pre></div>
 
-            <h3>Criterios de Evaluación:</h3>
-            <table>
-                <tr>
-                    <th>Criterio</th>
-                    <th>Puntuación</th>
-                </tr>
-                <tr>
-                    <td>Implementación de triggers de auditoría</td>
-                    <td>10 puntos</td>
-                </tr>
-                <tr>
-                    <td>Sistema de control de acceso</td>
-                    <td>8 puntos</td>
-                </tr>
-                <tr>
-                    <td>Funciones de verificación</td>
-                    <td>7 puntos</td>
-                </tr>
-                <tr>
-                    <td>Gestión de permisos especiales</td>
-                    <td>5 puntos</td>
-                </tr>
-                <tr>
-                    <td>Registro de auditoría</td>
-                    <td>5 puntos</td>
-                </tr>
-            </table>
-        </div>
+    <h3>Criterios de Evaluación:</h3>
+    <table>
+        <tr>
+            <th>Criterio</th>
+            <th>Puntuación</th>
+        </tr>
+        <tr>
+            <td>Implementación de triggers de auditoría</td>
+            <td>10 puntos</td>
+        </tr>
+        <tr>
+            <td>Sistema de control de acceso</td>
+            <td>8 puntos</td>
+        </tr>
+        <tr>
+            <td>Funciones de verificación</td>
+            <td>7 puntos</td>
+        </tr>
+        <tr>
+            <td>Gestión de permisos especiales</td>
+            <td>5 puntos</td>
+        </tr>
+        <tr>
+            <td>Registro de auditoría</td>
+            <td>5 puntos</td>
+        </tr>
+    </table>
+</div>
 
-        <div class="instrucciones">
-            <h2>Ejercicio 8: Sistema de Reportes Dinámicos con Análisis (40 puntos)</h2>
-            
-            <h3>Descripción del Problema:</h3>
-            <p>Crear un sistema flexible de generación de reportes que permita análisis dinámicos de datos, incluyendo tendencias, comparativas y proyecciones.</p>
+<div class="instrucciones">
+    <h2>Ejercicio 8: Sistema de Reportes Dinámicos con Análisis (40 puntos)</h2>
+    
+    <h3>Descripción del Problema:</h3>
+    <p>Crear un sistema flexible de generación de reportes que permita análisis dinámicos de datos, incluyendo tendencias, comparativas y proyecciones.</p>
 
-            <h3>Requerimientos Específicos:</h3>
-            <ol>
-                <li>Implementar un procedimiento principal que:
-                    <ul>
-                        <li>Interprete configuraciones JSON de reportes</li>
-                        <li>Genere consultas dinámicas</li>
-                        <li>Aplique filtros y agregaciones</li>
-                    </ul>
-                </li>
-                <li>Crear funciones de análisis para:
-                    <ul>
-                        <li>Cálculo de tendencias</li>
-                        <li>Comparativas interanuales</li>
-                        <li>Proyecciones de ventas</li>
-                        <li>Análisis de rendimiento</li>
-                    </ul>
-                </li>
-                <li>Desarrollar cursores para procesamiento de datos agregados</li>
-                <li>Implementar cache de resultados para reportes frecuentes</li>
-            </ol>
+    <h3>Requerimientos Específicos:</h3>
+    <ol>
+        <li>Implementar un procedimiento principal que:
+            <ul>
+                <li>Procese la configuración de reportes almacenada</li>
+                <li>Genere consultas dinámicas basadas en parámetros</li>
+                <li>Aplique filtros y agregaciones según el tipo de reporte</li>
+            </ul>
+        </li>
+        <li>Crear funciones de análisis para:
+            <ul>
+                <li>Cálculo de tendencias por períodos</li>
+                <li>Comparativas interanuales</li>
+                <li>Proyecciones de ventas</li>
+                <li>Análisis de rendimiento por métricas</li>
+            </ul>
+        </li>
+        <li>Desarrollar procedimientos para procesamiento de datos agregados</li>
+        <li>Implementar sistema de caché para reportes frecuentes</li>
+    </ol>
 
-            <h3>Estructura de Tablas Adicional:</h3>
-            <div class="code-block"><pre>
+    <h3>Estructura de Tablas Adicional:</h3>
+    <div class="code-block"><pre>
+CREATE TABLE configuracion_reportes (
+    id_reporte INT PRIMARY KEY,
+    nombre_reporte VARCHAR(100),
+    periodo_analisis ENUM('DIARIO', 'SEMANAL', 'MENSUAL', 'ANUAL'),
+    tabla_principal VARCHAR(50),
+    campos_mostrar TEXT,
+    condiciones_filtro TEXT,
+    orden VARCHAR(100)
+);
+
+CREATE TABLE reportes_generados (
+    id_generacion INT PRIMARY KEY AUTO_INCREMENT,
+    id_reporte INT,
+    fecha_generacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    resultado TEXT,
+    FOREIGN KEY (id_reporte) REFERENCES configuracion_reportes(id_reporte)
+);
+
 CREATE TABLE plantillas_reporte (
     id_plantilla INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100),
     descripcion TEXT,
-    configuracion JSON,
-    tipo_analisis ENUM('TENDENCIA', 'COMPARATIVA', 'PROYECCION', 'RENDIMIENTO')
+    tipo_analisis ENUM('TENDENCIA', 'COMPARATIVA', 'PROYECCION', 'RENDIMIENTO'),
+    campos_requeridos TEXT,
+    formulas_calculo TEXT,
+    formato_salida VARCHAR(50)
 );
 
 CREATE TABLE cache_reportes (
     id_cache INT PRIMARY KEY AUTO_INCREMENT,
-    hash_configuracion VARCHAR(64),
-    datos JSON,
+    configuracion_hash VARCHAR(64),
+    datos TEXT,
     fecha_generacion DATETIME,
     fecha_expiracion DATETIME
 );
@@ -410,34 +443,34 @@ CREATE TABLE metricas_rendimiento (
     categoria VARCHAR(50)
 );</pre></div>
 
-            <h3>Criterios de Evaluación:</h3>
-            <table>
-                <tr>
-                    <th>Criterio</th>
-                    <th>Puntuación</th>
-                </tr>
-                <tr>
-                    <td>Generación dinámica de consultas</td>
-                    <td>10 puntos</td>
-                </tr>
-                <tr>
-                    <td>Funciones de análisis</td>
-                    <td>10 puntos</td>
-                </tr>
-                <tr>
-                    <td>Implementación de cursores</td>
-                    <td>8 puntos</td>
-                </tr>
-                <tr>
-                    <td>Sistema de cache</td>
-                    <td>7 puntos</td>
-                </tr>
-                <tr>
-                    <td>Manejo de errores y optimización</td>
-                    <td>5 puntos</td>
-                </tr>
-            </table>
-        </div>
+    <h3>Criterios de Evaluación:</h3>
+    <table>
+        <tr>
+            <th>Criterio</th>
+            <th>Puntuación</th>
+        </tr>
+        <tr>
+            <td>Generación dinámica de consultas</td>
+            <td>10 puntos</td>
+        </tr>
+        <tr>
+            <td>Funciones de análisis</td>
+            <td>10 puntos</td>
+        </tr>
+        <tr>
+            <td>Procesamiento de datos agregados</td>
+            <td>8 puntos</td>
+        </tr>
+        <tr>
+            <td>Sistema de caché</td>
+            <td>7 puntos</td>
+        </tr>
+        <tr>
+            <td>Manejo de errores y optimización</td>
+            <td>5 puntos</td>
+        </tr>
+    </table>
+</div>
 
 </body>
 </html>
