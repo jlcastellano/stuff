@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Comandos WSL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        h2 {
+            color: #2980b9;
+            margin: 25px 0 15px 0;
+        }
+
+        .section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .command-block {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #e74c3c;
+        }
+
+        .tip {
+            background-color: #e1f5fe;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Manual Detallado de Comandos WSL</h1>
+
+    <div class="section">
+        <h2>1. GESTIÓN BÁSICA DE WSL</h2>
+        <p>Instalación y configuración:</p>
+        <div class="command-block">
+            <code>wsl --install</code> # Instala WSL con Ubuntu por defecto<br>
+            <code>wsl --install -d &lt;Distribución&gt;</code> # Instala una distribución específica<br>
+            <code>wsl --list --online</code> # Muestra distribuciones disponibles<br>
+            <code>wsl --list --verbose</code> # Muestra distribuciones instaladas<br>
+            <code>wsl --set-default &lt;Distribución&gt;</code> # Establece la distribución predeterminada
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. CONTROL DE DISTRIBUCIONES</h2>
+        <p>Operaciones básicas:</p>
+        <div class="command-block">
+            <code>wsl -d &lt;Distribución&gt;</code> # Inicia una distribución específica<br>
+            <code>wsl --terminate &lt;Distribución&gt;</code> # Detiene una distribución<br>
+            <code>wsl --unregister &lt;Distribución&gt;</code> # Desinstala una distribución<br>
+            <code>wsl --shutdown</code> # Detiene todas las distribuciones
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. GESTIÓN DE VERSIONES</h2>
+        <p>Comandos de versión:</p>
+        <div class="command-block">
+            <code>wsl --set-version &lt;Distribución&gt; 2</code> # Convierte a WSL 2<br>
+            <code>wsl --set-default-version 2</code> # Establece WSL 2 como versión predeterminada<br>
+            <code>wsl --status</code> # Muestra el estado de WSL
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. INTEROPERABILIDAD WINDOWS-WSL</h2>
+        <p>Ejecución de comandos:</p>
+        <div class="command-block">
+            <code>wsl &lt;comando&gt;</code> # Ejecuta un comando Linux desde Windows<br>
+            <code>wsl.exe --exec &lt;comando&gt;</code> # Ejecuta un comando sin iniciar shell<br>
+            <code>wsl --user &lt;usuario&gt; &lt;comando&gt;</code> # Ejecuta como usuario específico
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>5. GESTIÓN DE SISTEMA DE ARCHIVOS</h2>
+        <p>Acceso a archivos:</p>
+        <div class="command-block">
+            <code>cd /mnt/c</code> # Accede al disco C: de Windows<br>
+            <code>cd ~</code> # Accede al home directory de Linux<br>
+            <code>\\wsl$</code> # Accede al sistema de archivos WSL desde Explorer
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. REDES Y PUERTOS</h2>
+        <p>Gestión de red:</p>
+        <div class="command-block">
+            <code>wsl --networkingMode default</code> # Configura modo de red predeterminado<br>
+            <code>wsl --networkingMode bridged</code> # Configura modo de red puente<br>
+            <code>ip addr show</code> # Muestra direcciones IP en WSL
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>7. GESTIÓN DE MEMORIA Y RECURSOS</h2>
+        <p>Configuración de recursos:</p>
+        <div class="command-block">
+            # Crear/editar archivo .wslconfig en %UserProfile%<br>
+            [wsl2]<br>
+            memory=4GB<br>
+            processors=2
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>8. IMPORTACIÓN/EXPORTACIÓN</h2>
+        <p>Respaldo y migración:</p>
+        <div class="command-block">
+            <code>wsl --export &lt;Distribución&gt; &lt;archivo.tar&gt;</code> # Exporta una distribución<br>
+            <code>wsl --import &lt;Distribución&gt; &lt;InstallLocation&gt; &lt;archivo.tar&gt;</code> # Importa una distribución
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>9. SOLUCIÓN DE PROBLEMAS</h2>
+        <p>Comandos de diagnóstico:</p>
+        <div class="command-block">
+            <code>wsl --status</code> # Muestra estado general<br>
+            <code>wsl --version</code> # Muestra versión de WSL<br>
+            <code>wsl --update</code> # Actualiza el kernel de WSL
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>10. CONSEJOS ADICIONALES</h2>
+        <div class="tip">
+            <strong>GUI en WSL:</strong>
+            <ul>
+                <li>WSL 2 soporta aplicaciones GUI directamente</li>
+                <li>Instalar un servidor X si usas WSL 1</li>
+            </ul>
+        </div>
+        <div class="tip">
+            <strong>VS Code Integration:</strong>
+            <ul>
+                <li>Instalar extensión "Remote - WSL"</li>
+                <li>Usar comando "code ." dentro de WSL</li>
+            </ul>
+        </div>
+        <div class="tip">
+            <strong>Bases de Datos:</strong>
+            <ul>
+                <li>Los servicios como MySQL, PostgreSQL funcionan normalmente</li>
+                <li>Accesibles desde Windows usando localhost</li>
+            </ul>
+        </div>
+        <div class="tip">
+            <strong>Docker:</strong>
+            <ul>
+                <li>Docker Desktop se integra con WSL 2</li>
+                <li>Permite ejecutar contenedores nativamente</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
