@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Miembros a Microsoft Teams con PowerShell</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="contenido-didactico">
+        <h1>Añadir Miembros a Microsoft Teams con PowerShell</h1>
+        
+        <p>Para usar un script de PowerShell con Microsoft Teams para añadir los miembros a partir de los emails, sigue estos pasos detallados.</p>
+
+        <h2>1. Instalación del Módulo de Microsoft Teams</h2>
+        
+        <p>Primero, instala el módulo si no lo tienes. <strong>Debes ejecutar PowerShell como administrador</strong>:</p>
+
+        <pre><code class="language-powershell">Install-Module -Name MicrosoftTeams</code></pre>
+
+        <h2>2. Conectarse a Microsoft Teams</h2>
+        
+        <p>Después, conéctate a Microsoft Teams ejecutando el siguiente comando:</p>
+
+        <pre><code class="language-powershell">Connect-MicrosoftTeams</code></pre>
+
+        <blockquote>
+            <p><strong>Nota:</strong> Esto abrirá una ventana de inicio de sesión donde deberás introducir tus credenciales de Microsoft 365.</p>
+        </blockquote>
+
+        <h2>3. Ejecutar el Script de Añadir Usuarios</h2>
+        
+        <p>Una vez conectado, puedes ejecutar tu script. Debes copiar el script de abajo y sustituir el teamId y la lista de emails (entre comillas y separados por comas).
+            <br>Pégalo en un archivo .ps1 para ejecutarlo desde PowerShell.
+        </p>
+
+        <pre><code class="language-powershell"># Definir el Team ID y el array de emails
+$teamId = "LA_ID_DE_TU_EQUIPO"
+$emails = @(
+    "email1@digitechfp.com",
+    "email2@digitechfp.com"
+)
+
+foreach ($email in $emails) {
+    try {
+        Add-TeamUser -GroupId $teamId -User $email
+        Write-Host "Unido correctamente: $email" -ForegroundColor Green
+    } catch {
+        Write-Host "Error al unir: $email" -ForegroundColor Red
+        Write-Host $_.Exception.Message
+    }
+}</code></pre>
+
+
+        <blockquote>
+            <h3>¿Cómo obtengo el Team ID de mi equipo?</h3>
+            <p>Puedes copiar el vínculo que te da en la administración del equipo y quedarte con la cadena después de <mark>?groupId=</mark> y antes de <mark>&tenantId=</mark></p>            
+            <p>O puedes obtener el Team ID ejecutando el comando <code>Get-Team</code> en PowerShell después de conectarte. Esto listará todos tus equipos con sus respectivos IDs. También puedes usar <code>Get-Team -DisplayName "Nombre de tu equipo"</code> para buscar un equipo específico.</p>
+        </blockquote>
+
+
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
